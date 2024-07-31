@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="../frontend/">
+    <link rel="stylesheet" href="../frontend/css/style.css">
 </head>
 <body>
     <div class="container">

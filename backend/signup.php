@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="../frontend/style.css">
+    <link rel="stylesheet" href="../frontend/css/style.css">
     <script>
         function validateForm() {
             const fullName = document.forms["signupForm"]["name"].value.trim();
