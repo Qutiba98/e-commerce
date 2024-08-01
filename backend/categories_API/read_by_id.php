@@ -5,14 +5,14 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
-include ("function.php");
+include("function.php");
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 if($requestMethod == "GET"){
-    if(isset($_GET["user_id"])){
-        $users_list = get_User_by_id($_GET);
-        echo($users_list);
+    if(isset($_GET["id"])){
+        $categories_list = get_categorie_by_id($_GET["id"]); // تمرير قيمة id فقط
+        echo($categories_list);
     }
 } else {
     $data = [
@@ -22,5 +22,3 @@ if($requestMethod == "GET"){
     header("HTTP/1.0 405 Method Not Allowed");
     echo json_encode($data);
 }
-
-?>

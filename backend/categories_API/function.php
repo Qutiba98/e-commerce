@@ -4,7 +4,8 @@ require "../db.php";
 
 
 
-function storeUser($user_input) {
+
+function storeCategorie($categorie_input) {
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -17,51 +18,25 @@ function storeUser($user_input) {
         return json_encode($data);
     }
 
-    // تنقية المدخلات
-    $full_name = isset($user_input["full_name"]) ? mysqli_real_escape_string($conn, $user_input["full_name"]) : '';
-    $email = isset($user_input["email"]) ? mysqli_real_escape_string($conn, $user_input["email"]) : '';
-    $mobile = isset($user_input["mobile"]) ? mysqli_real_escape_string($conn, $user_input["mobile"]) : '';
-    $password = isset($user_input["password"]) ? password_hash($user_input["password"], PASSWORD_DEFAULT) : '';
-    $role_id = isset($user_input["role_id"]) ? intval($user_input["role_id"]) : 2;
-
-    // تحميل الصورة وتخزين المسار
-    $imagePath = null;
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $targetDir = "uploads/";
-        $targetFile = $targetDir . basename($_FILES['image']['name']);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-        // التحقق من نوع الملف
-        $check = getimagesize($_FILES['image']['tmp_name']);
-        if ($check === false) {
-            $uploadOk = 0;
-        }
-
-        // التحقق من حجم الملف
-        if ($_FILES['image']['size'] > 5000000) {
-            $uploadOk = 0;
-        }
-
-        // السماح بأنواع الملفات المعينة
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-            $uploadOk = 0;
-        }
-
-        // تحميل الملف
-        if ($uploadOk == 1 && move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-            $imagePath = $targetFile;
-        }
+    // التحقق من وجود المدخلات وتنقيتها
+    if (!isset($categorie_input['name']) || empty($categorie_input['name'])) {
+        $data = [
+            'status' => 400,
+            'message' => 'Category name is required',
+        ];
+        header("HTTP/1.0 400 Bad Request");
+        return json_encode($data);
     }
 
+    $name = mysqli_real_escape_string($conn, $categorie_input['name']);
+
     // استعلام لإدخال البيانات في قاعدة البيانات
-    $query = "INSERT INTO users (name, email, phone_number, password, role_id, image) 
-            VALUES ('$full_name', '$email', '$mobile', '$password', '$role_id', '$imagePath')";
+    $query = "INSERT INTO categories (name) VALUES ('$name')";
 
     if ($conn->query($query) === TRUE) {
         $data = [
             'status' => 200,
-            'message' => 'New record created successfully',
+            'message' => 'New category created successfully',
         ];
     } else {
         $data = [
@@ -77,7 +52,7 @@ function storeUser($user_input) {
 
 
 //  show all users --------------------------------------------------------------------------------------------------------
-function getUsersList(){
+function getCategories(){
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -92,7 +67,7 @@ function getUsersList(){
     }
 
     // تنفيذ الاستعلام
-    $query = "SELECT * FROM users";
+    $query = "SELECT * FROM categories";
     $query_run = mysqli_query($conn, $query);
 
     if ($query_run) {
@@ -101,7 +76,7 @@ function getUsersList(){
 
             $data = [
                 'status' => 200,
-                'message' => 'Users List Fetched Successfully',
+                'message' => 'categories List Fetched Successfully',
                 'data' => $res  // إضافة قائمة المستخدمين هنا
             ];
             header("HTTP/1.0 200 OK");
@@ -109,9 +84,9 @@ function getUsersList(){
         } else {
             $data = [
                 'status' => 404,
-                'message' => 'No User Found',
+                'message' => 'No categories Found',
             ];
-            header("HTTP/1.0 404 No User Found");
+            header("HTTP/1.0 404 No categories Found");
             echo json_encode($data);
         }
     } else {
@@ -129,7 +104,7 @@ function getUsersList(){
 
 
 //  show user by id ---------------------------------------------------------------------------------------------------------
-function get_user_by_id($user_id){
+function get_categorie_by_id($id){
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -144,24 +119,24 @@ function get_user_by_id($user_id){
     }
 
     // تأمين المدخلات
-    $user_id = mysqli_real_escape_string($conn, $user_id);
-    $query = "SELECT * FROM users WHERE user_id = '$user_id' LIMIT 1";
+    $id = mysqli_real_escape_string($conn, $id);
+    $query = "SELECT * FROM categories WHERE id = '$id' LIMIT 1";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
         if (mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
+            $categorie = mysqli_fetch_assoc($result);
             $data = [
                 'status' => 200,
-                'message' => 'User Found Successfully',
-                'data' => $user  // إضافة بيانات المستخدم هنا
+                'message' => 'categorie Found Successfully',
+                'data' => $categorie // إضافة بيانات المستخدم هنا
             ];
             header("HTTP/1.0 200 OK");
             echo json_encode($data);
         } else {
             $data = [
                 'status' => 404,
-                'message' => 'No User Found',
+                'message' => 'No categorie Found',
             ];
             header("HTTP/1.0 404 Not Found");
             echo json_encode($data);
@@ -183,7 +158,7 @@ function get_user_by_id($user_id){
 // ---------------------------------------------------------------------------------------
 
 
-function update_user($subjectInput, $subjectParams){
+function update_categorie($subjectInput, $subjectParams){
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -197,22 +172,18 @@ function update_user($subjectInput, $subjectParams){
         exit();
     }
 
-    if (isset($subjectParams['user_id'])) {
-        $user_id = mysqli_real_escape_string($conn, $subjectParams['user_id']);
+    if (isset($subjectParams['id'])) {
+        $id = mysqli_real_escape_string($conn, $subjectParams['id']);
 
         $name = mysqli_real_escape_string($conn, $subjectInput['name']);
-        $email = mysqli_real_escape_string($conn, $subjectInput['email']);
-        $phone_number = mysqli_real_escape_string($conn, $subjectInput['phone_number']);
-        $image = mysqli_real_escape_string($conn, $subjectInput['image']);
-        $role_id = mysqli_real_escape_string($conn, $subjectInput['role_id']);
-
-        $query = "UPDATE users SET name='$name', email='$email', phone_number='$phone_number', image='$image', role_id='$role_id' WHERE user_id='$user_id' LIMIT 1";
+     
+        $query = "UPDATE categories SET name='$name' WHERE id='$id' LIMIT 1";
         $result = mysqli_query($conn, $query);
 
         if ($result) {
             $data = [
                 'status' => 200,
-                'message' => 'user updated Successfully',
+                'message' => ' categorie updated Successfully',
             ];
             header('HTTP/1.0 200 Success');
             return json_encode($data);
@@ -227,7 +198,7 @@ function update_user($subjectInput, $subjectParams){
     } else {
         $data = [
             'status' => 400,
-            'message' => 'User ID is required',
+            'message' => 'categorie ID is required',
         ];
         header('HTTP/1.0 400 Bad Request');
         return json_encode($data);
@@ -236,7 +207,7 @@ function update_user($subjectInput, $subjectParams){
 
 // ----------------------------------------------------------------------------------------------------
 
-function delete_user($UsersParams) {
+function delete_categorie($categorieParams) {
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -250,23 +221,23 @@ function delete_user($UsersParams) {
         exit();
     }
 
-    if (isset($UsersParams["user_id"])) {
-        $user_id = mysqli_real_escape_string($conn, $UsersParams['user_id']);
+    if (isset($categorieParams["id"])) {
+        $id = mysqli_real_escape_string($conn, $categorieParams['id']);
 
-        $query = "DELETE FROM users WHERE user_id = '$user_id' LIMIT 1";
+        $query = "DELETE FROM categories WHERE id = '$id' LIMIT 1";
         $result = mysqli_query($conn, $query);
 
         if ($result) {
             $data = [
                 'status' => 200,
-                'message' => 'User deleted successfully',
+                'message' => 'categorie deleted successfully',
             ];
             header("HTTP/1.0 200 OK");
             return json_encode($data);
         } else {
             $data = [
                 'status' => 404,
-                'message' => 'No user found or failed to delete user',
+                'message' => 'No categorie found or failed to delete user',
             ];
             header("HTTP/1.0 404 Not Found");
             return json_encode($data);
@@ -274,7 +245,7 @@ function delete_user($UsersParams) {
     } else {
         $data = [
             'status' => 400,
-            'message' => 'User ID is required',
+            'message' => 'categorie ID is required',
         ];
         header("HTTP/1.0 400 Bad Request");
         return json_encode($data);

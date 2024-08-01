@@ -11,9 +11,9 @@ $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 if($requestMethod == "GET"){
 
-$users_list = getUsersList();
+$categories_list = getCategories();
 
-echo($users_list);
+echo($categories_list);
 
 
 }else{
