@@ -2,21 +2,21 @@
 
 header('Access-Control-Allow-Origin:*');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Method: DELETE');
+header('Access-Control-Allow-Method: GET');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Request-With');
 
 include ("function.php");
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
-if($requestMethod == "DELETE"){
+if($requestMethod == "GET"){
 
-    
+    if(isset($_GET["price"])){
 
-        $delete_product = delete_product($_GET);
-        echo($delete_product);
+        $product_list = get_product_by_price($_GET);
+        echo($product_list);
 
-
+    }
 
 
 

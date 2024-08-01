@@ -1,5 +1,4 @@
 <?php
-
 header('Access-Control-Allow-Origin:*');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Method: POST');
@@ -16,8 +15,8 @@ if ($requestMethod == "POST") {
         $inputData = $_POST;
     }
 
-    $storeCustomer = storeUser($inputData);
-    echo $storeCustomer;
+    $storeProduct = storeProduct($inputData);
+    echo $storeProduct;
 } else {
     $data = [
         'status' => 405,
@@ -28,3 +27,8 @@ if ($requestMethod == "POST") {
     echo json_encode($data);
     exit();
 }
+<<<<<<< HEAD
+=======
+
+?>
+>>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
