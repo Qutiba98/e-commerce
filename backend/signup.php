@@ -76,43 +76,54 @@
 
 <body>
 <div class="container">
-    <form name="signupForm" action="signup.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+      <form
+        name="signupForm"
+        action="signup.php"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="return validateForm();"
+      >
         <div class="form-group">
-            <h2>Sign Up</h2>
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
-            <span id="nameError" class="error-message"></span>
+          <h2>Sign Up</h2>
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name"  />
+          <span id="nameError" class="error-message"></span>
         </div>
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <span id="emailError" class="error-message"></span>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email"  />
+          <span id="emailError" class="error-message"></span>
         </div>
         <div class="form-group">
-            <label for="phone_number">Mobile:</label>
-            <input type="text" id="phone_number" name="phone_number" required>
-            <span id="mobileError" class="error-message"></span>
+          <label for="phone_number">Mobile:</label>
+          <input type="text" id="phone_number" name="phone_number"  />
+          <span id="mobileError" class="error-message"></span>
         </div>
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <span id="passwordError" class="error-message"></span>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password"  />
+          <span id="passwordError" class="error-message"></span>
         </div>
         <div class="form-group">
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-            <span id="confirmPasswordError" class="error-message"></span>
+          <label for="confirm_password">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            required
+          />
+          <span id="confirmPasswordError" class="error-message"></span>
         </div>
         <div class="form-group">
-            <label for="image">Upload Image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
+          <label for="image">Upload Image:</label>
+          <input type="file" id="image" name="image" accept="image/*" />
         </div>
         <button type="submit" class="btn">Sign Up</button>
         <p>Already have an account? <a href="login.php">Login here</a></p>
-    </form>
+      </form>
 
-    <div id="successMessage" class="success-message"></div>
-</div>
+      <div id="successMessage" class="success-message"></div>
+    </div>
 </body>
 </html>
 
