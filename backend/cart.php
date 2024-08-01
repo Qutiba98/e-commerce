@@ -1,3 +1,14 @@
+<?php 
+require "./connection_db_pdo.php";
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+$result = json_decode($input,true);
+// var_dump($result);
+// echo $result[0]['userName']
+// foreach($result as $row){
+//     echo $row['cartId'];
+// }
+?>
+
 <!DOCTYPE html>
 <html lang="en" style="font-size: 14px">
   <head>
@@ -29,21 +40,21 @@
     />
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="css/slick.css" />
-    <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
     <!-- MDB -->
-    <link rel="stylesheet" href="./css/mdb.min.css" />
+    <link rel="stylesheet" href="../frontend/css/mdb.min.css" />
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
 
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../frontend/css/font-awesome.min.css" />
 
     <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -210,6 +221,7 @@
     <!-- /HEADER -->
 
     <!-- start of cart des _______________________________________________________________________ -->
+    
     <section class="h-100">
       <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -225,7 +237,15 @@
                 </p>
               </div>
             </div>
+            <?php foreach($result as $row): ?>
+                <?php
+                $showImage=$row['productImage'];
 
+
+// echo "<img src='images/$showImage' alt='' />";
+// echo "showed"
+                     ?>
+                
             <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
                 <div
@@ -233,16 +253,16 @@
                 >
                   <div class="col-md-2 col-lg-2 col-xl-2">
                     <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
+                      src="images/<?php echo $showImage ?>"
                       class="img-fluid rounded-3"
                       alt="Cotton T-shirt"
                     />
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-3">
-                    <p class="lead fw-normal mb-2">Basic T-shirt</p>
+                    <p class="lead fw-normal mb-2"><?php echo $row['productName'] ?></p>
                     <p>
-                      <span class="text-muted">Size: </span>M
-                      <span class="text-muted">Color: </span>Grey
+                      <span class="text-muted">description: <?php echo $row['productDesc'] ?> </span>
+                      
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
@@ -276,7 +296,7 @@
                     </button>
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                    <h5 class="mb-0">$499.00</h5>
+                    <h5 class="mb-0">$<?php echo $row['productPrice'] ?> </h5>
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                     <a href="#!" class="text-danger"
@@ -286,6 +306,7 @@
                 </div>
               </div>
             </div>
+            <?php endforeach; ?>
 
             <div class="card mb-4">
               <div class="card-body p-4 d-flex flex-row">
@@ -526,13 +547,13 @@
     <!-- /FOOTER -->
 
     <!-- jQuery Plugins -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/nouislider.min.js"></script>
-    <script src="js/jquery.zoom.min.js"></script>
+    <script src="../frontend/js/jquery.min.js"></script>
+    <script src="../frontend/js/bootstrap.min.js"></script>
+    <script src="../frontend/js/slick.min.js"></script>
+    <script src="../frontend/js/nouislider.min.js"></script>
+    <script src="../frontend/js/jquery.zoom.min.js"></script>
     <!-- MDB -->
-    <script type="text/javascript" src="./js/mdb.umd.min.js"></script>
+    <script type="text/javascript" src="../frontend/js/mdb.umd.min.js"></script>
     <!--  -->
     <script src="js/main.js"></script>
   </body>
