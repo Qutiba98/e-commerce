@@ -66,14 +66,11 @@
         }
 
         .success-message {
-    color: green;
-    font-size: 1.2em;
-    margin-top: 20px;
-    text-align: center;
-}
-
-
-
+            color: green;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -115,11 +112,10 @@
     </form>
 
     <div id="successMessage" class="success-message"></div>
-
-
 </div>
 </body>
 </html>
+
 
 <?php
 include 'db.php';
@@ -127,6 +123,7 @@ include 'db.php';
 class UserRegistration {
     private $conn;
     private $errors = [];
+    private $image;
 
     public function __construct($dbServer, $dbUsername, $dbPassword, $dbDatabase) {
         $this->conn = new mysqli($dbServer, $dbUsername, $dbPassword, $dbDatabase);
@@ -218,6 +215,8 @@ class UserRegistration {
             $stmt->bind_param("sssssi", $data['name'], $data['email'], $hashedPassword, $data['phone_number'], $this->image, $roleId);
 
             if ($stmt->execute()) {
+                $userId = $stmt->insert_id; // Get the ID of the newly inserted user
+                $this->addToCart($userId); // Add the user to the cart
                 echo "Registration successful!";
             } else {
                 echo "Error: " . $stmt->error;
@@ -231,12 +230,21 @@ class UserRegistration {
             }
         }
     }
+
+    private function addToCart($userId) {
+        $stmt = $this->conn->prepare("INSERT INTO cart (user_id) VALUES (?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+        $stmt->bind_param("i", $userId);
+
+        if (!$stmt->execute()) {
+            echo "Error adding user to cart: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
 }
-
-
-
-
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);

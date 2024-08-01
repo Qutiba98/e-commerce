@@ -79,9 +79,9 @@ class Auth {
             $_SESSION['image'] = $user['image'];
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: admin_dashboard.php");
+                header("Location: ../frontend/adminlandingpage.html");
             } else {
-                header("Location: welcome.php");
+                header("Location: ../frontend/index.html");
             }
             exit();
         } else {
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
-        <form action="../frontend/index.html" method="POST" onsubmit="return validateForm()">
+        <form action="login.php" method="POST" onsubmit="return validateForm()">
             <div class="form-group">
                 <h2>Login</h2>
                 <label for="email">Email:</label>
