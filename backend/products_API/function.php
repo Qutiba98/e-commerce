@@ -4,12 +4,8 @@ require "../db.php";
 
 
 
-<<<<<<< HEAD
-function storeUser($user_input)
-{
-=======
+
 function storeProduct($product_input) {
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -66,11 +62,6 @@ function storeProduct($product_input) {
 function getProductList() {
     global $conn;
 
-<<<<<<< HEAD
-//  show all users --------------------------------------------------------------------------------------------------------
-function getUsersList()
-{
-=======
     // التحقق من اتصال قاعدة البيانات
     if ($conn->connect_error) {
         $data = [
@@ -119,7 +110,6 @@ function getUsersList()
 //  show user by id ---------------------------------------------------------------------------------------------------------
 
 function  get_product_by_id($productParams){
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -133,12 +123,6 @@ function  get_product_by_id($productParams){
         exit();
     }
 
-<<<<<<< HEAD
-    // تنفيذ الاستعلام
-    $query = "SELECT * FROM product";
-    $query_run = mysqli_query($conn, $query);
-=======
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
 
 
     $product_id = mysqli_real_escape_string($conn, $productParams['id']);
@@ -178,16 +162,8 @@ function  get_product_by_id($productParams){
     // إغلاق اتصال قاعدة البيانات
     $conn->close();
 }
-<<<<<<< HEAD
-
-
-//  show user by id ---------------------------------------------------------------------------------------------------------
-function get_user_by_id($user_id)
-{
-=======
 // -------------------------------------------------------------------------------------------------
 function  get_product_by_price($productParams){
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -242,16 +218,7 @@ function  get_product_by_price($productParams){
 }
 // -------------------------------------------------------------------------------------------------
 
-<<<<<<< HEAD
-
-// ---------------------------------------------------------------------------------------
-
-
-function update_user($subjectInput, $subjectParams)
-{
-=======
 function updatePruduct($subjectInput, $subjectParams){
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -303,12 +270,7 @@ function updatePruduct($subjectInput, $subjectParams){
 // -----------------------------------------------------------------------------------------------------------------------------
 
 
-<<<<<<< HEAD
-function delete_user($UsersParams)
-{
-=======
 function delete_product($ProductParams) {
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -352,8 +314,5 @@ function delete_product($ProductParams) {
         return json_encode($data);
     }
 }
-<<<<<<< HEAD
-=======
 
 ?>
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4
