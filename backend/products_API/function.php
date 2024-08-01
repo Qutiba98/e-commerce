@@ -1,6 +1,7 @@
-<?php 
+<?php
 
 require "../db.php";
+
 
 
 

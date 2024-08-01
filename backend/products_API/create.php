@@ -4,13 +4,13 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Method: POST');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Request-With');
 
-include ("function.php");
+include("function.php");
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 if ($requestMethod == "POST") {
     $inputData = json_decode(file_get_contents("php://input"), true);
-    
+
     if (empty($inputData)) {
         $inputData = $_POST;
     }
@@ -27,5 +27,8 @@ if ($requestMethod == "POST") {
     echo json_encode($data);
     exit();
 }
+<<<<<<< HEAD
+=======
 
 ?>
+>>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4

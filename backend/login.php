@@ -79,9 +79,9 @@ class Auth {
             $_SESSION['image'] = $user['image'];
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: admin_dashboard.php");
+                header("Location: ../frontend/adminlandingpage.html");
             } else {
-                header("Location: welcome.php");
+                header("Location: ../frontend/index.html");
             }
             exit();
         } else {

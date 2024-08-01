@@ -13,7 +13,7 @@ INNER JOIN cart ON cart.user_id=  cart_product.cart_id
 INNER JOIN users ON users.user_id = cart.user_id
 WHERE cart_product.cart_id ='$id'";
     $result = $conn->query($sql);
-    $output = $result-> fetch(PDO::FETCH_ASSOC);
+    $output = $result-> fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output ,true );
 
 }else{
