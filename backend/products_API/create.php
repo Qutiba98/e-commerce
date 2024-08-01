@@ -27,8 +27,7 @@ if ($requestMethod == "POST") {
     echo json_encode($data);
     exit();
 }
-<<<<<<< HEAD
-=======
+
+
 
 ?>
->>>>>>> c24862573d82cf04ad7cfecd81025b7a8d27d0b4

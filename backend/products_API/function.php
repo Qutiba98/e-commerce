@@ -237,7 +237,7 @@ function  get_product_by_categorie_id($productParams){
 
     $product_price = mysqli_real_escape_string($conn, $productParams['categories_id']);
 
-    $query = "SELECT * FROM product WHERE categories_id = '$product_price' LIMIT 1 ";
+    $query = "SELECT * FROM product WHERE categories_id = '$product_price'  ";
 
     $reult = mysqli_query($conn, $query);
 
