@@ -13,8 +13,8 @@ if($requestMethod == "DELETE"){
 
     
 
-        $delete_user = delete_user($_GET);
-        echo($delete_user);
+        $delete_product = delete_product($_GET);
+        echo($delete_product);
 
 
 

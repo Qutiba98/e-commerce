@@ -5,23 +5,37 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Method: GET');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Request-With');
 
-include("function.php");
+include ("function.php");
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
-if ($requestMethod == "GET") {
+if($requestMethod == "GET"){
 
-    $users_list = getUsersList();
+    if(isset($_GET["price"])){
 
-    echo ($users_list);
-} else {
+        $product_list = get_product_by_price($_GET);
+        echo($product_list);
+
+    }
+
+
+
+
+}else{
 
     $data = [
 
         'status' => 405,
-        'message' => $requestMethod . 'Method Not Allowed',
+        'message' => $requestMethod.'Method Not Allowed',
+
+
     ];
 
     header("HTTP/1.0 405 Method Not Allowed");
     echo json_encode($data);
+
+
 }
+
+
+?>

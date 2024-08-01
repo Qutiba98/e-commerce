@@ -16,12 +16,12 @@ $user = $result->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $full_name = $_POST['full_name'];
     $name_parts = explode(' ', $full_name);
-    
+
     $first_name = $name_parts[0];
     $middle_name = $name_parts[1];
     $last_name = $name_parts[2];
     $family_name = $name_parts[3];
-    
+
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
     $role_id = $_POST['role_id'];
@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
@@ -64,12 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 </head>
+
 <body>
     <div class="container">
-        
+
         <form name="editUserForm" action="edit_user.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="form-group">
-              <h2>Edit User</h2>
+                <h2>Edit User</h2>
                 <label for="full_name">Full Name:</label>
                 <input type="text" id="full_name" name="full_name" value="<?php echo $user['first_name'] . ' ' . $user['middle_name'] . ' ' . $user['last_name'] . ' ' . $user['family_name']; ?>" required>
             </div>
@@ -88,12 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group">
                 <label for="role_id">Role:</label>
                 <select id="role_id" name="role_id" required>
-                    <option value="1" <?php if($user['role_id'] == 1) echo 'selected'; ?>>Admin</option>
-                    <option value="2" <?php if($user['role_id'] == 2) echo 'selected'; ?>>User</option>
+                    <option value="1" <?php if ($user['role_id'] == 1) echo 'selected'; ?>>Admin</option>
+                    <option value="2" <?php if ($user['role_id'] == 2) echo 'selected'; ?>>User</option>
                 </select>
             </div>
             <button type="submit" class="btn">Update User</button>
         </form>
     </div>
 </body>
+
 </html>
