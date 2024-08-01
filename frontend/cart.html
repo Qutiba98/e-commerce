@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link
+    href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+
+  <!-- Slick -->
+  <link type="text/css" rel="stylesheet" href="css/slick.css"/>
+  <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+
+  <!-- nouislider -->
+  <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+
+  <!-- Font Awesome Icon -->
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
+  <!-- Custom stlylesheet -->
+  <link type="text/css" rel="stylesheet" href="css/style.css"/>
+
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        background-color: #f2f2f2;
+        padding: 2rem;
+      }
+      .container1 {
+        display: flex;
+        flex-direction: row;
+        gap: 3rem;
+        align-items: center;
+        justify-content: space-around;
+        border-radius: 1rem;
+        flex-wrap: wrap;
+      }
+      .product {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        width: 20rem;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 1rem;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+      .item1 {
+        height: 15rem;
+        width: 100%;
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+      .item2 {
+        background-color: #ffffff;
+        height: 4rem;
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+      }
+      .item3 {
+        background-color: #ffffff;
+        height: 4rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+      .kalam1,
+      .kalam2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .kalam1 p,
+      .kalam2 p {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+      }
+      .item3 > button {
+        background-color: #d12028;
+        height: 2rem;
+        width: 8rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+      }
+      .item3 > button:hover {
+        background-color: #830101;
+      }
+      .selected-container {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 1rem;
+        padding: 1rem;
+        padding-inline: 7rem;
+        margin-top: 1rem;
+        background-color: #f2f2f2;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .selected-container>img {
+      }
+
+      .selected-item {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .selected-item img {
+        width: 15rem;
+        height: 15rem;
+        object-fit: cover;
+        border-radius: 0.5rem;
+      }
+      .selected-item p {
+        margin: 0.5rem 0;
+        color: black;
+      }
+      .remove-button {
+        background-color: #000000;
+        color: white;
+        border: none;
+        border-radius: 5rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        height: 3rem;
+        width: 3rem;
+        font-size: 1.5rem;
+        transition: background-color 0.3s;
+      }
+      .quantity-button {
+        border: solid rgb(0, 0, 0) 1px;
+        border-radius: 0.7rem;
+        color: rgb(0, 0, 0);
+        cursor: pointer;
+        height: 3rem;
+        width: 3rem;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+      .remove-button:hover {
+        background-color: #b00202d9;
+      }
+      .quantity-button:hover {
+        background-color: #00000032;
+      }
+      .total-container {
+        display: flex;
+        background-color: #f2f2f2;
+        padding: 1rem;
+        border-radius: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .total-container p {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+      }
+      .item1 > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      /*       .quantity-button {
+        background-color: #ff0000;
+        color: rgb(0, 0, 0);
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        height: 2rem;
+        width: 2rem;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+      }
+      */
+      .Home {
+        background-color: #d12028;
+        height: 3rem;
+        color: white;
+        border: none;
+        border-radius: 0.4rem;
+        font-size: 16px;
+        text-decoration: none;
+      }
+      .checkout {
+        background-color: #d12028;
+        height: 3rem;
+        color: white;
+        border: none;
+        border-radius: 0.4rem;
+        font-size: 16px;
+      }
+      .down {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        justify-content: right;
+      }
+      .coupon-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      #apply-coupon {
+        background-color: #d12028;
+        color: white;
+        border: none;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+      }
+      #apply-coupon:hover {
+        background-color: #830101;
+      }
+      /* cc0000 */
+      .selected-item{
+        font-size: 18px;
+      }
+      .quantity-button.increase{
+        padding: 0px;
+      }
+      .quantity-button.decrease{
+        padding: 0px;
+      }
+
+      
+      @media screen and (MAX-width: 841px) {
+      .selected-item{
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 16px;
+        flex-direction: column;
+
+
+      }
+      .selected-item>img{
+        width: 8rem;
+        height: 8rem;
+        
+      }
+      .quantity-button {
+        height: 3rem;
+        width: 3rem;
+      }
+/*       .quantity-button-increase{
+        padding: 5px;
+      }
+ */
+
+
+      }
+      @media screen and (MAX-width: 561px) {
+      .selected-item{
+        font-size: 14px;
+      }
+    }
+    </style>
+  </head>
+  <body>
+  </head>
+	<body>
+		<!-- HEADER -->
+		<header>
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /TOP HEADER -->
+
+			<!-- MAIN HEADER -->
+			<div id="header">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<!-- LOGO -->
+						<div class="col-md-3">
+							<div class="header-logo">
+								<a href="#" class="logo">
+									<img src="./img/logo.png" alt="">
+								</a>
+							</div>
+						</div>
+						<!-- /LOGO -->
+
+						<!-- SEARCH BAR -->
+						<div class="col-md-6">
+<!-- 							<div class="header-search">
+								<form>
+									<select class="input-select">
+										<option value="0">All Categories</option>
+										<option value="1">Category 01</option>
+										<option value="1">Category 02</option>
+									</select>
+									<input class="input" placeholder="Search here">
+									<button class="search-btn">Search</button>
+								</form>
+							</div>
+ -->						</div>
+						<!-- /SEARCH BAR -->
+
+						<!-- ACCOUNT -->
+						<div class="col-md-3 clearfix">
+							<div class="header-ctn">
+								<!-- Wishlist -->
+								<div>
+									<a href="#">
+										<i class="fa fa-heart-o"></i>
+										<span>Your Wishlist</span>
+										<div class="qty">2</div>
+									</a>
+								</div>
+								<!-- /Wishlist -->
+
+								<!-- Cart -->
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Your Cart</span>
+										<div class="qty">3</div>
+									</a>
+									<div class="cart-dropdown">
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="./img/product01.png" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="./img/product02.png" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+										</div>
+										<div class="cart-summary">
+											<small>3 Item(s) selected</small>
+											<h5>SUBTOTAL: $2940.00</h5>
+										</div>
+										<div class="cart-btns">
+											<a href="#">View Cart</a>
+											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									</div>
+								</div>
+								<!-- /Cart -->
+
+								<!-- Menu Toogle -->
+								<div class="menu-toggle">
+									<a href="#">
+										<i class="fa fa-bars"></i>
+										<span>Menu</span>
+									</a>
+								</div>
+								<!-- /Menu Toogle -->
+							</div>
+						</div>
+						<!-- /ACCOUNT -->
+					</div>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- /MAIN HEADER -->
+		</header>
+		<!-- /HEADER -->
+
+		<!-- NAVIGATION -->
+		<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
+
+		<!-- BREADCRUMB -->
+
+		<!-- /SECTION -->
+
+		<!-- NEWSLETTER -->
+
+    <div class="main">
+      <div class="container1">
+        <div class="product">
+          <div class="item1">
+            <img
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="headset"
+            />
+          </div>
+          <div class="item2">
+            <div class="kalam1">
+              <p>headset</p>
+            </div>
+            <div class="kalam2">
+              <p>150 jd</p>
+            </div>
+          </div>
+          <div class="item3">
+            <button class="add-to-cart-button"><p>add to cart</p></button>
+          </div>
+        </div>
+        <div class="product">
+          <div class="item1">
+            <img
+              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="iphone"
+            />
+          </div>
+          <div class="item2">
+            <div class="kalam1">
+              <p>iphone</p>
+            </div>
+            <div class="kalam2">
+              <p>900 jd</p>
+            </div>
+          </div>
+          <div class="item3">
+            <button class="add-to-cart-button"><p>add to cart</p></button>
+          </div>
+        </div>
+        <div class="product">
+          <div class="item1">
+            <img
+              src="https://images.unsplash.com/photo-1634306625570-2d21fb4b4781?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="keyboard"
+            />
+          </div>
+          <div class="item2">
+            <div class="kalam1">
+              <p>keyboard</p>
+            </div>
+            <div class="kalam2">
+              <p>60 jd</p>
+            </div>
+          </div>
+          <div class="item3">
+            <button class="add-to-cart-button"><p>add to cart</p></button>
+          </div>
+        </div>
+      </div>
+      <div id="selected-products-container"></div>
+      <!--       <div id="total-amount-container" class="total-container">
+        <p>Total Amount: <span id="total-amount">0</span> jd</p>
+      </div>
+ -->
+      <div class="down">
+        <button class="Home">
+          <a href="index.html" style="text-decoration: none; color: white"
+            >Home</a
+          >
+        </button>
+        <button class="checkout">
+          <a href="" style="text-decoration: none; color: white">checkout</a>
+        </button>
+      </div>
+    </div>
+    <div class="coupon-container" style="display: flex; flex-direction: row;justify-content: center;">
+      <label for="coupon" style="font-size: 20px;">Enter Coupon Code: </label>
+      <input type="text" id="coupon" />
+      <button id="apply-coupon">Apply</button>
+    </div>
+    <div class="total-container "  >
+      <p  style="font-size: 20px; ">Total Amount: <span id="total-amount" style="font-size: 20px; ">0</span> jd</p>
+    </div>
+    <div class="total-container">
+      <p style="font-size: 20px; ">Amount after Discount: <span id="amount-after-discount"style="font-size: 20px; ">0</span> jd</p>
+    </div>
+    		<!-- FOOTER -->
+		<footer id="footer">
+			<!-- top footer -->
+			<div class="section">
+				<!-- container -->
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">About Us</h3>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+								<ul class="footer-links">
+									<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
+									<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Categories</h3>
+								<ul class="footer-links">
+									<li><a href="#">Hot deals</a></li>
+									<li><a href="#">Laptops</a></li>
+									<li><a href="#">Smartphones</a></li>
+									<li><a href="#">Cameras</a></li>
+									<li><a href="#">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="clearfix visible-xs"></div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Information</h3>
+								<ul class="footer-links">
+									<li><a href="#">About Us</a></li>
+									<li><a href="#">Contact Us</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="#">Orders and Returns</a></li>
+									<li><a href="#">Terms & Conditions</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-md-3 col-xs-6">
+							<div class="footer">
+								<h3 class="footer-title">Service</h3>
+								<ul class="footer-links">
+									<li><a href="#">My Account</a></li>
+									<li><a href="#">View Cart</a></li>
+									<li><a href="#">Wishlist</a></li>
+									<li><a href="#">Track My Order</a></li>
+									<li><a href="#">Help</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /top footer -->
+
+			<!-- bottom footer -->
+			<div id="bottom-footer" class="section">
+				<div class="container">
+					<!-- row -->
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<ul class="footer-payments">
+								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+							</ul>
+							<span class="copyright">
+								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+							</span>
+
+
+						</div>
+					</div>
+						<!-- /row -->
+				</div>
+				<!-- /container -->
+			</div>
+			<!-- /bottom footer -->
+		</footer>
+
+
+    <script>
+      const selectedProductsContainer = document.getElementById(
+        "selected-products-container"
+      );
+      const totalAmountContainer = document.getElementById(
+        "total-amount-container"
+      );
+      const totalAmountElement = document.getElementById("total-amount");
+      let selectedProducts = [];
+
+      document
+        .querySelectorAll(".add-to-cart-button")
+        .forEach((button, index) => {
+          button.addEventListener("click", () => {
+            const product = button.closest(".product");
+            const imgSrc = product.querySelector("img").src;
+            const name = product.querySelector(".kalam1 p").innerText;
+            const price = parseInt(
+              product.querySelector(".kalam2 p").innerText.split(" ")[0]
+            );
+
+            const existingProduct = selectedProducts.find(
+              (p) => p.name === name
+            );
+            if (existingProduct) {
+              existingProduct.quantity += 1;
+              existingProduct.totalPrice += price;
+            } else {
+              selectedProducts.push({
+                imgSrc,
+                name,
+                price,
+                quantity: 1,
+                totalPrice: price,
+              });
+            }
+
+            renderSelectedProducts();
+            updateTotalAmount();
+          });
+        });
+
+      function renderSelectedProducts() {
+        selectedProductsContainer.innerHTML = "";
+
+        selectedProducts.forEach((product, index) => {
+          const productContainer = document.createElement("div");
+          productContainer.classList.add("selected-container");
+          productContainer.innerHTML = `
+            <div class="selected-item">
+                <img  src="${product.imgSrc}" alt="${product.name}">
+                <p >${product.name}</p>
+            </div>
+            <div class="selected-item">
+                <button class="quantity-button decrease">-</button>
+                <p>Quantity: ${product.quantity} </p>
+                <button class="quantity-button increase">+</button>
+            </div>
+            <div class="selected-item">
+              <p >Total: ${product.totalPrice} jd</p>
+            </div>
+            <button class="remove-button">X</button>`;
+
+          productContainer
+            .querySelector(".remove-button")
+            .addEventListener("click", () => {
+              selectedProducts.splice(index, 1);
+              renderSelectedProducts();
+              updateTotalAmount();
+            });
+
+          productContainer
+            .querySelector(".quantity-button.increase")
+            .addEventListener("click", () => {
+              product.quantity += 1;
+              product.totalPrice += product.price;
+              renderSelectedProducts();
+              updateTotalAmount();
+            });
+
+          productContainer
+            .querySelector(".quantity-button.decrease")
+            .addEventListener("click", () => {
+              if (product.quantity > 1) {
+                product.quantity -= 1;
+                product.totalPrice -= product.price;
+                renderSelectedProducts();
+                updateTotalAmount();
+              }
+            });
+
+          selectedProductsContainer.appendChild(productContainer);
+        });
+      }
+
+      function updateTotalAmount() {
+        const totalAmount = selectedProducts.reduce(
+          (sum, product) => sum + product.totalPrice,
+          0
+        );
+        totalAmountElement.innerText = totalAmount;
+      }
+      const couponInput = document.getElementById("coupon");
+      const applyCouponButton = document.getElementById("apply-coupon");
+      const amountAfterDiscountElement = document.getElementById(
+        "amount-after-discount"
+      );
+
+      const coupons = {
+        10: 10,
+        20: 20,
+      };
+
+      applyCouponButton.addEventListener("click", () => {
+        const couponCode = couponInput.value.trim();
+        const discount = coupons[couponCode] || 0;
+        updateTotalAmount(discount);
+      });
+
+      function updateTotalAmount(discount = 0) {
+        const totalAmount = selectedProducts.reduce(
+          (sum, product) => sum + product.totalPrice,
+          0
+        );
+        const discountedAmount = totalAmount - totalAmount * (discount / 100);
+
+        totalAmountElement.innerText = totalAmount;
+        amountAfterDiscountElement.innerText = discountedAmount.toFixed(2);
+      }
+
+      document
+        .querySelectorAll(".add-to-cart-button")
+        .forEach((button, index) => {
+          button.addEventListener("click", () => {
+            const product = button.closest(".product");
+            const imgSrc = product.querySelector("img").src;
+            const name = product.querySelector(".kalam1 p").innerText;
+            const price = parseInt(
+              product.querySelector(".kalam2 p").innerText.split(" ")[0]
+            );
+
+            const existingProduct = selectedProducts.find(
+              (p) => p.name === name
+            );
+            if (existingProduct) {
+              existingProduct.quantity += 1;
+              existingProduct.totalPrice += price;
+            } else {
+              selectedProducts.push({
+                imgSrc,
+                name,
+                price,
+                quantity: 1,
+                totalPrice: price,
+              });
+            }
+
+            renderSelectedProducts();
+            updateTotalAmount();
+          });
+        });
+
+      function renderSelectedProducts() {
+        selectedProductsContainer.innerHTML = "";
+
+        selectedProducts.forEach((product, index) => {
+          const productContainer = document.createElement("div");
+          productContainer.classList.add("selected-container");
+          productContainer.innerHTML = `
+      <div class="selected-item">
+          <img src="${product.imgSrc}" alt="${product.name}">
+          <p>${product.name}</p>
+      </div>
+      <div class="selected-item">
+          <button class="quantity-button decrease">-</button>
+          <p>Quantity: ${product.quantity} </p>
+          <button class="quantity-button increase">+</button>
+      </div>
+      <div class="selected-item">
+          <p>Total: ${product.totalPrice} jd</p>
+      </div>
+      <button class="remove-button">X</button>`;
+
+          productContainer
+            .querySelector(".remove-button")
+            .addEventListener("click", () => {
+              selectedProducts.splice(index, 1);
+              renderSelectedProducts();
+              updateTotalAmount();
+            });
+
+          productContainer
+            .querySelector(".quantity-button.increase")
+            .addEventListener("click", () => {
+              product.quantity += 1;
+              product.totalPrice += product.price;
+              renderSelectedProducts();
+              updateTotalAmount();
+            });
+
+          productContainer
+            .querySelector(".quantity-button.decrease")
+            .addEventListener("click", () => {
+              if (product.quantity > 1) {
+                product.quantity -= 1;
+                product.totalPrice -= product.price;
+                renderSelectedProducts();
+                updateTotalAmount();
+              }
+            });
+
+          selectedProductsContainer.appendChild(productContainer);
+        });
+      }
+    </script>
+  </body>
+</html>
