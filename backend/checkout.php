@@ -1,53 +1,68 @@
 <?php
-// Initialize error variables
+require "../backend/connection_db_pdo.php";
+// need to change the cart id to be correct
 $firstNameErr = $lastNameErr = $emailErr = $addressErr = $cityErr = $countryErr = $zipCodeErr = $telephoneErr = "";
-
-// Initialize form variables
+$flag = true; // to decide if the form should be inserted or not
 $firstName = $lastName = $email = $address = $city = $country = $zipCode = $tel = "";
+$amount =1000;
 
-// Check if form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //make it show an message in cart
+    //make it show an message in cart class="errorValidCheckOut"
     // Validate and assign form data
     $firstName = isset($_POST['first-name']) ? trim($_POST['first-name']) : "";
     if (empty($firstName) || !preg_match("/^[a-zA-Z-' ]*$/", $firstName)) {
         $firstNameErr = "First name is required and should only contain letters and spaces";
+		$flag = false;
     }
 
     $lastName = isset($_POST['last-name']) ? trim($_POST['last-name']) : "";
     if (empty($lastName) || !preg_match("/^[a-zA-Z-' ]*$/", $lastName)) {
         $lastNameErr = "Last name is required and should only contain letters and spaces";
+		$flag = false;
     }
 
     $email = isset($_POST['email']) ? trim($_POST['email']) : "";
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = "Valid email is required";
+		$flag = false;
     }
 
     $address = isset($_POST['address']) ? trim($_POST['address']) : "";
     if (empty($address)) {
         $addressErr = "Address is required";
+		$flag = false;
     }
 
     $city = isset($_POST['city']) ? trim($_POST['city']) : "";
     if (empty($city) || !preg_match("/^[a-zA-Z-' ]*$/", $city)) {
         $cityErr = "City is required and should only contain letters and spaces";
+		$flag = false;
     }
 
     $country = isset($_POST['country']) ? trim($_POST['country']) : "";
     if (empty($country) || !preg_match("/^[a-zA-Z-' ]*$/", $country)) {
         $countryErr = "Country is required and should only contain letters and spaces";
+		$flag = false;
     }
 
     $zipCode = isset($_POST['zip-code']) ? trim($_POST['zip-code']) : "";
     if (empty($zipCode) || !preg_match("/^\d{5}(-\d{4})?$/", $zipCode)) {
         $zipCodeErr = "Valid ZIP code is required (e.g., 12345 or 12345-6789)";
+		$flag = false;
     }
 
     $tel = isset($_POST['tel']) ? trim($_POST['tel']) : "";
     if (empty($tel) || !preg_match("/^\+?[0-9]{10,15}$/", $tel)) {
         $telephoneErr = "Valid telephone number is required";
+		$flag = false;
     }
+	
+		if($flag){
+			$sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, zip_code, telephone, amount ,cart_id) VALUES (CURRENT_TIMESTAMP(), '$firstName', '$lastName', '$email', '$address', '$city', '$country', '$zipCode', '$tel', '$amount',21)";
+
+			$conn->exec($sql);
+		}
+	
 
    
 } else {
@@ -64,7 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
+	<style>
+		.errorValidCheckOut{
+			color: red;
+		}
+	</style>
 		<title>Electro - HTML Ecommerce Template</title>
 
 		<!-- Google font -->
@@ -253,29 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</header>
 		<!-- /HEADER -->
 
-		<!-- NAVIGATION -->
-		<nav id="navigation">
-		<!-- container -->
-		<div class="container">
-			<!-- responsive-nav -->
-			<div id="responsive-nav">
-			<!-- NAV -->
-			<ul class="main-nav nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#">Hot Deals</a></li>
-				<li><a href="#">Categories</a></li>
-				<li><a href="#">Laptops</a></li>
-				<li><a href="#">Smartphones</a></li>
-				<li><a href="#">Cameras</a></li>
-				<li><a href="#">Accessories</a></li>
-			</ul>
-			<!-- /NAV -->
-			</div>
-			<!-- /responsive-nav -->
-		</div>
-		<!-- /container -->
-		</nav>
-		<!-- /NAVIGATION -->
+	
 
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
@@ -286,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			<div class="col-md-12">
 				<h3 class="breadcrumb-header">Checkout</h3>
 				<ul class="breadcrumb-tree">
-				<li><a href="#">Home</a></li>
+				<li><a href="../frontend/index.html">Home</a></li>
 				<li class="active">Checkout</li>
 				</ul>
 			</div>
@@ -317,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="first-name"
 						placeholder="First Name"
 					/>
-                    <div> <?php echo $firstNameErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $firstNameErr ?></div>
 					</div>
 					<div class="form-group">
 					<input
@@ -326,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="last-name"
 						placeholder="Last Name"
 					/>
-                    <div> <?php echo $lastNameErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $lastNameErr ?></div>
 
 					</div>
 					<div class="form-group">
@@ -336,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="email"
 						placeholder="Email"
 					/>
-                    <div> <?php echo $emailErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $emailErr ?></div>
 
 					</div>
 					<div class="form-group">
@@ -346,7 +343,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="address"
 						placeholder="Address"
 					/>
-                    <div> <?php echo $addressErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $addressErr ?></div>
 
 					</div>
 					<div class="form-group">
@@ -356,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="city"
 						placeholder="City"
 					/>
-                    <div> <?php echo $cityErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $cityErr ?></div>
 
 					</div>
 					<div class="form-group">
@@ -366,7 +363,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="country"
 						placeholder="Country"
 					/>
-                    <div> <?php echo $countryErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $countryErr ?></div>
                     
                 </div>
                 <div class="form-group">
@@ -376,7 +373,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     name="zip-code"
                     placeholder="ZIP Code"
 					/>
-                    <div> <?php echo $zipCodeErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $zipCodeErr ?></div>
                     
 					</div>
 					<div class="form-group">
@@ -386,7 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						name="tel"
 						placeholder="Telephone"
 					/>
-                    <div> <?php echo $telephoneErr ?></div>
+                    <div class="errorValidCheckOut"> <?php echo $telephoneErr ?></div>
 
 					</div>
 				<div class="form-group">
@@ -438,57 +435,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<div><strong class="order-total">$2940.00</strong></div>
 				</div>
 				</div>
-				<div class="payment-method">
-				<div class="input-radio">
-					<input type="radio" name="payment" id="payment-1" />
-					<label for="payment-1">
-					<span></span>
-					Direct Bank Transfer
-					</label>
-					<div class="caption">
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-						sed do eiusmod tempor incididunt ut labore et dolore magna
-						aliqua.
-					</p>
-					</div>
-				</div>
-				<div class="input-radio">
-					<input type="radio" name="payment" id="payment-2" />
-					<label for="payment-2">
-					<span></span>
-					Cheque Payment
-					</label>
-					<div class="caption">
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-						sed do eiusmod tempor incididunt ut labore et dolore magna
-						aliqua.
-					</p>
-					</div>
-				</div>
-				<div class="input-radio">
-					<input type="radio" name="payment" id="payment-3" />
-					<label for="payment-3">
-					<span></span>
-					Paypal System
-					</label>
-					<div class="caption">
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-						sed do eiusmod tempor incididunt ut labore et dolore magna
-						aliqua.
-					</p>
-					</div>
-				</div>
-				</div>
-				<div class="input-checkbox">
-				<input type="checkbox" id="terms" />
-				<label for="terms">
-					<span></span>
-					I've read and accept the <a href="#">terms & conditions</a>
-				</label>
-				</div>
+				
+				
 				<button type="submit" class="primary-btn order-submit">Place order </button>
 				
 			</div>
@@ -683,5 +631,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	</body>
 	</html>
 	
+	<?php 
+	
+	?>
    
 
