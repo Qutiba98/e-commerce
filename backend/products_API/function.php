@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 require "../db.php";
 
 
 
-function storeUser($user_input) {
+function storeUser($user_input)
+{
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -77,7 +78,8 @@ function storeUser($user_input) {
 
 
 //  show all users --------------------------------------------------------------------------------------------------------
-function getUsersList(){
+function getUsersList()
+{
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -92,7 +94,7 @@ function getUsersList(){
     }
 
     // تنفيذ الاستعلام
-    $query = "SELECT * FROM users";
+    $query = "SELECT * FROM product";
     $query_run = mysqli_query($conn, $query);
 
     if ($query_run) {
@@ -129,7 +131,8 @@ function getUsersList(){
 
 
 //  show user by id ---------------------------------------------------------------------------------------------------------
-function get_user_by_id($user_id){
+function get_user_by_id($user_id)
+{
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -183,7 +186,8 @@ function get_user_by_id($user_id){
 // ---------------------------------------------------------------------------------------
 
 
-function update_user($subjectInput, $subjectParams){
+function update_user($subjectInput, $subjectParams)
+{
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -236,7 +240,8 @@ function update_user($subjectInput, $subjectParams){
 
 // ----------------------------------------------------------------------------------------------------
 
-function delete_user($UsersParams) {
+function delete_user($UsersParams)
+{
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -280,6 +285,3 @@ function delete_user($UsersParams) {
         return json_encode($data);
     }
 }
-
-
-?>
