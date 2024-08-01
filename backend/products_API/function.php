@@ -108,7 +108,7 @@ function getProductList() {
 
 //  show user by id ---------------------------------------------------------------------------------------------------------
 
-function  get_product_by_id($productParams){
+function  get_product_by_name($productParams){
     global $conn;
 
     // التحقق من اتصال قاعدة البيانات
@@ -124,9 +124,11 @@ function  get_product_by_id($productParams){
 
 
 
-    $product_id = mysqli_real_escape_string($conn, $productParams['id']);
+    $product_name = mysqli_real_escape_string($conn, $productParams['name']);
 
-    $query = "SELECT * FROM product WHERE id = '$product_id' LIMIT 1 ";
+
+
+    $query = "SELECT * FROM product WHERE name = '$product_name' LIMIT 1   ";
 
     $reult = mysqli_query($conn, $query);
 
@@ -181,6 +183,60 @@ function  get_product_by_price($productParams){
     $product_price = mysqli_real_escape_string($conn, $productParams['price']);
 
     $query = "SELECT * FROM product WHERE price = '$product_price' LIMIT 1 ";
+
+    $reult = mysqli_query($conn, $query);
+
+    if ($reult) {
+        if (mysqli_num_rows($reult) > 0) {
+            $res = mysqli_fetch_all($reult, MYSQLI_ASSOC);
+
+            $data = [
+                'status' => 200,
+                'message' => 'product List Fetched Successfully',
+                'data' => $res  // إضافة قائمة المستخدمين هنا
+            ];
+            header("HTTP/1.0 200 OK");
+            echo json_encode($data);
+        } else {
+            $data = [
+                'status' => 404,
+                'message' => 'No product Found',
+            ];
+            header("HTTP/1.0 404 No product Found");
+            echo json_encode($data);
+        }
+    } else {
+        $data = [
+            'status' => 500,
+            'message' => 'Internal Server Error',
+        ];
+        header("HTTP/1.0 500 Internal Server Error");
+        echo json_encode($data);
+    }
+
+    // إغلاق اتصال قاعدة البيانات
+    $conn->close();
+}
+// -------------------------------------------------------------------------------------------------
+function  get_product_by_categorie_id($productParams){
+    global $conn;
+
+    // التحقق من اتصال قاعدة البيانات
+    if ($conn->connect_error) {
+        $data = [
+            'status' => 500,
+            'message' => 'Database Connection Failed',
+        ];
+        header("HTTP/1.0 500 Internal Server Error");
+        echo json_encode($data);
+        exit();
+    }
+
+
+
+    $product_price = mysqli_real_escape_string($conn, $productParams['categories_id']);
+
+    $query = "SELECT * FROM product WHERE categories_id = '$product_price' LIMIT 1 ";
 
     $reult = mysqli_query($conn, $query);
 

@@ -11,10 +11,10 @@ $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 if($requestMethod == "GET"){
 
-    if(isset($_GET["name"])){
+    if(isset($_GET["categories_id"])){
 
-        $phone_list = get_product_by_name($_GET);
-        echo($phone_list);
+        $product_list = get_product_by_categorie_id($_GET);
+        echo($product_list);
 
     }
 
