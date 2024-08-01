@@ -46,24 +46,7 @@ require 'db.php';
             </tr>
           </thead>
           <tbody>
-            <?php
 
-            if ($query_run > 0) {
-              while ($row = $query_run->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["id"] . "</td>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["price"] . "</td>";
-                echo "<td>" . $row["description"] . "</td>";
-                echo "<td>" . $row["categories_id"] . "</td>";
-                echo "<td>" . $row["image"] . "</td>";
-                echo '<td><a href="read.php?id=' . $row["id"] . '">View</a> | <a href="update.php?id=' . $row["id"] . '">Update</a> | <a href="delete.php?id=' . $row["id"] . '">Delete</a></td>';
-                echo "</tr>";
-              }
-            } else {
-              echo "<tr><td colspan='5'>No users found</td></tr>";
-            }
-            $conn->close(); ?>
           </tbody>
         </table>
       </section>
