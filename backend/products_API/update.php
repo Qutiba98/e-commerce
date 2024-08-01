@@ -17,13 +17,13 @@ if ($requestMethod == "PUT") {
         $inputData = $_POST;
     }
 
-    if (isset($_GET['user_id'])) {
-        $updateSubject = update_user($inputData, $_GET);
-        echo $updateSubject;
+    if (isset($_GET['id'])) {
+        $updatePruduct = updatePruduct($inputData, $_GET);
+        echo $updatePruduct;
     } else {
         $data = [
             'status' => 400,
-            'message' => 'User ID is required',
+            'message' => 'pruduct ID is required',
         ];
         header("HTTP/1.0 400 Bad Request");
         echo json_encode($data);
