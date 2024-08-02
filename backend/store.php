@@ -284,8 +284,14 @@ if ($categoryId) {
     // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
     $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
-    // $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
-    $apiUrl = 'http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php';
+    $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
+=======
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
+} elseif ($searchName) {
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
+} else {
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
+>>>>>>> b33186af9a28b11c6fe0b038fe50bc9245d09dae:frontend/store.php
 }
 
 // جلب البيانات من الـ API
@@ -306,7 +312,7 @@ if ($response === FALSE) {
         foreach ($data['data'] as $product) {
             $productName = htmlspecialchars($product['name']);
             $imageName = htmlspecialchars($product['image']);
-            $imagePath = 'http://127.0.0.1/brief%203/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
+            $imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
 
             if (stripos($productName, htmlspecialchars($searchName)) !== false) {
                 echo '<div class="col-md-4 col-xs-6">';
