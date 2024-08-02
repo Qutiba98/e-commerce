@@ -9,11 +9,7 @@ if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
 $isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
-<<<<<<< HEAD
-$input = file_get_contents("http://localhost/new%20github/e-commerce/backend/productapi/getbyid.php?id=54");
-=======
 $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
 $result = json_decode($input, true);
 
 if ($result) {

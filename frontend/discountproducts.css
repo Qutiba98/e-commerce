@@ -135,6 +135,8 @@ h1 {
   display: block;
 }
 
+
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
   .card {
@@ -170,4 +172,48 @@ h1 {
   .card-content .button {
     font-size: 14px; /* Adjust font size for button on smaller screens */
   }
+}
+/* ---------------------------------------- */
+
+
+/* Main Header Styles */
+#header {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #15161d;
+}
+
+.header-ctn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-icon a,
+.cart-icon a {
+  color: white;
+ 
+  font-size: 16px;
+  flex-direction: column;
+  align-items:normal;
+
+}
+
+.homestyle{
+   
+    margin-left: 1.6rem;
+    margin-top: 15px;
+   
+    display: block;
+    font-size: 18px;
+
+}
+
+.qty {
+  background-color: #d10024;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 12px;
+  margin-left: 5px;
 }

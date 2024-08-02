@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-<?php
-require "./connection_db_pdo.php";
-session_start();
-$input = file_get_contents("http://localhost/new%20github/e-commerce/backend/cartApi/cartFetchData.php?id=21");
-=======
 
 <?php 
 require "./connection_db_pdo.php";
 session_start();
 $id = 0;
 $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
 // $result = json_decode($input,true);
 // unset($_SESSION['products'][0]);
 $registerd = false;
@@ -245,14 +238,6 @@ if(isset($_SESSION['user'])){
                 <a href="#!" class="text-body">price <i class="fas fa-angle-down mt-1"></i></a>
               </p>
             </div>
-<<<<<<< HEAD
-          </div>
-          <?php foreach ($result as $row) : ?>
-            <?php
-            $showImage = $row['image'];
-            ?>
-
-=======
             <!-- <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST"> -->
             <?php foreach($result as $row): ?>
                 <?php
@@ -260,7 +245,6 @@ if(isset($_SESSION['user'])){
                      ?>
                      
                 
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
                 <div class="row d-flex justify-content-between align-items-center">
@@ -275,33 +259,15 @@ if(isset($_SESSION['user'])){
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-<<<<<<< HEAD
-                    <form action="./cart.php" method="POST">
-
-                      <p data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                        <i class="fas fa-minus"></i>
-                      </p>
-
-                      <input id="form1" id="bigFont" min="0" name="quantity" value="<?php echo $row['quantity'] ?>" type="number" class="form-control form-control-sm" style="font-size: 1rem" />
-
-                      <p data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                        <i class="fas fa-plus"></i>
-                      </p>
-
-=======
                   
 
                      
                     
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                     <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-<<<<<<< HEAD
-                    <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
-=======
                   <?php 
                   if ($registerd): ?>
                       <a href="" class="text-danger"
@@ -309,7 +275,6 @@ if(isset($_SESSION['user'])){
                           </i
                     >
                     <?php endif; ?></a>
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                   </div>
                 </div>
               </div>
@@ -328,11 +293,6 @@ if(isset($_SESSION['user'])){
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div class="card">
-            <div class="card-body">
-              <input type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-warning btn-block btn-lg" value="Proceed to Pay" />
-=======
             <div class="card">
               <div class="card-body">
                 <a href="./checkout.php">
@@ -346,77 +306,10 @@ if(isset($_SESSION['user'])){
                 </a>
               
               </div>
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             </div>
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-    </div>
-    </form>
-  </section>
-  <!-- end of cart des _______________________________________________________________________ -->
-  <!-- BREADCRUMB -->
-  <div id="breadcrumb" class="section">
-    <!-- container -->
-    <div class="container">
-      <!-- row -->
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="breadcrumb-header">Regular Page</h3>
-          <ul class="breadcrumb-tree">
-            <li><a href="#">Home</a></li>
-            <li class="active">Blank</li>
-          </ul>
-        </div>
-      </div>
-      <!-- /row -->
-    </div>
-    <!-- /container -->
-  </div>
-  <!-- /BREADCRUMB -->
-
-  <!-- SECTION -->
-  <div class="section">
-    <!-- container -->
-    <div class="container">
-      <!-- row -->
-      <div class="row"></div>
-      <!-- /row -->
-    </div>
-    <!-- /container -->
-  </div>
-  <!-- /SECTION -->
-
-  <!-- NEWSLETTER -->
-  <div id="newsletter" class="section">
-    <!-- container -->
-    <div class="container">
-      <!-- row -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="newsletter">
-            <p>Sign Up for the <strong>NEWSLETTER</strong></p>
-            <form>
-              <input class="input" type="email" placeholder="Enter Your Email" />
-              <button class="newsletter-btn">
-                <i class="fa fa-envelope"></i> Subscribe
-              </button>
-            </form>
-            <ul class="newsletter-follow">
-              <li>
-                <a href="#"><i class="fa fa-facebook"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-              </li>
-              <li>
-                <a href="#"><i class="fa fa-pinterest"></i></a>
-              </li>
-=======
       <!-- </form> -->
     </section>
     <!-- end of cart des _______________________________________________________________________ -->
@@ -431,7 +324,6 @@ if(isset($_SESSION['user'])){
             <ul class="breadcrumb-tree">
               <li><a href="#">Home</a></li>
               <li class="active">Blank</li>
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             </ul>
           </div>
         </div>

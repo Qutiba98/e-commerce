@@ -53,10 +53,48 @@
             </div>
         </div>
 
+          <!-- MAIN HEADER -->
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- Home -->
+                <div class="col-md-6 ">
+                    <div class=" home-icon">
+                        <a href="index.html">
+                            <i class="fa fa-home homestyle"></i><br>
+                            <span>Home</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- /Home -->
+
+                <!-- Cart -->
+                <div class="col-md-6 clearfix">
+                    <div class="header-ctn cart-icon">
+                        <div class="dropdown cart-icon">
+                            <a href="cart.html">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Your Cart</span>
+                                <div class="qty">3</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Cart -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /MAIN HEADER -->
+
         <div class="discount-section">
             <div class="container">
                 <h1>Discounted Products</h1>
                 <div class="grid">
+
                     <?php
                     // Database configuration
                     $host = 'localhost';

@@ -76,43 +76,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-    <div class="container">
-        <form name="signupForm" action="signup.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
-            <div class="form-group">
-                <h2>Sign Up</h2>
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" />
-                <span id="nameError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" />
-                <span id="emailError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="phone_number">Mobile:</label>
-                <input type="text" id="phone_number" name="phone_number" />
-                <span id="mobileError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" />
-                <span id="passwordError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required />
-                <span id="confirmPasswordError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="image">Upload Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" />
-            </div>
-            <button type="submit" class="btn">Sign Up</button>
-            <p>Already have an account? <a href="login.php">Login here</a></p>
-        </form>
-=======
 <div class="container">
       <form
         name="signupForm"
@@ -159,7 +122,6 @@
         <button type="submit" class="btn">Sign Up</button>
         <p>Already have an account? <a href="login.php">Login here</a></p>
       </form>
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
 
         <div id="successMessage" class="success-message"></div>
     </div>
@@ -168,11 +130,7 @@
 </html>
 
 <?php
-<<<<<<< HEAD
-include 'dbqutipa.php';
-=======
 include './dbqutipa.php';
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
 
 class UserRegistration
 {
@@ -295,14 +253,8 @@ class UserRegistration
         }
     }
 
-<<<<<<< HEAD
-    private function addToCart($userId)
-    {
-        $stmt = $this->conn->prepare("INSERT INTO cart (user_id) VALUES (?)");
-=======
     private function addToCart($userId) {
         $stmt = $this->conn->prepare("INSERT INTO cart (id, user_id) VALUES (?, ?)");
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
         if (!$stmt) {
             die("Prepare failed: " . $this->conn->error);
         }
@@ -318,15 +270,11 @@ class UserRegistration
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-<<<<<<< HEAD
-    $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-=======
 
     $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
     // $registration = new UserRegistration($servername, $username, $password, $dbname);
 
->>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
     $registration->validateInput($_POST, $_FILES);
     $registration->checkExistingUser($_POST['email'], $_POST['phone_number']);
     $registration->registerUser($_POST);
