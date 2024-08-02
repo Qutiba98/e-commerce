@@ -6,29 +6,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Details</title>
 
-    <!-- Google font -->
+    
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-    <!-- Bootstrap -->
+   
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
 
-    <!-- Slick -->
+    
     <link type="text/css" rel="stylesheet" href="css/slick.css"/>
     <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
 
-    <!-- nouislider -->
+    
     <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
 
-    <!-- Font Awesome Icon -->
+    
     <link rel="stylesheet" href="css/font-awesome.min.css">
 
-    <!-- Custom stylesheet -->
+    
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
     <style>
         .quantity {
             display: flex;
             align-items: center;
         }
+
+.container {
+    margin-top: 50px;
+}
+
+.customer-reviews {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px #D10024;
+}
+
+.reviews-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #D10024;
+    padding-bottom: 10px;
+}
+
+.reviews {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px;
+}
+
+.review {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #f9f9f9;
+}
+
+.review-author {
+    font-weight: bold;
+    color: #D10024;
+}
+
+.review-text {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.add-review-form {
+    margin-top: 30px;
+}
+
+.add-review-form h4 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #D10024;
+    border-color: black;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
         .quantity input {
             text-align: center;
             width: 50px;
@@ -273,46 +343,72 @@
             </div>
             <!-- /row -->
 
-            <!-- Customer Reviews -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="customer-reviews">
-                        <h3 class="reviews-title">Customer Reviews</h3>
-                        <div class="reviews">
-                            <!-- Review 1 -->
-                            <div class="review">
-                                <div class="review-author">
-                                    <strong>John Doe</strong> <span>4.5/5</span>
-                                </div>
-                                <p class="review-text">This is a great product! It exceeded my expectations in every way.</p>
-                            </div>
-                            <!-- /Review 1 -->
+            <?php
+// session_start();
 
-                            <!-- Review 2 -->
-                            <div class="review">
-                                <div class="review-author">
-                                    <strong>Jane Smith</strong> <span>4.0/5</span>
-                                </div>
-                                <p class="review-text">Good quality, but the shipping took longer than expected.</p>
-                            </div>
-                            <!-- /Review 2 -->
+$_SESSION['user_id'] = 22; // Example user ID
+$_SESSION['product_id'] = 75; // Example product ID
 
-                            <!-- Add Review Form -->
-                            <div class="add-review-form">
-                                <h4>Add Your Review</h4>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="review-text">Your Review:</label>
-                                        <textarea id="review-text" class="form-control" rows="4"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                                </form>
-                            </div>
-                            <!-- /Add Review Form -->
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "e-commerce"; 
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $product_id = $_SESSION['product_id'];
+    $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
+    $user_id = $_SESSION['user_id'];
+
+    if ($product_id && $comment_text && $user_id) {
+        $stmt = $conn->prepare("INSERT INTO comments (product_id, comment_text, user_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("isi", $product_id, $comment_text, $user_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
+
+$product_id = $_SESSION['product_id'];
+$result = $conn->query("SELECT * FROM comments WHERE product_id = $product_id");
+?>
+<!-- Customer Reviews Section -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="customer-reviews">
+                <h3 class="reviews-title">Customer Reviews</h3>
+                <div class="reviews">
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                    <div class="review">
+                        <div class="review-author">
+                            <strong>User <?php echo $row['user_id']; ?></strong>
                         </div>
+                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
                     </div>
+                    <?php endwhile; ?>
                 </div>
+                
+                <!-- Add Review Form -->
+                <div class="add-review-form">
+                    <h4>Add Your Review</h4>
+                    <form method="POST" action="">
+                        <div class="form-group">
+                            <label for="review-text">Your Review:</label>
+                            <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+                <!-- /Add Review Form -->
             </div>
+        </div>
+    </div>
+</div>
             <!-- /Customer Reviews -->
         </div>
         <!-- /container -->
@@ -441,3 +537,4 @@
     </script>
 </body>
 </html>
+

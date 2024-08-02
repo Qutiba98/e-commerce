@@ -127,9 +127,12 @@
 </body>
 </html>
 
-
 <?php
+<<<<<<< HEAD
 include './dbqutipa.php';
+=======
+include 'dbqutipa.php';
+>>>>>>> dc4c7f069016363d4df8252c749e23555c3aa0bb
 
 class UserRegistration {
     private $conn;
@@ -259,7 +262,15 @@ class UserRegistration {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<<<<<<< HEAD
     $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+=======
+<<<<<<< HEAD
+    $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+=======
+    $registration = new UserRegistration($servername, $username, $password, $dbname);
+>>>>>>> cf8402dcb2c4173c6c986a01925fd9c4deaebc47
+>>>>>>> dc4c7f069016363d4df8252c749e23555c3aa0bb
     $registration->validateInput($_POST, $_FILES);
     $registration->checkExistingUser($_POST['email'], $_POST['phone_number']);
     $registration->registerUser($_POST);

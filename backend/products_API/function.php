@@ -72,7 +72,9 @@ function getProductList() {
         return json_encode($data);
     }
 
-    $query = "SELECT * FROM product";
+
+    $query = " SELECT product.*,categories.name AS categoriesName FROM product
+ JOIN categories ON product.categories_id=categories.id";
     $result = mysqli_query($conn, $query);
 
     if ($result) {

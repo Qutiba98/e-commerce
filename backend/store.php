@@ -12,20 +12,20 @@
  		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
  		<!-- Bootstrap -->
- 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
 
  		<!-- Slick -->
- 		<link type="text/css" rel="stylesheet" href="css/slick.css"/>
- 		<link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
 
  		<!-- nouislider -->
- 		<link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
 
  		<!-- Font Awesome Icon -->
- 		<link rel="stylesheet" href="css/font-awesome.min.css">
+ 		<link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
  		<!-- Custom stlylesheet -->
- 		<link type="text/css" rel="stylesheet" href="css/style.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
 
 	<style>
 /* Container styling */
@@ -278,11 +278,19 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
+<<<<<<< HEAD:backend/store.php
+    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+} elseif ($searchName) {
+    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+} else {
+    $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
+=======
     $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
 } elseif ($searchName) {
     $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
 } else {
     $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
+>>>>>>> b33186af9a28b11c6fe0b038fe50bc9245d09dae:frontend/store.php
 }
 
 // جلب البيانات من الـ API
@@ -553,12 +561,12 @@ if ($response === FALSE) {
 
 
 		</script>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
+		<script src="../frontend/js/jquery.min.js"></script>
+		<script src="../frontend/js/bootstrap.min.js"></script>
+		<script src="../frontend/js/slick.min.js"></script>
+		<script src="../frontend/js/nouislider.min.js"></script>
+		<script src="../frontend/js/jquery.zoom.min.js"></script>
+		<script src="../frontend/js/main.js"></script>
 
 	</body>
 </html>
