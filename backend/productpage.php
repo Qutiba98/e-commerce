@@ -6,10 +6,14 @@ session_start();
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
-
+$isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
+<<<<<<< HEAD
 $input = file_get_contents("http://localhost/new%20github/e-commerce/backend/productapi/getbyid.php?id=54");
+=======
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
 $result = json_decode($input, true);
 
 if ($result) {
@@ -20,7 +24,8 @@ if ($result) {
         'price' => $result['price'],
         'description' => $result['description'],
         'image' => $result['image'],
-        'quantity' => $quantity
+        'quantity' => $quantity,
+        'isInDatabase' =>$isInDatabase
     ];
 
 
@@ -42,7 +47,7 @@ if ($result) {
 }
 
 // Debug: Display the session products array
-print_r($_SESSION['products']);
+// print_r($_SESSION['products']);
 
 $showImage = $result['image'];
 ?>
@@ -302,6 +307,7 @@ $showImage = $result['image'];
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
+<<<<<<< HEAD
                         <form action="../backend/productpage.php" method="POST">
                             <div class="quantity">
                                 <p class="qty-btn" onclick="decreaseQuantity()">-</p>
@@ -311,6 +317,13 @@ $showImage = $result['image'];
                             </div>
                             <!-- /Quantity -->
 
+=======
+                         <form action="../backend/productpage.php" method="POST" >
+                        <div class="quantity">
+                        <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                        <input type="text" id="quantity" name="qua" value="1">
+                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                             <br>
                             <!-- Add to Cart Button -->
                             <div class="product-actions">

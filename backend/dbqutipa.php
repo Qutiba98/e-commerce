@@ -1,9 +1,9 @@
 <?php
 // db.php
 
-// التأكد من تعريف الثوابت مرة واحدة فقط
+// Ensure constants are defined only once
 if (!defined('DB_SERVER')) {
-    define("DB_SERVER", "localhost");
+    define("DB_SERVER", "127.0.0.1");
 }
 if (!defined('DB_USERNAME')) {
     define("DB_USERNAME", "root");
@@ -14,8 +14,7 @@ if (!defined('DB_PASSWORD')) {
 if (!defined('DB_NAME')) {
     define("DB_NAME", "e-commerce");
 }
-
-// التأكد من عدم تعريف كلاس Database أكثر من مرة
+// Ensure the Database class is defined only once
 if (!class_exists('Database')) {
     class Database {
         private $conn;

@@ -1,15 +1,38 @@
+<<<<<<< HEAD
 <?php
 require "./connection_db_pdo.php";
 session_start();
 $input = file_get_contents("http://localhost/new%20github/e-commerce/backend/cartApi/cartFetchData.php?id=21");
-// $result = json_decode($input,true);
-$result = $_SESSION['products'];
+=======
 
+<?php 
+require "./connection_db_pdo.php";
+session_start();
+$id = 0;
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
+// $result = json_decode($input,true);
+// unset($_SESSION['products'][0]);
+$registerd = false;
+$result = $_SESSION['products'];
+$_SESSION['user'] = 1;
 // var_dump($result);
-// echo $result[0]['userName']
-// foreach($result as $row){
-//     echo $row['cartId'];
-// }
+// unset($result);
+$cartId = 21; // Example cartId
+    $productId = 54;
+    // here to check if the item aleardy in database
+if(isset($_SESSION['user'])){
+  $registerd = true;
+  foreach($result as &$row){
+    if( !$row['isInDatabase'] ){
+      
+    $sql = "INSERT INTO cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
+    $res = $conn -> exec($sql); 
+      $row['isInDatabase'] = true;
+    }
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -222,12 +245,22 @@ $result = $_SESSION['products'];
                 <a href="#!" class="text-body">price <i class="fas fa-angle-down mt-1"></i></a>
               </p>
             </div>
+<<<<<<< HEAD
           </div>
           <?php foreach ($result as $row) : ?>
             <?php
             $showImage = $row['image'];
             ?>
 
+=======
+            <!-- <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST"> -->
+            <?php foreach($result as $row): ?>
+                <?php
+                $showImage=$row['image'];
+                     ?>
+                     
+                
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
                 <div class="row d-flex justify-content-between align-items-center">
@@ -242,6 +275,7 @@ $result = $_SESSION['products'];
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+<<<<<<< HEAD
                     <form action="./cart.php" method="POST">
 
                       <p data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
@@ -254,12 +288,28 @@ $result = $_SESSION['products'];
                         <i class="fas fa-plus"></i>
                       </p>
 
+=======
+                  
+
+                     
+                    
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                     <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+<<<<<<< HEAD
                     <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+=======
+                  <?php 
+                  if ($registerd): ?>
+                      <a href="" class="text-danger"
+                        ><i class="fas fa-trash fa-lg">
+                          </i
+                    >
+                    <?php endif; ?></a>
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                   </div>
                 </div>
               </div>
@@ -278,13 +328,30 @@ $result = $_SESSION['products'];
             </div>
           </div>
 
+<<<<<<< HEAD
           <div class="card">
             <div class="card-body">
               <input type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-warning btn-block btn-lg" value="Proceed to Pay" />
+=======
+            <div class="card">
+              <div class="card-body">
+                <a href="./checkout.php">
+                <button
+              href="./admin_create_user.php"
+    type="submit"
+
+    class="btn btn-warning btn-block btn-lg"
+    value="Proceed to Pay"
+  > procc </button>
+                </a>
+              
+              </div>
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             </div>
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </div>
     </form>
   </section>
@@ -349,6 +416,22 @@ $result = $_SESSION['products'];
               <li>
                 <a href="#"><i class="fa fa-pinterest"></i></a>
               </li>
+=======
+      <!-- </form> -->
+    </section>
+    <!-- end of cart des _______________________________________________________________________ -->
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb" class="section">
+      <!-- container -->
+      <div class="container">
+        <!-- row -->
+        <div class="row">
+          <div class="col-md-12">
+            <h3 class="breadcrumb-header">Regular Page</h3>
+            <ul class="breadcrumb-tree">
+              <li><a href="#">Home</a></li>
+              <li class="active">Blank</li>
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
             </ul>
           </div>
         </div>

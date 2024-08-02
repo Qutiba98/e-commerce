@@ -12,20 +12,20 @@
  		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
  		<!-- Bootstrap -->
- 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
 
  		<!-- Slick -->
- 		<link type="text/css" rel="stylesheet" href="css/slick.css"/>
- 		<link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
 
  		<!-- nouislider -->
- 		<link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
 
  		<!-- Font Awesome Icon -->
- 		<link rel="stylesheet" href="css/font-awesome.min.css">
+ 		<link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
  		<!-- Custom stlylesheet -->
- 		<link type="text/css" rel="stylesheet" href="css/style.css"/>
+ 		<link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
 
 	<style>
 /* Container styling */
@@ -278,11 +278,14 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
+    // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
 } elseif ($searchName) {
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
+    // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
+    // $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
+    $apiUrl = 'http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php';
 }
 
 // جلب البيانات من الـ API
@@ -303,13 +306,13 @@ if ($response === FALSE) {
         foreach ($data['data'] as $product) {
             $productName = htmlspecialchars($product['name']);
             $imageName = htmlspecialchars($product['image']);
-            $imagePath = 'http://127.0.0.1/brief%203/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
+            $imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
 
             if (stripos($productName, htmlspecialchars($searchName)) !== false) {
                 echo '<div class="col-md-4 col-xs-6">';
                 echo '<div class="product">';
                 echo '<div class="product-img">';
-                echo '<img src="../backend/images $imageName" alt="Product Image">';
+                echo '<img src="./images/'.$imagePath.' alt="Product Image">';
                 echo '<div class="product-label">';
                 echo '<span class="sale">-30%</span>';
                 echo '<span class="new">NEW</span>';
@@ -553,12 +556,12 @@ if ($response === FALSE) {
 
 
 		</script>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
+		<script src="../frontend/js/jquery.min.js"></script>
+		<script src="../frontend/js/bootstrap.min.js"></script>
+		<script src="../frontend/js/slick.min.js"></script>
+		<script src="../frontend/js/nouislider.min.js"></script>
+		<script src="../frontend/js/jquery.zoom.min.js"></script>
+		<script src="../frontend/js/main.js"></script>
 
 	</body>
 </html>
