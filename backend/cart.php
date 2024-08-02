@@ -243,10 +243,6 @@ $result = $_SESSION['products'];
             <?php foreach($result as $row): ?>
                 <?php
                 $showImage=$row['image'];
-
-
-// echo "<img src='images/$showImage' alt='' />";
-// echo "showed"
                      ?>
                 
             <div class="card rounded-3 mb-4">
@@ -269,7 +265,7 @@ $result = $_SESSION['products'];
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                    <form action="./cart.php" method="POST">
+                  <form action="./cart.php" method="POST">
 
                       <p 
                         data-mdb-button-init
@@ -337,19 +333,19 @@ $result = $_SESSION['products'];
 
             <div class="card">
               <div class="card-body">
-                <input
-                  type="submit"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  class="btn btn-warning btn-block btn-lg"
-                  value ="Proceed to Pay"
-                > 
+              <input
+    type="submit"
+    data-mdb-button-init
+    data-mdb-ripple-init
+    class="btn btn-warning btn-block btn-lg"
+    value="Proceed to Pay"
+  /> 
               </div>
             </div>
           </div>
         </div>
       </div>
-    </form>
+      </form>
     </section>
     <!-- end of cart des _______________________________________________________________________ -->
     <!-- BREADCRUMB -->
