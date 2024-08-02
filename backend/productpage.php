@@ -1,30 +1,51 @@
-<?php 
+<?php
 include 'db.php';
+session_start();
 
-// Retrieve POST data
+// // Initialize the session variable if it doesn't exist
+if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
+    $_SESSION['products'] = [];
+}
+$isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
-echo $quantity;
-// Debugging line
 
-// Example API call to get product details
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
 $result = json_decode($input, true);
+
+if ($result) {
+    $productId = $result['id'];
+    $productInfo = [
+        'id' => $productId,
+        'name' => $result['name'],
+        'price' => $result['price'],
+        'description' => $result['description'],
+        'image' => $result['image'],
+        'quantity' => $quantity,
+        'isInDatabase' =>$isInDatabase
+    ];
+
+    
+    $productExists = false;
+
+    
+    foreach ($_SESSION['products'] as &$product) {
+        if ($product['id'] === $productId) {
+            $product['quantity'] += $quantity;
+            $productExists = true;
+            break;
+        }
+    }
+
+    // Add the product if it doesn't exist
+    if (!$productExists) {
+        $_SESSION['products'][] = $productInfo;
+    }
+}
+
+// Debug: Display the session products array
+// print_r($_SESSION['products']);
+
 $showImage = $result['image'];
-$productName = $result['name'];
-$productPrice = $result['price'];
-$productDescription = $result['description'];
-
-// Prepare product info
-$productInfo = [
-    'name' => $productName,
-    'price' => $productPrice,
-    'description' => $productDescription,
-    'image' => $showImage,
-    'quantity' => $quantity
-];
-
-// echo $quantity;  // Output quantity for debugging
-// var_dump($productInfo);
 ?>
 
 
@@ -55,7 +76,7 @@ $productInfo = [
     <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
     <style>
-        .product-btns, .qty-btn {
+        .qty-btn {
             display: inline-block;
             width: 30px;
             height: 30px;
@@ -65,13 +86,14 @@ $productInfo = [
             cursor: pointer;
             border: 1px solid #d10024;
             border-radius: 5px;
-            background-color: #d10024;
+            background-color: #15161d;
             color: white;
             transition: background-color 0.3s, transform 0.3s;
-            margin: 0;
+            margin :0
+            
         }
 
-        .product-btns:hover, .qty-btn:hover {
+        .qty-btn:hover {
             background-color: #d10024;
             transform: scale(1.1);
         }
@@ -279,9 +301,9 @@ $productInfo = [
                         <!-- Quantity -->
                          <form action="../backend/productpage.php" method="POST" >
                         <div class="quantity">
-                            <p  class="product-btns" onclick="decreaseQuantity()">-</p>
-                            <input type="text" id="quantity" name="qua" value="<?php echo $quantity; ?>">
-                            <p  class="qty-btn" onclick="increaseQuantity()">+</p>
+                        <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                        <input type="text" id="quantity" name="qua" value="1">
+                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
                             <br>
                         </div>
                         <!-- /Quantity -->

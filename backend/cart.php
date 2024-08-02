@@ -1,12 +1,31 @@
+
 <?php 
 require "./connection_db_pdo.php";
+session_start();
+$id = 0;
 $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
-$result = json_decode($input,true);
+// $result = json_decode($input,true);
+// unset($_SESSION['products'][0]);
+$registerd = false;
+$result = $_SESSION['products'];
+$_SESSION['user'] = 1;
 // var_dump($result);
-// echo $result[0]['userName']
-// foreach($result as $row){
-//     echo $row['cartId'];
-// }
+// unset($result);
+$cartId = 21; // Example cartId
+    $productId = 54;
+    // here to check if the item aleardy in database
+if(isset($_SESSION['user'])){
+  $registerd = true;
+  foreach($result as &$row){
+    if( !$row['isInDatabase'] ){
+      
+    $sql = "INSERT INTO cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
+    $res = $conn -> exec($sql); 
+      $row['isInDatabase'] = true;
+    }
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -237,14 +256,12 @@ $result = json_decode($input,true);
                 </p>
               </div>
             </div>
+            <!-- <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST"> -->
             <?php foreach($result as $row): ?>
                 <?php
-                $showImage=$row['productImage'];
-
-
-// echo "<img src='images/$showImage' alt='' />";
-// echo "showed"
+                $showImage=$row['image'];
                      ?>
+                     
                 
             <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
@@ -259,49 +276,29 @@ $result = json_decode($input,true);
                     />
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-3">
-                    <p class="lead fw-normal mb-2"><?php echo $row['productName'] ?></p>
+                    <p class="lead fw-normal mb-2"><?php echo $row['name'] ?></p>
                     <p>
-                      <span class="text-muted">description: <?php echo $row['productDesc'] ?> </span>
+                      <span class="text-muted">description: <?php echo $row['description'] ?> </span>
                       
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                    <button
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      class="btn btn-link px-2"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                    >
-                      <i class="fas fa-minus"></i>
-                    </button>
+                  
 
-                    <input
-                      id="form1"
-                      id="bigFont"
-                      min="0"
-                      name="quantity"
-                      value="2"
-                      type="number"
-                      class="form-control form-control-sm"
-                      style="font-size: 1rem"
-                    />
-
-                    <button
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      class="btn btn-link px-2"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
+                     
+                    
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                    <h5 class="mb-0">$<?php echo $row['productPrice'] ?> </h5>
+                    <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                    <a href="#!" class="text-danger"
-                      ><i class="fas fa-trash fa-lg"></i
-                    ></a>
+                  <?php 
+                  if ($registerd): ?>
+                      <a href="" class="text-danger"
+                        ><i class="fas fa-trash fa-lg">
+                          </i
+                    >
+                    <?php endif; ?></a>
                   </div>
                 </div>
               </div>
@@ -331,19 +328,22 @@ $result = json_decode($input,true);
 
             <div class="card">
               <div class="card-body">
+                <a href="./checkout.php">
                 <button
-                  type="button"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
-                  class="btn btn-warning btn-block btn-lg"
-                >
-                  Proceed to Pay
-                </button>
+              href="./admin_create_user.php"
+    type="submit"
+
+    class="btn btn-warning btn-block btn-lg"
+    value="Proceed to Pay"
+  > procc </button>
+                </a>
+              
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- </form> -->
     </section>
     <!-- end of cart des _______________________________________________________________________ -->
     <!-- BREADCRUMB -->
