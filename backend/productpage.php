@@ -1,15 +1,52 @@
-
-<?php 
-
+<?php
 include 'db.php';
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
-$result = json_decode($input,true);
-// echo var_dump($result);
-// echo $result['name']
-$showImage=$result['image']
+session_start();
+
+// // Initialize the session variable if it doesn't exist
+if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
+    $_SESSION['products'] = [];
+}
+$isInDatabase = false;
+$quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
+
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
+$result = json_decode($input, true);
+
+if ($result) {
+    $productId = $result['id'];
+    $productInfo = [
+        'id' => $productId,
+        'name' => $result['name'],
+        'price' => $result['price'],
+        'description' => $result['description'],
+        'image' => $result['image'],
+        'quantity' => $quantity,
+        'isInDatabase' =>$isInDatabase
+    ];
+
+    
+    $productExists = false;
+
+    
+    foreach ($_SESSION['products'] as &$product) {
+        if ($product['id'] === $productId) {
+            $product['quantity'] += $quantity;
+            $productExists = true;
+            break;
+        }
+    }
+
+    // Add the product if it doesn't exist
+    if (!$productExists) {
+        $_SESSION['products'][] = $productInfo;
+    }
+}
+
+// Debug: Display the session products array
+// print_r($_SESSION['products']);
+
+$showImage = $result['image'];
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -19,7 +56,6 @@ $showImage=$result['image']
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Details</title>
-
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -40,6 +76,43 @@ $showImage=$result['image']
     <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
     <style>
+        .qty-btn {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 1px solid #d10024;
+            border-radius: 5px;
+            background-color: #15161d;
+            color: white;
+            transition: background-color 0.3s, transform 0.3s;
+            margin :0
+            
+        }
+
+        .qty-btn:hover {
+            background-color: #d10024;
+            transform: scale(1.1);
+        }
+
+        #quantity {
+            width: 60px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #d10024;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #15161d;
+            background-color: white;
+        }
+
+        #quantity:focus {
+            outline: none;
+            border-color: #d10024;
+        }
         .quantity {
             display: flex;
             align-items: center;
@@ -127,13 +200,12 @@ $showImage=$result['image']
                             <!-- /Wishlist -->
 
                             <!-- Cart -->
-                            <div >
-                                <a href="./cart.php" >
+                            <div>
+                                <a href="./cart.php">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
                                     <div class="qty">3</div>
                                 </a>
-                                
                             </div>
                             <!-- /Cart -->
 
@@ -217,6 +289,7 @@ $showImage=$result['image']
 
                 <!-- Product Details -->
                 <div class="col-md-6">
+                    
                     <div class="product-details">
 
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
@@ -226,22 +299,25 @@ $showImage=$result['image']
                         <p class="product-description"><?php echo $result['description'] ?></p>
                         
                         <!-- Quantity -->
+                         <form action="../backend/productpage.php" method="POST" >
                         <div class="quantity">
-                            <button class="qty-btn" onclick="decreaseQuantity()">-</button>
-                            <input type="text" id="quantity" value="1">
-                            <button class="qty-btn" onclick="increaseQuantity()">+</button>
-							<br>
-
+                        <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                        <input type="text" id="quantity" name="qua" value="1">
+                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
+                            <br>
                         </div>
                         <!-- /Quantity -->
+   
                         <br>
                         <!-- Add to Cart Button -->
-						<div class="product-actions">
-							<button class="btn" 
-									style="background-color: #D10024; border-color: #D10024; color: #fff;"
-									onclick="addToCart(name= <?php echo $result['name'] ?>)">Add to Cart</button>
-						</div>
-												<!-- /Add to Cart Button -->
+                        <div class="product-actions">
+                            <input type="submit"
+                             class="btn"
+                                    style="background-color: #D10024; border-color: #D10024; color: #fff;"
+                                    value ="Add to Cart">
+                        </div>
+                        </form>
+                        <!-- /Add to Cart Button -->
                     </div>
                 </div>
                 <!-- /Product Details -->
@@ -257,139 +333,129 @@ $showImage=$result['image']
                             <!-- Review 1 -->
                             <div class="review">
                                 <div class="review-author">
-                                    <strong>John Doe</strong> <span>4.5/5</span>
+                                    <strong>John Doe</strong> <span class="review-date">March 15, 2023</span>
                                 </div>
-                                <p class="review-text">This is a great product! It exceeded my expectations in every way.</p>
+                                <div class="review-text">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus ligula a tortor malesuada, in vestibulum ligula viverra. Suspendisse potenti.</p>
+                                </div>
                             </div>
                             <!-- /Review 1 -->
 
                             <!-- Review 2 -->
                             <div class="review">
                                 <div class="review-author">
-                                    <strong>Jane Smith</strong> <span>4.0/5</span>
+                                    <strong>Jane Smith</strong> <span class="review-date">February 10, 2023</span>
                                 </div>
-                                <p class="review-text">Good quality, but the shipping took longer than expected.</p>
+                                <div class="review-text">
+                                    <p>Quisque euismod dui sed lacus finibus, a tincidunt nulla pretium. Nam semper ligula id dolor hendrerit, at facilisis elit pretium. Aenean in velit eu mauris vulputate dignissim.</p>
+                                </div>
                             </div>
                             <!-- /Review 2 -->
-
-                            <!-- Add Review Form -->
-                            <div class="add-review-form">
-                                <h4>Add Your Review</h4>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="review-text">Your Review:</label>
-                                        <textarea id="review-text" class="form-control" rows="4"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                                </form>
-                            </div>
-                            <!-- /Add Review Form -->
                         </div>
                     </div>
                 </div>
             </div>
             <!-- /Customer Reviews -->
+
         </div>
         <!-- /container -->
     </div>
     <!-- /SECTION -->
 
-		<!-- FOOTER -->
-		<footer id="footer">
-			<!-- top footer -->
-			<div class="section">
-				<!-- container -->
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">About Us</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-								<ul class="footer-links">
-									<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-									<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-									<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-								</ul>
-							</div>
-						</div>
+    <!-- FOOTER -->
+    <footer id="footer">
+        <!-- top footer -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">About Us</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <ul class="footer-links">
+                                <li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
+                                <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
+                                <li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Categories</h3>
-								<ul class="footer-links">
-									<li><a href="#">Hot deals</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cameras</a></li>
-									<li><a href="#">Accessories</a></li>
-								</ul>
-							</div>
-						</div>
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Categories</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">Hot deals</a></li>
+                                <li><a href="#">Laptops</a></li>
+                                <li><a href="#">Smartphones</a></li>
+                                <li><a href="#">Cameras</a></li>
+                                <li><a href="#">Accessories</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
-						<div class="clearfix visible-xs"></div>
+                    <div class="clearfix visible-xs"></div>
 
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Information</h3>
-								<ul class="footer-links">
-									<li><a href="#">About Us</a></li>
-									<li><a href="#">Contact Us</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-									<li><a href="#">Orders and Returns</a></li>
-									<li><a href="#">Terms & Conditions</a></li>
-								</ul>
-							</div>
-						</div>
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Information</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Orders and Returns</a></li>
+                                <li><a href="#">Terms & Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Service</h3>
-								<ul class="footer-links">
-									<li><a href="#">My Account</a></li>
-									<li><a href="#">View Cart</a></li>
-									<li><a href="#">Wishlist</a></li>
-									<li><a href="#">Track My Order</a></li>
-									<li><a href="#">Help</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /top footer -->
+                    <div class="col-md-3 col-xs-6">
+                        <div class="footer">
+                            <h3 class="footer-title">Service</h3>
+                            <ul class="footer-links">
+                                <li><a href="#">My Account</a></li>
+                                <li><a href="#">View Cart</a></li>
+                                <li><a href="#">Wishlist</a></li>
+                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="#">Help</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /top footer -->
 
-			<!-- bottom footer -->
-			<div id="bottom-footer" class="section">
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-12 text-center">
-							<ul class="footer-payments">
-								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-							</ul>
-							<span class="copyright">
-								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							</span>
-						</div>
-					</div>
-						<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /bottom footer -->
-		</footer>
-		<!-- /FOOTER -->
-
+        <!-- bottom footer -->
+        <div id="bottom-footer" class="section">
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="footer-payments">
+                            <li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
+                            <li><a href="#"><i class="fa fa-credit-card"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
+                            <li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
+                        </ul>
+                        <span class="copyright">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                        </span>
+                    </div>
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /bottom footer -->
+    </footer>
+    <!-- /FOOTER -->
 
     <!-- jQuery Plugins -->
     <script src="../frontend/js/jquery.min.js"></script>
@@ -400,42 +466,5 @@ $showImage=$result['image']
     <script src="../frontend/js/main.js"></script>
     <script src="../frontend/productPage.js"></script>
 
-    <script>
-        let quantityInput = document.querySelector("#quantity")
-let productname = document.querySelector(".product-name")
-let productprice = document.querySelector(".product-price")
-let productdesc = document.querySelector(".product-description")
-function addToCart(params) {
-    alert("mmm")
-    var httpc = new XMLHttpRequest(); // simplified for clarity
-    var url = "../backend/cart.php";
-    httpc.open("POST", url, true); // sending as POST
-
-    httpc.onreadystatechange = function () { //Call a function when the state changes.
-        if (httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
-        }
-    };
-    httpc.send(params);
-}
-
-function decreaseQuantity() {
-    var quantityOfProduct = parseInt(quantityInput.value);
-
-    if (quantityOfProduct > 1) {
-        quantityOfProduct -= 1;
-        quantityInput.value = quantityOfProduct;
-    }
-    // alert(quantityOfProduct)
-}
-function increaseQuantity() {
-    var quantityOfProduct = parseInt(quantityInput.value);
-
-    if (quantityOfProduct > 1) {
-        quantityOfProduct += 1;
-        quantityInput.value = quantityOfProduct;
-    }
-}
-    </script>
 </body>
 </html>

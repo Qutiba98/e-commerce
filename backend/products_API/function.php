@@ -109,6 +109,87 @@ function getProductList() {
     $conn->close();
 }
 
+//  show product pagination---------------------------------------------------------------------------------------------------------
+function getProductList_pagination($page , $itemsPerPage ) {
+    global $conn;
+
+    // التحقق من اتصال قاعدة البيانات
+    if ($conn->connect_error) {
+        $data = [
+            'status' => 500,
+            'message' => 'Database Connection Failed',
+        ];
+        header("HTTP/1.0 500 Internal Server Error");
+        return json_encode($data);
+    }
+
+    // التحقق من رقم الصفحة وحجم الصفحة
+    $page = intval($page);
+    $itemsPerPage = intval($itemsPerPage);
+
+    // التحقق من القيم الافتراضية
+    if ($page < 1) $page = 1;
+    if ($itemsPerPage < 1) $itemsPerPage = 10;
+
+    // حساب التمرير (offset)
+    $offset = ($page - 1) * $itemsPerPage;
+
+    // استعلام للحصول على إجمالي عدد العناصر
+    $countQuery = "SELECT COUNT(*) as total FROM product";
+    $countResult = mysqli_query($conn, $countQuery);
+
+    if ($countResult) {
+        $totalItems = mysqli_fetch_assoc($countResult)['total'];
+
+        // استعلام للحصول على العناصر المطلوبة مع التصفّح
+        $query = "SELECT * FROM product LIMIT $offset, $itemsPerPage";
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            if (mysqli_num_rows($result) > 0) {
+                $res = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+                $data = [
+                    'status' => 200,
+                    'message' => 'Phone List Fetched Successfully',
+                    'data' => $res,
+                    'pagination' => [
+                        'current_page' => $page,
+                        'items_per_page' => $itemsPerPage,
+                        'total_items' => $totalItems,
+                        'total_pages' => ceil($totalItems / $itemsPerPage)
+                    ]
+                ];
+                header("HTTP/1.0 200 OK");
+                return json_encode($data);
+            } else {
+                $data = [
+                    'status' => 404,
+                    'message' => 'No Phone Found',
+                ];
+                header("HTTP/1.0 404 Not Found");
+                return json_encode($data);
+            }
+        } else {
+            $data = [
+                'status' => 500,
+                'message' => 'Internal Server Error',
+            ];
+            header("HTTP/1.0 500 Internal Server Error");
+            return json_encode($data);
+        }
+    } else {
+        $data = [
+            'status' => 500,
+            'message' => 'Internal Server Error',
+        ];
+        header("HTTP/1.0 500 Internal Server Error");
+        return json_encode($data);
+    }
+
+    // إغلاق اتصال قاعدة البيانات
+    $conn->close();
+}
 //  show user by id ---------------------------------------------------------------------------------------------------------
 
 function  get_product_by_name($productParams){
@@ -131,7 +212,7 @@ function  get_product_by_name($productParams){
 
 
 
-    $query = "SELECT * FROM product WHERE name = '$product_name' LIMIT 1   ";
+    $query = "SELECT * FROM product WHERE name LIKE '%$product_name%' LIMIT 1   ";
 
     $reult = mysqli_query($conn, $query);
 

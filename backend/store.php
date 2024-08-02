@@ -27,7 +27,30 @@
  		<!-- Custom stlylesheet -->
  		<link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
 
-	
+	<style>
+/* Container styling */
+/* Container styling */
+
+
+/* Card styling */
+
+/* Card image styling */
+.product-img {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.product-img img {
+    width: 100%;
+    height: 250px; /* Adjust the height as needed */
+    object-fit: contain; /* Ensures the image is fully visible without being cropped */
+}
+
+
+
+
+	</style>
 
     </head>
 	<body>
@@ -231,7 +254,7 @@
 						<!-- store top filter -->
 						<div class="store-filter clearfix">
 							<div class="store-sort">
-							
+							<!-- <img src="../backend/images" alt=""> -->
 
 							</div>
 							
@@ -243,37 +266,58 @@
 							<div class="container">
 								<div class="row">
 								<?php
+// تحديد رقم الصفحة (الافتراضي هو 1)
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// تحقق من صحة رقم الصفحة
+$page = $page > 0 ? $page : 1;
+
+// تحديد المعلمات الأخرى
 $categoryId = isset($_GET['category']) ? $_GET['category'] : '';
 $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 
+// تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
+<<<<<<< HEAD:backend/store.php
     $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
 } elseif ($searchName) {
     $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
     $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
+=======
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
+} elseif ($searchName) {
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
+} else {
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
+>>>>>>> b33186af9a28b11c6fe0b038fe50bc9245d09dae:frontend/store.php
 }
 
 // جلب البيانات من الـ API
 $response = @file_get_contents($apiUrl);
 
 if ($response === FALSE) {
-	echo '<div class="col-12">
-    <h1 class="error">Product not found.</h1>
-    </div>';
+    echo '<div class="col-12"><h1 class="error">Product not found.</h1></div>';
 } else {
     $data = json_decode($response, true);
 
-    if (!isset($data['data']) || empty($data['data'])) {
+    // التحقق من محتوى البيانات
+    if ($data === null) {
+        echo '<div class="col-12"><h1 class="error">Failed to decode JSON response.</h1></div>';
+    } elseif (!isset($data['data']) || empty($data['data'])) {
         echo '<div class="col-12"><div class="error">Product not found.</div></div>';
     } else {
+        // عرض المنتجات
         foreach ($data['data'] as $product) {
             $productName = htmlspecialchars($product['name']);
+            $imageName = htmlspecialchars($product['image']);
+            $imagePath = 'http://127.0.0.1/brief%203/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
+
             if (stripos($productName, htmlspecialchars($searchName)) !== false) {
                 echo '<div class="col-md-4 col-xs-6">';
                 echo '<div class="product">';
                 echo '<div class="product-img">';
-                echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['name']) . '">';
+                echo '<img src="../backend/images $imageName" alt="Product Image">';
                 echo '<div class="product-label">';
                 echo '<span class="sale">-30%</span>';
                 echo '<span class="new">NEW</span>';
@@ -303,9 +347,12 @@ if ($response === FALSE) {
                 echo '</div>';
             }
         }
-    }
+
+	}
 }
 ?>
+
+
 
 
 
@@ -319,16 +366,31 @@ if ($response === FALSE) {
 						<!-- /store products -->
 
 						<!-- store bottom filter -->
-						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
-							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-							</ul>
-						</div>
+
+						<?php
+						 // عرض عناصر التصفح (Pagination)
+						 echo '<div class="store-filter clearfix">';
+						 echo '<span class="store-qty">Showing page ' . htmlspecialchars($page) . '</span>';
+						 echo '<ul class="store-pagination">';
+				 
+						 // عرض أرقام الصفحات (افتراضياً من 1 إلى 4)
+						 for ($i = 1; $i <= 4; $i++) {
+							 echo '<li class="' . ($page === $i ? 'active' : '') . '">';
+							 echo '<a href="?page=' . $i . (isset($_GET['category']) ? '&category=' . urlencode($_GET['category']) : '') . (isset($_GET['name']) ? '&name=' . urlencode($_GET['name']) : '') . '">' . $i . '</a>';
+							 echo '</li>';
+						 }
+				 
+						 // رابط للانتقال للصفحة التالية
+						 echo '<li>';
+						 echo '<a href="?page=' . ($page + 1) . (isset($_GET['category']) ? '&category=' . urlencode($_GET['category']) : '') . (isset($_GET['name']) ? '&name=' . urlencode($_GET['name']) : '') . '"><i class="fa fa-angle-right"></i></a>';
+						 echo '</li>';
+				 
+						 echo '</ul>';
+						 echo '</div>';
+					 
+						
+						?>
+						
 						<!-- /store bottom filter -->
 					</div>
 					<!-- /STORE -->
