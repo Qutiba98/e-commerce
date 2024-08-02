@@ -5,23 +5,27 @@
 //API 
 
 //qutiba
-$input0 = file_get_contents("http://localhost/pref%204/e-commerce/backend/products_API/read.php");
+// $input0 = file_get_contents("http://localhost/pref%204/e-commerce/backend/products_API/read.php");
+$input0 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php");
 $result0 = json_decode($input0, true);
 
 //img pc 
-$input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=54");
+// $input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=54");
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
 $result = json_decode($input, true);
 $showImage = $result['image'];
 
 
 //img laptop 
-$input2 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=64");
+// $input2 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=64");
+$input2 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=64");
 $result2 = json_decode($input2, true);
 $showImage2 = $result2['image'];
 
 
 //img  Accessories 
-$input3 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=69");
+$input3 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=69");
+// $input3 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=69");
 $result3 = json_decode($input3, true);
 $showImage3 = $result3['image'];
 
@@ -29,27 +33,21 @@ $showImage3 = $result3['image'];
 
 //laptop
 $categoryIDLaptop = 1;
-$inputLaptop = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
+// $inputLaptop = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
+$inputLaptop = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
 $resultLaptop = json_decode($inputLaptop, true);
 
 // ا(PC)
 $categoryIDPC = 2;
-$inputPC = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
+// $inputPC = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
+$inputPC = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
 $resultPC = json_decode($inputPC, true);
 
 // Accessories
 $categoryIDAccessories = 3;
-$inputAccessories = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
+// $inputAccessories = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
+$inputAccessories = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
 $resultAccessories = json_decode($inputAccessories, true);
-
-
-
-
-
-
-
-
-
 
 
 

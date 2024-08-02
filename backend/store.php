@@ -278,19 +278,14 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
-<<<<<<< HEAD:backend/store.php
-    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+    // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
 } elseif ($searchName) {
-    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+    // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
-    $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
-=======
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
-} elseif ($searchName) {
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
-} else {
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
->>>>>>> b33186af9a28b11c6fe0b038fe50bc9245d09dae:frontend/store.php
+    // $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
+    $apiUrl = 'http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php';
 }
 
 // جلب البيانات من الـ API
@@ -317,7 +312,7 @@ if ($response === FALSE) {
                 echo '<div class="col-md-4 col-xs-6">';
                 echo '<div class="product">';
                 echo '<div class="product-img">';
-                echo '<img src="../backend/images $imageName" alt="Product Image">';
+                echo '<img src="./images/'.$imagePath.' alt="Product Image">';
                 echo '<div class="product-label">';
                 echo '<span class="sale">-30%</span>';
                 echo '<span class="new">NEW</span>';
