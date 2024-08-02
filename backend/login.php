@@ -61,7 +61,7 @@ class Auth {
             if ($_SESSION['role'] == 'admin') {
                 header("Location: ./admin.php");
             } else {
-                header("Location: ../frontend/index.html");
+                header("Location: index.php");
             }
             exit();
         } else {
