@@ -1,8 +1,8 @@
 
 <?php 
 
-include'db.php';
-$input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=58");
+include 'db.php';
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
 $result = json_decode($input,true);
 // echo var_dump($result);
 // echo $result['name']
@@ -127,45 +127,13 @@ $showImage=$result['image']
                             <!-- /Wishlist -->
 
                             <!-- Cart -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <div >
+                                <a href="./cart.php" >
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
                                     <div class="qty">3</div>
                                 </a>
-                                <div class="cart-dropdown">
-                                    <div class="cart-list">
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product01.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">Product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product02.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">Product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="cart-summary">
-                                        <small>3 Item(s) selected</small>
-                                        <h5>SUBTOTAL: $2940.00</h5>
-                                    </div>
-                                    <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
+                                
                             </div>
                             <!-- /Cart -->
 
@@ -259,9 +227,9 @@ $showImage=$result['image']
                         
                         <!-- Quantity -->
                         <div class="quantity">
-                            <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                            <button class="qty-btn" onclick="decreaseQuantity()">-</button>
                             <input type="text" id="quantity" value="1">
-                            <button class="qty-btn" onclick="changeQuantity(1)">+</button>
+                            <button class="qty-btn" onclick="increaseQuantity()">+</button>
 							<br>
 
                         </div>
@@ -271,7 +239,7 @@ $showImage=$result['image']
 						<div class="product-actions">
 							<button class="btn" 
 									style="background-color: #D10024; border-color: #D10024; color: #fff;"
-									onclick="addToCart()">Add to Cart</button>
+									onclick="addToCart(name= <?php echo $result['name'] ?>)">Add to Cart</button>
 						</div>
 												<!-- /Add to Cart Button -->
                     </div>
@@ -429,22 +397,45 @@ $showImage=$result['image']
     <script src="../frontend/js/slick.min.js"></script>
     <script src="../frontend/js/nouislider.min.js"></script>
     <script src="../frontend/js/jquery.zoom.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../frontend/js/main.js"></script>
+    <script src="../frontend/productPage.js"></script>
 
     <script>
-        function changeQuantity(amount) {
-            var qtyInput = document.getElementById('quantity');
-            var currentQty = parseInt(qtyInput.value);
-            if (currentQty + amount >= 1) { // Prevents quantity from going below 1
-                qtyInput.value = currentQty + amount;
-            }
-        }
+        let quantityInput = document.querySelector("#quantity")
+let productname = document.querySelector(".product-name")
+let productprice = document.querySelector(".product-price")
+let productdesc = document.querySelector(".product-description")
+function addToCart(params) {
+    alert("mmm")
+    var httpc = new XMLHttpRequest(); // simplified for clarity
+    var url = "../backend/cart.php";
+    httpc.open("POST", url, true); // sending as POST
 
-        function addToCart() {
-            var qty = document.getElementById('quantity').value;
-            alert('Added ' + qty + ' items to cart!');
-            // Add logic to actually add the item to the cart
+    httpc.onreadystatechange = function () { //Call a function when the state changes.
+        if (httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
+            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
         }
+    };
+    httpc.send(params);
+}
+
+function decreaseQuantity() {
+    var quantityOfProduct = parseInt(quantityInput.value);
+
+    if (quantityOfProduct > 1) {
+        quantityOfProduct -= 1;
+        quantityInput.value = quantityOfProduct;
+    }
+    // alert(quantityOfProduct)
+}
+function increaseQuantity() {
+    var quantityOfProduct = parseInt(quantityInput.value);
+
+    if (quantityOfProduct > 1) {
+        quantityOfProduct += 1;
+        quantityInput.value = quantityOfProduct;
+    }
+}
     </script>
 </body>
 </html>

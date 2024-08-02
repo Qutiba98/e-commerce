@@ -1,18 +1,12 @@
 <?php
-session_start();
-require 'db.php';
+require './db.php';
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.html");
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user'])) {
+    $id = intval($_POST['id']);
+    $query = "DELETE FROM users WHERE user_id='$id'";
+    if (mysqli_query($conn, $query)) {
+        echo "User deleted successfully";
+    } else {
+        echo "Error deleting user: " . mysqli_error($conn);
+    }
 }
-
-$id = $_GET['id'];
-
-if ($conn->query("DELETE FROM users WHERE id = $id") === TRUE) {
-    header("Location: admin_dashboard.php");
-} else {
-    echo "Error: " . $conn->error;
-}
-$conn->close();
-?>
