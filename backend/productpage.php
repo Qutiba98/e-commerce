@@ -6,10 +6,10 @@ session_start();
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
-
+$isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
 $result = json_decode($input, true);
 
 if ($result) {
@@ -20,7 +20,8 @@ if ($result) {
         'price' => $result['price'],
         'description' => $result['description'],
         'image' => $result['image'],
-        'quantity' => $quantity
+        'quantity' => $quantity,
+        'isInDatabase' =>$isInDatabase
     ];
 
     
@@ -42,7 +43,7 @@ if ($result) {
 }
 
 // Debug: Display the session products array
-print_r($_SESSION['products']);
+// print_r($_SESSION['products']);
 
 $showImage = $result['image'];
 ?>
@@ -301,8 +302,8 @@ $showImage = $result['image'];
                          <form action="../backend/productpage.php" method="POST" >
                         <div class="quantity">
                         <p class="qty-btn" onclick="decreaseQuantity()">-</p>
-    <input type="text" id="quantity" name="qua" value="1">
-    <p class="qty-btn" onclick="increaseQuantity()">+</p>
+                        <input type="text" id="quantity" name="qua" value="1">
+                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
                             <br>
                         </div>
                         <!-- /Quantity -->

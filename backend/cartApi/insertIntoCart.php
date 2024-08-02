@@ -7,11 +7,11 @@ require '../connection_db_pdo.php';
 if ($_SERVER['REQUEST_METHOD'] == "POST"){
 
 
-    $studentId = isset($_POST['studentId']) ? $_POST['studentId'] : "";
-    $subjectId = isset($_POST['subjectId']) ? $_POST['subjectId'] : "";
+    $cartId = isset($_POST['cartId']) ? $_POST['cartId'] : "";
+    $productId = isset($_POST['productId']) ? $_POST['productId'] : "";
 
 
-    $sql = "INSERT INTO ss (student_id ,subject_id) VALUES('$studentId' ,'$subjectId')";
+    $sql = "INSERT INTO `cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
     $res = $conn -> exec($sql); 
     // $data = [
     //     "studentId" => $studentId,
