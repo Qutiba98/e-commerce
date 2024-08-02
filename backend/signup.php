@@ -78,7 +78,7 @@
 <div class="container">
       <form
         name="signupForm"
-        action="signup.php"
+        action="./login.php"
         method="POST"
         enctype="multipart/form-data"
         onsubmit="return validateForm();"
@@ -129,7 +129,7 @@
 
 
 <?php
-include 'db.php';
+include './dbqutipa.php';
 
 class UserRegistration {
     private $conn;
@@ -255,10 +255,11 @@ class UserRegistration {
 
         $stmt->close();
     }
+   
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+    $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
     $registration->validateInput($_POST, $_FILES);
     $registration->checkExistingUser($_POST['email'], $_POST['phone_number']);
     $registration->registerUser($_POST);
