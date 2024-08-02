@@ -1,18 +1,19 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.html");
-    exit();
-}
+// if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+//     header("Location: login.html");
+//     exit();
+// }
 require 'db.php';
 $users = $conn->query("SELECT * FROM users");
+var_dump($users);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../frontend/style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <div class="container">
@@ -35,7 +36,7 @@ $users = $conn->query("SELECT * FROM users");
                 <?php while($row = $users->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo $row['id']; ?></td>
-                        <td><img src="<?php echo $row['image']; ?>" alt="User Image" width="50" height="50" /></td>
+                        <td><img src="./images/<?php echo $row['image']; ?>" alt="User Image" width="50" height="50" /></td>
                         <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
                         <td><?php echo $row['email']; ?></td>
                         <td><?php echo $row['date_created']; ?></td>
