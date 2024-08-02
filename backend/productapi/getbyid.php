@@ -9,7 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     $id = isset($_GET['id']) ? intval( $_GET['id']) : "";
     $sql = "SELECT * FROM product where id ='$id'";
     $stmt =$conn-> query($sql);
-    $result = $stmt ->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt ->fetch(PDO::FETCH_ASSOC);
     echo json_encode($result,true);
 }else{
     $data = [

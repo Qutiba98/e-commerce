@@ -1,3 +1,17 @@
+
+<?php 
+
+include 'db.php';
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
+$result = json_decode($input,true);
+// echo var_dump($result);
+// echo $result['name']
+$showImage=$result['image']
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,24 +20,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Details</title>
 
+
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
 
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
 
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stylesheet -->
-    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
     <style>
         .quantity {
             display: flex;
@@ -45,17 +60,6 @@
             justify-content: center;
             cursor: pointer;
         }
-
-        /* .product-details{
-            font-size: 18px;
-        } */
-
-
-/* 
-.product-image{
-    width: 320px !important;
-} */
-
     </style>
 </head>
 <body>
@@ -123,45 +127,13 @@
                             <!-- /Wishlist -->
 
                             <!-- Cart -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <div >
+                                <a href="./cart.php" >
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
                                     <div class="qty">3</div>
                                 </a>
-                                <div class="cart-dropdown">
-                                    <div class="cart-list">
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product01.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">Product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product02.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">Product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="cart-summary">
-                                        <small>3 Item(s) selected</small>
-                                        <h5>SUBTOTAL: $2940.00</h5>
-                                    </div>
-                                    <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
+                                
                             </div>
                             <!-- /Cart -->
 
@@ -238,7 +210,7 @@
                 <!-- Product Image -->
                 <div class="col-md-6">
                     <div class="product-image">
-                        <img src="../frontend/img/product02.png" alt="Product Image" class="img-responsive">
+                        <img src="images/<?php echo $showImage?>" alt="Product Image" class="img-responsive">
                     </div>
                 </div>
                 <!-- /Product Image -->
@@ -246,15 +218,18 @@
                 <!-- Product Details -->
                 <div class="col-md-6">
                     <div class="product-details">
-                        <h2 class="product-name">Product Name</h2>
-                        <h3 class="product-price">$Price</h3>
-                        <p class="product-description">Product description goes here. You can write detailed features and specifications of the product here.</p>
+
+                        <h2 class="product-name"><?php echo $result['name'] ?></h2>
+
+                        <h3 class="product-price">$<?php echo $result['price'] ?></h3>
+
+                        <p class="product-description"><?php echo $result['description'] ?></p>
                         
                         <!-- Quantity -->
                         <div class="quantity">
-                            <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                            <button class="qty-btn" onclick="decreaseQuantity()">-</button>
                             <input type="text" id="quantity" value="1">
-                            <button class="qty-btn" onclick="changeQuantity(1)">+</button>
+                            <button class="qty-btn" onclick="increaseQuantity()">+</button>
 							<br>
 
                         </div>
@@ -264,7 +239,7 @@
 						<div class="product-actions">
 							<button class="btn" 
 									style="background-color: #D10024; border-color: #D10024; color: #fff;"
-									onclick="addToCart()">Add to Cart</button>
+									onclick="addToCart(name= <?php echo $result['name'] ?>)">Add to Cart</button>
 						</div>
 												<!-- /Add to Cart Button -->
                     </div>
@@ -417,27 +392,50 @@
 
 
     <!-- jQuery Plugins -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/nouislider.min.js"></script>
-    <script src="js/jquery.zoom.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../frontend/js/jquery.min.js"></script>
+    <script src="../frontend/js/bootstrap.min.js"></script>
+    <script src="../frontend/js/slick.min.js"></script>
+    <script src="../frontend/js/nouislider.min.js"></script>
+    <script src="../frontend/js/jquery.zoom.min.js"></script>
+    <script src="../frontend/js/main.js"></script>
+    <script src="../frontend/productPage.js"></script>
 
     <script>
-        function changeQuantity(amount) {
-            var qtyInput = document.getElementById('quantity');
-            var currentQty = parseInt(qtyInput.value);
-            if (currentQty + amount >= 1) { // Prevents quantity from going below 1
-                qtyInput.value = currentQty + amount;
-            }
-        }
+        let quantityInput = document.querySelector("#quantity")
+let productname = document.querySelector(".product-name")
+let productprice = document.querySelector(".product-price")
+let productdesc = document.querySelector(".product-description")
+function addToCart(params) {
+    alert("mmm")
+    var httpc = new XMLHttpRequest(); // simplified for clarity
+    var url = "../backend/cart.php";
+    httpc.open("POST", url, true); // sending as POST
 
-        function addToCart() {
-            var qty = document.getElementById('quantity').value;
-            alert('Added ' + qty + ' items to cart!');
-            // Add logic to actually add the item to the cart
+    httpc.onreadystatechange = function () { //Call a function when the state changes.
+        if (httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
+            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
         }
+    };
+    httpc.send(params);
+}
+
+function decreaseQuantity() {
+    var quantityOfProduct = parseInt(quantityInput.value);
+
+    if (quantityOfProduct > 1) {
+        quantityOfProduct -= 1;
+        quantityInput.value = quantityOfProduct;
+    }
+    // alert(quantityOfProduct)
+}
+function increaseQuantity() {
+    var quantityOfProduct = parseInt(quantityInput.value);
+
+    if (quantityOfProduct > 1) {
+        quantityOfProduct += 1;
+        quantityInput.value = quantityOfProduct;
+    }
+}
     </script>
 </body>
 </html>
