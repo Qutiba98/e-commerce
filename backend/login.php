@@ -1,26 +1,6 @@
 <?php
 session_start();
-require 'db.php';  // استيراد ملف التكوين
-
-class Database {
-    private $conn;
-
-    public function __construct() {
-        $this->connect();
-    }
-
-    private function connect() {
-        // استخدام الثوابت المعرفة في ملف التكوين
-        $this->conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
-    }
-
-    public function getConnection() {
-        return $this->conn;
-    }
-}
+require './dbqutipa.php';  // استيراد ملف التكوين
 
 class User {
     private $db;
@@ -79,7 +59,7 @@ class Auth {
             $_SESSION['image'] = $user['image'];
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: ../frontend/adminlandingpage.html");
+                header("Location: ./admin.php");
             } else {
                 header("Location: ../frontend/index.html");
             }

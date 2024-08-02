@@ -86,7 +86,7 @@ $products = fetchProducts();
                         <td><?php echo $product['description']; ?></td>
                         <td><?php echo $product['price']; ?></td>
                         <td><?php echo $product['categories_id']; ?></td>
-                        <td><img src="<?php echo $product['image']; ?>" alt="Product Image" style="max-width: 100px;"></td>
+                        <td><img src="./images/<?php echo $product['image']; ?>" alt="Product Image" style="max-width: 100px;"></td>
                         <td>
                             <button class="edit-btn" onclick="editProduct(<?php echo $product['id']; ?>)">Edit</button>
                             <button class="delete-btn" onclick="confirmDelete(<?php echo $product['id']; ?>)">Delete</button>
