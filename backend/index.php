@@ -1,7 +1,8 @@
 
 <?php 
 
-
+session_start();
+$id=$_SESSION['user_id'];
 //API 
 
 //qutiba
@@ -124,8 +125,8 @@ $resultAccessories = json_decode($inputAccessories, true);
               <a href="#"><i class="fa fa-dollar"></i> JOR</a>
             </li>
             <li>
-              <a href="../backend/userProfile/veiw.php"
-                ><i class="fa fa-user-o"></i> acount </a
+              <a href="../backend/userProfile/veiw.php?user_id=<?php echo $id?>"
+                ><i class="fa fa-user-o"></i> account </a
               >
             </li>
           </ul>

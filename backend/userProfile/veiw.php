@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 
 if (!isset($_GET['user_id']) || empty($_GET['user_id'])) {
-    header("location:http://127.0.0.1/brief%203/e-commerce/backend/login.php");
+    // header("location:http://127.0.0.1/brief%203/e-commerce/backend/login.php");
     echo "No ID provided!";
     exit;
 }
