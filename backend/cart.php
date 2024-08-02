@@ -1,7 +1,10 @@
 <?php 
 require "./connection_db_pdo.php";
+session_start();
 $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
-$result = json_decode($input,true);
+// $result = json_decode($input,true);
+$result = $_SESSION['products'];
+
 // var_dump($result);
 // echo $result[0]['userName']
 // foreach($result as $row){
@@ -239,7 +242,7 @@ $result = json_decode($input,true);
             </div>
             <?php foreach($result as $row): ?>
                 <?php
-                $showImage=$row['productImage'];
+                $showImage=$row['image'];
 
 
 // echo "<img src='images/$showImage' alt='' />";
@@ -259,44 +262,47 @@ $result = json_decode($input,true);
                     />
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-3">
-                    <p class="lead fw-normal mb-2"><?php echo $row['productName'] ?></p>
+                    <p class="lead fw-normal mb-2"><?php echo $row['name'] ?></p>
                     <p>
-                      <span class="text-muted">description: <?php echo $row['productDesc'] ?> </span>
+                      <span class="text-muted">description: <?php echo $row['description'] ?> </span>
                       
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                    <button
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      class="btn btn-link px-2"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                    >
-                      <i class="fas fa-minus"></i>
-                    </button>
+                    <form action="./cart.php" method="POST">
 
-                    <input
-                      id="form1"
-                      id="bigFont"
-                      min="0"
-                      name="quantity"
-                      value="2"
-                      type="number"
-                      class="form-control form-control-sm"
-                      style="font-size: 1rem"
-                    />
-
-                    <button
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      class="btn btn-link px-2"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
+                      <p 
+                        data-mdb-button-init
+                        data-mdb-ripple-init
+                        class="btn btn-link px-2"
+                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                      >
+                        <i class="fas fa-minus"></i>
+                      </p>
+  
+                      <input
+                        id="form1"
+                        id="bigFont"
+                        min="0"
+                        name="quantity"
+                        value="<?php echo $row['quantity'] ?>"
+                        type="number"
+                        class="form-control form-control-sm"
+                        style="font-size: 1rem"
+                      />
+  
+                      <p
+                        data-mdb-button-init
+                        data-mdb-ripple-init
+                        class="btn btn-link px-2"
+                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                      >
+                        <i class="fas fa-plus"></i>
+                      </p>
+                    
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                    <h5 class="mb-0">$<?php echo $row['productPrice'] ?> </h5>
+                    <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                     <a href="#!" class="text-danger"
@@ -331,19 +337,19 @@ $result = json_decode($input,true);
 
             <div class="card">
               <div class="card-body">
-                <button
-                  type="button"
+                <input
+                  type="submit"
                   data-mdb-button-init
                   data-mdb-ripple-init
                   class="btn btn-warning btn-block btn-lg"
-                >
-                  Proceed to Pay
-                </button>
+                  value ="Proceed to Pay"
+                > 
               </div>
             </div>
           </div>
         </div>
       </div>
+    </form>
     </section>
     <!-- end of cart des _______________________________________________________________________ -->
     <!-- BREADCRUMB -->

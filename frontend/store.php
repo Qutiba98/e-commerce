@@ -254,7 +254,7 @@
 						<!-- store top filter -->
 						<div class="store-filter clearfix">
 							<div class="store-sort">
-							
+							<!-- <img src="../backend/images" alt=""> -->
 
 							</div>
 							
@@ -278,11 +278,11 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
-    $apiUrl = "http://localhost:8080/project_php/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}&page={$page}";
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?categories_id={$categoryId}&page={$page}";
 } elseif ($searchName) {
-    $apiUrl = "http://localhost:8080/project_php/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName) . "&page={$page}";
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?name=" . urlencode($searchName) . "&page={$page}";
 } else {
-    $apiUrl = "http://localhost:8080/project_php/e-commerce/backend/products_API/read_pagination.php?page={$page}";
+    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_pagination.php?page={$page}";
 }
 
 // جلب البيانات من الـ API
@@ -303,13 +303,13 @@ if ($response === FALSE) {
         foreach ($data['data'] as $product) {
             $productName = htmlspecialchars($product['name']);
             $imageName = htmlspecialchars($product['image']);
-            $imagePath = 'http://localhost:8080/project_php/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
+            $imagePath = 'http://127.0.0.1/brief%203/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
 
             if (stripos($productName, htmlspecialchars($searchName)) !== false) {
                 echo '<div class="col-md-4 col-xs-6">';
                 echo '<div class="product">';
                 echo '<div class="product-img">';
-                echo '<img src="' . $imagePath . '" alt="Product Image">';
+                echo '<img src="../backend/images $imageName" alt="Product Image">';
                 echo '<div class="product-label">';
                 echo '<span class="sale">-30%</span>';
                 echo '<span class="new">NEW</span>';
