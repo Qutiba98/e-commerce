@@ -128,7 +128,7 @@
 </html>
 
 <?php
-include 'dbqutipa.php';
+include './dbqutipa.php';
 
 class UserRegistration {
     private $conn;
@@ -242,16 +242,16 @@ class UserRegistration {
     }
 
     private function addToCart($userId) {
-        $stmt = $this->conn->prepare("INSERT INTO cart (user_id) VALUES (?)");
+        $stmt = $this->conn->prepare("INSERT INTO cart (id, user_id) VALUES (?, ?)");
         if (!$stmt) {
             die("Prepare failed: " . $this->conn->error);
         }
-        $stmt->bind_param("i", $userId);
-
+        $stmt->bind_param("ii", $id, $userId);
+        
         if (!$stmt->execute()) {
             echo "Error adding user to cart: " . $stmt->error;
         }
-
+        
         $stmt->close();
     }
    
@@ -261,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
-    $registration = new UserRegistration($servername, $username, $password, $dbname);
+    // $registration = new UserRegistration($servername, $username, $password, $dbname);
 
     $registration->validateInput($_POST, $_FILES);
     $registration->checkExistingUser($_POST['email'], $_POST['phone_number']);

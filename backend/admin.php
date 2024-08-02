@@ -25,6 +25,7 @@ require './db.php'; // Include database connection
             <li><a href="?section=products" class="<?php echo $section === 'products' ? 'active' : ''; ?>">Manage Products</a></li>
             <li><a href="?section=categories" class="<?php echo $section === 'categories' ? 'active' : ''; ?>">Manage Categories</a></li>
             <li><a href="?section=users" class="<?php echo $section === 'users' ? 'active' : ''; ?>">Manage Users</a></li>
+            <li><a href="?section=viewSales" class="<?php echo $section === 'viewSales' ? 'active' : ''; ?>">View Sales</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
@@ -41,6 +42,9 @@ require './db.php'; // Include database connection
                 break;
             case 'users':
                 include 'manage_users.php';
+                break;
+                case 'viewSales':
+                    include 'viewOrders.php';
                 break;
             default:
                 include 'manage_products.php';
