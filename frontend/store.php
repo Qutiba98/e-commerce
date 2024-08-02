@@ -28,28 +28,11 @@
  		<link type="text/css" rel="stylesheet" href="css/style.css"/>
 
 	<style>
-		/* Container styling */
-.col-md-4, .col-xs-6 {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+/* Container styling */
+/* Container styling */
+
 
 /* Card styling */
-.product {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-
-
-    width: 100%;
-
-    box-sizing: border-box;
-    overflow: hidden;
-}
 
 /* Card image styling */
 .product-img {
@@ -64,48 +47,7 @@
     object-fit: contain; /* Ensures the image is fully visible without being cropped */
 }
 
-/* Card content styling */
-.product-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
 
-.product-body .product-category,
-.product-body .product-name,
-.product-body .product-price,
-.product-body .product-old-price,
-.product-body .product-rating {
-    margin-bottom: 10px;
-}
-
-.product-body .product-price {
-    font-size: 1.1em;
-    color: #333;
-    font-weight: bold;
-}
-
-/* Add to cart button styling */
-.add-to-cart {
-    padding: 10px 20px;
-    background: #f5f5f5;
-    border-top: 1px solid #ddd;
-    text-align: center;
-}
-
-.add-to-cart-btn {
-    background: #333;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.add-to-cart-btn:hover {
-    background: #555;
-}
 
 
 	</style>
