@@ -1,5 +1,5 @@
 <?php
-require './db.php';
+require './dbqutipa.php';
 
 // Fetch users
 function fetchUsers()
