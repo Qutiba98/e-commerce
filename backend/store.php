@@ -298,56 +298,63 @@ if ($response === FALSE) {
 
     // التحقق من محتوى البيانات
     if ($data === null) {
-        echo '<div class="col-12"><h1 class="error">Failed to decode JSON response.</h1></div>';
-    } elseif (!isset($data['data']) || empty($data['data'])) {
-        echo '<div class="col-12"><div class="error">Product not found.</div></div>';
-    } else {
-        // عرض المنتجات
-        foreach ($data['data'] as $product) {
-            $productName = htmlspecialchars($product['name']);
-            $imageName = htmlspecialchars($product['image']);
-            $imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
-
-            if (stripos($productName, htmlspecialchars($searchName)) !== false) {
-                echo '<div class="col-md-4 col-xs-6">';
-                echo '<div class="product">';
-                echo '<div class="product-img">';
-
-//        echo '<img src="' . $imagePath . '" alt="Product Image">'; qutiba
-
+		echo '<div class="col-12"><h1 class="error">Failed to decode JSON response.</h1></div>';
+	} elseif (!isset($data['data']) || empty($data['data'])) {
+		echo '<div class="col-12"><div class="error">Product not found.</div></div>';
+	} else {
+		// عرض المنتجات
+		foreach ($data['data'] as $product) {
+			$productName = htmlspecialchars($product['name']);
+			$imageName = htmlspecialchars($product['image']);
+			$imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // src img
+	
+			if (stripos($productName, htmlspecialchars($searchName)) !== false) {
+				echo '<div class="col-md-4 col-xs-6">';
+				echo '<div class="product">';
+				echo '<div class="product-img">';
 				echo '<img src="' . $imagePath . '" alt="Product Image">';
-                echo '<div class="product-label">';
-                echo '<span class="sale">-30%</span>';
-                echo '<span class="new">NEW</span>';
-                echo '</div>';
-                echo '</div>';
-                echo '<div class="product-body">';
-                echo '<p class="product-category">Category</p>';
-                echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
-                echo '<h4 class="product-price">$' . htmlspecialchars($product['price']) . ' <del class="product-old-price">$990.00</del></h4>';
-                echo '<div class="product-rating">';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '</div>';
-                echo '<div class="product-btns">';
-                echo '<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>';
-                echo '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>';
-                echo '<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>';
-                echo '</div>';
-                echo '</div>';
-                echo '<div class="add-to-cart">';
-                echo '<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>';
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-            }
-        }
+				echo '<div class="product-label">';
+				echo '<span class="sale">-30%</span>';
+				echo '<span class="new">NEW</span>';
+				echo '</div>'; 
+				echo '</div>'; 
+				echo '<div class="product-body">';
+				
+				// التحقق من وجود الفئة في بيانات المنتج
+				if (isset($product['categoriesName'])) {
+					$categoryName = htmlspecialchars($product['categoriesName']);
+				} else {
+					$categoryName = "No category"; 
+				}
+	
+				echo '<p class="product-category">' . $categoryName . '</p>';
+				echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
+				echo '<h4 class="product-price">$' . htmlspecialchars($product['price']) . ' <del class="product-old-price">$990.00</del></h4>';
+				echo '<div class="product-rating">';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '</div>';
+				echo '<div class="product-btns">';
+				echo '<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>';
+				echo '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>';
+				echo '<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>';
+				echo '</div>'; 
+				echo '</div>';
+				echo '<div class="add-to-cart">';
+				echo '<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>';
+				echo '</div>'; 
+				echo '</div>'; 
+				echo '</div>';
+			}
+		}
+	}
+	
 
 	}
-}
+
 ?>
 
 
