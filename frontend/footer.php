@@ -52,10 +52,10 @@ Thank you for choosing e-commerce lojw. We are here to meet your tech needs and 
 							<div class="footer">
 								<h3 class="footer-title">Categories</h3>
 								<ul class="footer-links">
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">PC</a></li>
-									<li><a href="#">Accessories</a></li>
-									<li><a href="#">pieces for pc</a></li>
+									<li><a href="http://localhost:8080/project_php/e-commerce/backend/store.php?category=2">Laptops</a></li>
+									<li><a href="http://localhost:8080/project_php/e-commerce/backend/store.php?category=1">PC</a></li>
+									<li><a href="http://localhost:8080/project_php/e-commerce/backend/store.php?category=3">Accessories</a></li>
+									<li><a href="http://localhost:8080/project_php/e-commerce/backend/store.php?category=4">pieces for pc</a></li>
 								</ul>
 							</div>
 						</div>
