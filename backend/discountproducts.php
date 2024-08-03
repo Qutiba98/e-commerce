@@ -53,42 +53,42 @@
             </div>
         </div>
 
-          <!-- MAIN HEADER -->
-    <div id="header">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- Home -->
-                <div class="col-md-6 ">
-                    <div class=" home-icon">
-                        <a href="index.html">
-                            <i class="fa fa-home homestyle"></i><br>
-                            <span>Home</span>
-                        </a>
-                    </div>
-                </div>
-                <!-- /Home -->
-
-                <!-- Cart -->
-                <div class="col-md-6 clearfix">
-                    <div class="header-ctn cart-icon">
-                        <div class="dropdown cart-icon">
-                            <a href="cart.html">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
-                                <div class="qty">3</div>
+        <!-- MAIN HEADER -->
+        <div id="header">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <!-- Home -->
+                    <div class="col-md-6 ">
+                        <div class=" home-icon">
+                            <a href="./index.php">
+                                <i class="fa fa-home homestyle"></i><br>
+                                <span>Home</span>
                             </a>
                         </div>
                     </div>
+                    <!-- /Home -->
+
+                    <!-- Cart -->
+                    <div class="col-md-6 clearfix">
+                        <div class="header-ctn cart-icon">
+                            <div class="dropdown cart-icon">
+                                <a href="./cart.php">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>Your Cart</span>
+                                    <div class="qty">3</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Cart -->
                 </div>
-                <!-- /Cart -->
+                <!-- /row -->
             </div>
-            <!-- /row -->
+            <!-- /container -->
         </div>
-        <!-- /container -->
-    </div>
-    <!-- /MAIN HEADER -->
+        <!-- /MAIN HEADER -->
 
         <div class="discount-section">
             <div class="container">
@@ -124,17 +124,18 @@
                             $originalPrice = $row['price'];
                             $discountAmount = $row['discount_amount'];
                             $discountedPrice = $originalPrice * $discountAmount;
-                            $newPrice = $originalPrice  -$discountedPrice;
+                            $newPrice = $originalPrice  - $discountedPrice;
 
 
                             echo '<div class="card">';
-                            echo '<img src="./images/' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . 'width=100px">';
+                            echo '<img src="./images/' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '" style="width: 100px; height: 100px; object-fit: cover;">';
+
                             echo '<div class="card-content">';
                             echo '<h3>' . htmlspecialchars($row['name']) . '</h3>';
                             echo '<p class="price">$' . number_format($originalPrice, 2) . '</p>';
                             echo '<p class="discount">Discount: $' . number_format($discountAmount, 2) . '</p>';
                             echo '<p class="sale-price">Sale Price: $' . number_format($newPrice, 2) . '</p>';
-                            echo '<form action="add_to_cart.php" method="POST">'; // Form to add to cart
+                            echo '<form action="./add_to_cart.php" method="POST">'; // Form to add to cart
                             echo '<input type="hidden" name="product_id" value="' . $row['id'] . '">';
                             echo '<input type="hidden" name="product_name" value="' . htmlspecialchars($row['name']) . '">';
                             echo '<input type="hidden" name="product_price" value="' . $discountedPrice . '">';

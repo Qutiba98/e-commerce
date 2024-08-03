@@ -135,8 +135,6 @@ h1 {
   display: block;
 }
 
-
-
 /* Responsive Styles */
 @media (max-width: 1200px) {
   .card {
@@ -175,7 +173,6 @@ h1 {
 }
 /* ---------------------------------------- */
 
-
 /* Main Header Styles */
 #header {
   padding-top: 15px;
@@ -192,21 +189,18 @@ h1 {
 .home-icon a,
 .cart-icon a {
   color: white;
- 
+
   font-size: 16px;
   flex-direction: column;
-  align-items:normal;
-
+  align-items: normal;
 }
 
-.homestyle{
-   
-    margin-left: 1.6rem;
-    margin-top: 15px;
-   
-    display: block;
-    font-size: 18px;
+.homestyle {
+  margin-left: 1.6rem;
+  margin-top: 15px;
 
+  display: block;
+  font-size: 18px;
 }
 
 .qty {

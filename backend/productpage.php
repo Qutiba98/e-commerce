@@ -2,12 +2,7 @@
 include 'db.php';
 session_start();
 
-$id =$_GET['productId']? $_GET['productId'] :"";
-<<<<<<< HEAD
-var_dump ($_GET['productId']);
-$_SESSION['currentProductId'] = $_GET['productId'];
-=======
->>>>>>> 6f38aa7170808e22d10a9defd68ce213e81afdf2
+$id = $_GET['id'] ? $_GET['id'] : "";
 // // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -15,7 +10,7 @@ if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
 $isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=$id");
+$input = file_get_contents("http://localhost//last/e-commerce/backend/productapi/getbyid.php?id=$id");
 $result = json_decode($input, true);
 
 if ($result) {
@@ -27,13 +22,13 @@ if ($result) {
         'description' => $result['description'],
         'image' => $result['image'],
         'quantity' => $quantity,
-        'isInDatabase' =>$isInDatabase
+        'isInDatabase' => $isInDatabase
     ];
 
-    
+
     $productExists = false;
 
-    
+
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
             $product['quantity'] += $quantity;
@@ -57,6 +52,7 @@ $showImage = $result['image'];
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,101 +63,102 @@ $showImage = $result['image'];
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
 
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
 
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stylesheet -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
     <style>
-       
         .quantity {
             display: flex;
             align-items: center;
         }
 
-.container {
-    margin-top: 50px;
-}
+        .container {
+            margin-top: 50px;
+        }
 
-.customer-reviews {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px #D10024;
-}
+        .customer-reviews {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px #D10024;
+        }
 
-.reviews-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #D10024;
-    padding-bottom: 10px;
-}
+        .reviews-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #D10024;
+            padding-bottom: 10px;
+        }
 
-.reviews {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding-right: 10px;
-}
+        .reviews {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
 
-.review {
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #f9f9f9;
-}
+        .review {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
 
-.review-author {
-    font-weight: bold;
-    color: #D10024;
-}
+        .review-author {
+            font-weight: bold;
+            color: #D10024;
+        }
 
-.review-text {
-    margin-top: 10px;
-    font-size: 16px;
-    line-height: 1.5;
-}
+        .review-text {
+            margin-top: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
-.add-review-form {
-    margin-top: 30px;
-}
+        .add-review-form {
+            margin-top: 30px;
+        }
 
-.add-review-form h4 {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
+        .add-review-form h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
 
-.form-group {
-    margin-bottom: 20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.form-control {
-    border-radius: 5px;
-}
+        .form-control {
+            border-radius: 5px;
+        }
 
-.btn-primary {
-    background-color: #D10024;
-    border-color: black;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-}
+        .btn-primary {
+            background-color: #D10024;
+            border-color: black;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
         .quantity input {
             text-align: center;
             width: 50px;
             margin: 0 10px;
         }
+
         .quantity button {
             background: #f2f2f2;
             border: 1px solid #ddd;
@@ -179,12 +176,12 @@ $showImage = $result['image'];
         } */
 
 
-/* 
+        /* 
 .product-image{
     width: 320px !important;
 } */
 
-    
+
         .qty-btn {
             display: inline-block;
             width: 30px;
@@ -198,8 +195,7 @@ $showImage = $result['image'];
             background-color: #15161d;
             color: white;
             transition: background-color 0.3s, transform 0.3s;
-            margin :0
-            
+            margin: 0
         }
 
         .qty-btn:hover {
@@ -222,15 +218,18 @@ $showImage = $result['image'];
             outline: none;
             border-color: #d10024;
         }
+
         .quantity {
             display: flex;
             align-items: center;
         }
+
         .quantity input {
             text-align: center;
             width: 50px;
             margin: 0 10px;
         }
+
         .quantity button {
             background: #f2f2f2;
             border: 1px solid #ddd;
@@ -244,6 +243,7 @@ $showImage = $result['image'];
         }
     </style>
 </head>
+
 <body>
     <!-- HEADER -->
     <header>
@@ -391,14 +391,14 @@ $showImage = $result['image'];
                 <!-- Product Image -->
                 <div class="col-md-6">
                     <div class="product-image">
-                        <img src="images/<?php echo $showImage?>" alt="Product Image" class="img-responsive">
+                        <img src="images/<?php echo $showImage ?>" alt="Product Image" class="img-responsive">
                     </div>
                 </div>
                 <!-- /Product Image -->
 
                 <!-- Product Details -->
                 <div class="col-md-6">
-                    
+
                     <div class="product-details">
 
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
@@ -406,25 +406,22 @@ $showImage = $result['image'];
                         <h3 class="product-price">$<?php echo $result['price'] ?></h3>
 
                         <p class="product-description"><?php echo $result['description'] ?></p>
-                        
+
                         <!-- Quantity -->
-                         <form action="../backend/productpage.php" method="POST" >
-                        <div class="quantity">
-                        <p class="qty-btn" onclick="decreaseQuantity()">-</p>
-                        <input type="text" id="quantity" name="qua" value="1">
-                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
+                        <form action="../backend/productpage.php" method="POST">
+                            <div class="quantity">
+                                <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                                <input type="text" id="quantity" name="qua" value="1">
+                                <p class="qty-btn" onclick="increaseQuantity()">+</p>
+                                <br>
+                            </div>
+                            <!-- /Quantity -->
+
                             <br>
-                        </div>
-                        <!-- /Quantity -->
-   
-                        <br>
-                        <!-- Add to Cart Button -->
-                        <div class="product-actions">
-                            <input type="submit"
-                             class="btn"
-                                    style="background-color: #D10024; border-color: #D10024; color: #fff;"
-                                    value ="Add to Cart">
-                        </div>
+                            <!-- Add to Cart Button -->
+                            <div class="product-actions">
+                                <input type="submit" class="btn" style="background-color: #D10024; border-color: #D10024; color: #fff;" value="Add to Cart">
+                            </div>
                         </form>
                         <!-- /Add to Cart Button -->
                     </div>
@@ -432,83 +429,83 @@ $showImage = $result['image'];
                 <!-- /Product Details -->
             </div>
             <!-- /row -->
-<?php
-// session_start();
+            <?php
+            // session_start();
 
-$_SESSION['user_id'] = 21; // Example user ID
-// $_SESSION['product_id'] = 75; // Example product ID
+            $_SESSION['user_id'] = 21; // Example user ID
+            // $_SESSION['product_id'] = 75; // Example product ID
 
-$servername = "localhost"; 
-$username = "root"; 
-$password = ""; 
-$dbname = "e-commerce"; 
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "e-commerce";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $product_id = $_SESSION['product_id'];
-    $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
-    $name = $_SESSION['name'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $product_id = $_SESSION['product_id'];
+                $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
+                $name = $_SESSION['name'];
 
-    if ($product_id && $comment_text && $user_id) {
-        $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
+                if ($product_id && $comment_text && $user_id) {
+                    $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
 
-        $stmt->bind_param("sii",$comment_text, $product_id , $user_id);
-        $stmt->execute();
-        $stmt->close();
-    }
-}
+                    $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+            }
 
-$user_id = $_SESSION['user_id'];
+            $user_id = $_SESSION['user_id'];
 
 
 
-$result = $conn->query(
-" SELECT comments.* ,users.name FROM comments
+            $result = $conn->query(
+                " SELECT comments.* ,users.name FROM comments
 INNER JOIN users
 USING (user_id)
 WHERE comments.user_id =  $user_id"
-);
-?>
-<!-- Customer Reviews Section -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="customer-reviews">
-                <h3 class="reviews-title">Customer Reviews</h3>
-                <div class="reviews">
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="review">
-                        <div class="review-author">
-                            <strong> <?php echo $row['name']; ?></strong>
+            );
+            ?>
+            <!-- Customer Reviews Section -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="customer-reviews">
+                            <h3 class="reviews-title">Customer Reviews</h3>
+                            <div class="reviews">
+                                <?php while ($row = $result->fetch_assoc()) : ?>
+                                    <div class="review">
+                                        <div class="review-author">
+                                            <strong> <?php echo $row['name']; ?></strong>
+                                        </div>
+                                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
+                                    </div>
+                                <?php endwhile; ?>
+                            </div>
+
+                            <!-- Add Review Form -->
+                            <div class="add-review-form">
+                                <h4>Add Your Review</h4>
+                                <form method="POST" action="">
+                                    <div class="form-group">
+                                        <label for="review-text">Your Review:</label>
+                                        <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                                </form>
+                            </div>
+                            <!-- /Add Review Form -->
                         </div>
-                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
                     </div>
-                    <?php endwhile; ?>
                 </div>
-                
-                <!-- Add Review Form -->
-                <div class="add-review-form">
-                    <h4>Add Your Review</h4>
-                    <form method="POST" action="">
-                        <div class="form-group">
-                            <label for="review-text">Your Review:</label>
-                            <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
-                    </form>
-                </div>
-                <!-- /Add Review Form -->
             </div>
-        </div>
-    </div>
-</div>
             <!-- /Customer Reviews -->
-            
+
         </div>
         <!-- /container -->
     </div>
@@ -597,7 +594,9 @@ WHERE comments.user_id =  $user_id"
                         </ul>
                         <span class="copyright">
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                            Copyright &copy;<script>
+                                document.write(new Date().getFullYear());
+                            </script> All rights reserved
                         </span>
                     </div>
                 </div>
@@ -619,4 +618,5 @@ WHERE comments.user_id =  $user_id"
     <script src="../frontend/productPage.js"></script>
 
 </body>
+
 </html>
