@@ -60,12 +60,12 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+						<li><a href="#"><i class="fa fa-phone"></i> +962 779 199 880</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> Qutiba@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Amman</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+						<li><a href="#"><i class="fa fa-dollar"></i> JOR</a></li>
 						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
 					</ul>
 				</div>
@@ -191,13 +191,13 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/index.php">Home</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4#">Categories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=2#">Laptops</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=1#">PC</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=3#">Accessories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=4#">Pieces For PC </a></li>
+
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -279,13 +279,13 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
     // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+    $apiUrl = "http://localhost/pref%204//e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
 } elseif ($searchName) {
     // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
     // $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
-    $apiUrl = 'http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php';
+    $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
 }
 
 // جلب البيانات من الـ API
@@ -312,7 +312,10 @@ if ($response === FALSE) {
                 echo '<div class="col-md-4 col-xs-6">';
                 echo '<div class="product">';
                 echo '<div class="product-img">';
-                echo '<img src="./images/'.$imagePath.' alt="Product Image">';
+
+//        echo '<img src="' . $imagePath . '" alt="Product Image">'; qutiba
+
+				echo '<img src="' . $imagePath . '" alt="Product Image">';
                 echo '<div class="product-label">';
                 echo '<span class="sale">-30%</span>';
                 echo '<span class="new">NEW</span>';

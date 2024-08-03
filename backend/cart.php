@@ -32,7 +32,7 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
     // dont forget to make dynamic based on id of the user
     $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
     $cartData = json_decode($cartFromDatabase);
-    $sql ="SELECT cart_product.cart_id , cart_product.product_id , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id FROM cart_product 
+    $sql ="SELECT cart_product.cart_id , cart_product.product_id as productId , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id FROM cart_product 
 INNER JOIN product ON product.id = cart_product.product_id
 INNER JOIN cart ON cart.id = cart_product.cart_id
 INNER JOIN users on users.user_id = cart.user_id
@@ -318,7 +318,7 @@ var_dump($_SESSION['products']);
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                   <?php 
                   if ($registerd): ?>
-                      <a href="" class="text-danger"
+                      <a href="http://127.0.0.1/brief%203/e-commerce/backend/cartapi/deleteFromCart.php?product_id=<?php echo $row['productId'] ?>" class="text-danger"
                         ><i class="fas fa-trash fa-lg">
                           </i
                     >
@@ -361,11 +361,13 @@ var_dump($_SESSION['products']);
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                   <?php 
                   if ($registerd): ?>
-                      <a href="" class="text-danger"
+                      <a href="http://127.0.0.1/brief%203/e-commerce/backend/cartapi/deleteFromCart.php?productId=<?php echo $row['productId'] ?>" class="text-danger"
                         ><i class="fas fa-trash fa-lg">
+                        
                           </i
                     >
-                    <?php endif; ?></a>
+                    </a>
+                    <?php endif; ?>
                   </div>
                 </div>
               </div>

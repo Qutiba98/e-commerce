@@ -14,6 +14,7 @@ if (!defined('DB_PASSWORD')) {
 if (!defined('DB_NAME')) {
     define("DB_NAME", "e-commerce");
 }
+
 // Ensure the Database class is defined only once
 if (!class_exists('Database')) {
     class Database {
@@ -35,4 +36,5 @@ if (!class_exists('Database')) {
         }
     }
 }
+
 ?>
