@@ -237,11 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	</div>
 	<!-- /SECTION -->
 
-	<!-- FOOTER -->
-	<footer>
-		<!-- Your footer content -->
-	</footer>
-	<!-- /FOOTER -->
+		
 
 	<!-- Add your JavaScript links here -->
 </body>
