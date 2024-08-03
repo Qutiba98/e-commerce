@@ -20,7 +20,7 @@ require './db.php'; // Include database connection
 
 <body>
     <div class="navbar">
-        <h2>Admin Dashboard</h2>
+        <h2 style="color: white;">Admin Dashboard</h2>
         <ul>
             <li><a href="?section=products" class="<?php echo $section === 'products' ? 'active' : ''; ?>">Manage Products</a></li>
             <li><a href="?section=categories" class="<?php echo $section === 'categories' ? 'active' : ''; ?>">Manage Categories</a></li>
@@ -43,8 +43,8 @@ require './db.php'; // Include database connection
             case 'users':
                 include 'manage_users.php';
                 break;
-                case 'viewSales':
-                    include 'viewOrders.php';
+            case 'viewSales':
+                include 'viewOrders.php';
                 break;
             default:
                 include 'manage_products.php';

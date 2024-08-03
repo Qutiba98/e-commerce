@@ -12,12 +12,14 @@ body {
   background-color: #333;
   color: #fff;
   padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 .navbar h2 {
   margin: 0;
 }
 
+/* Navigation Links */
 .navbar ul {
   list-style: none;
   margin: 0;
@@ -32,16 +34,53 @@ body {
 .navbar ul li a {
   color: #fff;
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 12px 20px; /* Increased padding for larger clickable area */
   display: block;
+  border-radius: 6px; /* Rounded corners for buttons */
+  background: linear-gradient(145deg, #444, #555); /* Gradient background */
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
 }
 
+/* Active Link Styling */
 .navbar ul li a.active {
-  background-color: #555;
-  border-radius: 4px;
+  background-color: #555; /* Slightly different background for active link */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow to highlight active link */
+}
+
+/* Hover and Focus States */
+.navbar ul li a:hover,
+.navbar ul li a:focus {
+  background: linear-gradient(
+    145deg,
+    #555,
+    #666
+  ); /* Darker gradient on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
 }
 
 /* Main Content */
 .main-content {
   padding: 20px;
+}
+
+/* Admin Dashboard Text */
+.admin-dashboard-text {
+  margin-left: 40px; /* Increased margin for more space on the left */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar ul li {
+    margin-bottom: 10px; /* Space between links on smaller screens */
+  }
+
+  .navbar ul li a {
+    padding: 10px 15px; /* Adjust padding for smaller screens */
+  }
 }
