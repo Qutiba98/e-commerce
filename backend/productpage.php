@@ -2,7 +2,13 @@
 include 'db.php';
 session_start();
 
+<<<<<<< HEAD
 $id = $_GET['id'] ? $_GET['id'] : "";
+=======
+$id =$_GET['productId']? $_GET['productId'] :"";
+// var_dump ($_GET['productId']);
+$_SESSION['currentProductId'] = $_GET['productId'];
+>>>>>>> 548068a5c531ea9b06f259899e9e6ed9bdd81d65
 // // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -32,6 +38,7 @@ if ($result) {
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
             $product['quantity'] += $quantity;
+            // $_SESSION['quaProduct'][] = $quantity;
             $productExists = true;
             break;
         }
@@ -408,6 +415,7 @@ $showImage = $result['image'];
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
+<<<<<<< HEAD
                         <form action="../backend/productpage.php" method="POST">
                             <div class="quantity">
                                 <p class="qty-btn" onclick="decreaseQuantity()">-</p>
@@ -417,6 +425,13 @@ $showImage = $result['image'];
                             </div>
                             <!-- /Quantity -->
 
+=======
+                         <form action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId'] ?>" method="POST" >
+                        <div class="quantity">
+                        <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                        <input type="text" id="quantity" name="qua" value="1">
+                        <p class="qty-btn" onclick="increaseQuantity()">+</p>
+>>>>>>> 548068a5c531ea9b06f259899e9e6ed9bdd81d65
                             <br>
                             <!-- Add to Cart Button -->
                             <div class="product-actions">

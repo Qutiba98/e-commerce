@@ -1,3 +1,40 @@
+<?php 
+
+session_start(); // Start the session
+// session_destroy();
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Retrieve form data
+    $productId = intval($_POST['product_id']);
+    $productName = htmlspecialchars($_POST['product_name']);
+    $productPrice = floatval($_POST['product_price']);
+    $productImage = htmlspecialchars($_POST['product_image']);
+    $productdesc = htmlspecialchars($_POST['product_desc']);
+
+    // Create product array
+    $product = array(
+        'id' => $productId,
+        'name' => $productName,
+        'price' => $productPrice,
+        'description' => $productdesc,
+        'image' => $productImage,
+        'quantity' => 1,
+        'isInDatabase' => false,
+    );
+
+    // Check if cart already exists in session
+    if (!isset($_SESSION['products'])) {
+        $_SESSION['products'] = array();
+    }
+
+    // Add product to cart
+    $_SESSION['products'][] = $product;
+    var_dump($_SESSION['products']);
+    // Redirect to cart page
+    // header('Location:discountpage.php');
+    // exit();
+}
+?>
 <!-- Updated HTML Code -->
 <!DOCTYPE html>
 <html lang="en">
@@ -111,7 +148,7 @@
                     }
 
                     // Fetch discounted products from the database
-                    $sql = "SELECT d.id, p.name, p.price, p.image, d.discount_amount
+                    $sql = "SELECT p.id as product_id, p.name, p.price,p.description as description, p.image, d.discount_amount
                             FROM discount d
                             JOIN product p ON d.product_id = p.id";
                     $result = $conn->query($sql);
@@ -135,9 +172,15 @@
                             echo '<p class="price">$' . number_format($originalPrice, 2) . '</p>';
                             echo '<p class="discount">Discount: $' . number_format($discountAmount, 2) . '</p>';
                             echo '<p class="sale-price">Sale Price: $' . number_format($newPrice, 2) . '</p>';
+<<<<<<< HEAD
                             echo '<form action="./add_to_cart.php" method="POST">'; // Form to add to cart
                             echo '<input type="hidden" name="product_id" value="' . $row['id'] . '">';
+=======
+                            echo '<form action="./discountproducts.php"" method="POST">'; // Form to add to cart
+                            echo '<input type="hidden" name="product_id" value="' . $row['product_id'] . '">';
+>>>>>>> 548068a5c531ea9b06f259899e9e6ed9bdd81d65
                             echo '<input type="hidden" name="product_name" value="' . htmlspecialchars($row['name']) . '">';
+                            echo '<input type="hidden" name="product_desc" value="' . htmlspecialchars($row['description']) . '">';
                             echo '<input type="hidden" name="product_price" value="' . $discountedPrice . '">';
                             echo '<input type="hidden" name="product_image" value="' . htmlspecialchars($row['image']) . '">';
                             echo '<button type="submit" class="button">Add to Cart</button>';
@@ -148,7 +191,7 @@
                     } else {
                         echo '<p>No discounted products found.</p>';
                     }
-
+                    
                     // Close the connection
                     $conn->close();
                     ?>
