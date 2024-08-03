@@ -47,7 +47,7 @@ if ($result) {
 }
 
 // Debug: Display the session products array
-// print_r($_SESSION['products']);
+print_r($_SESSION['products']);
 
 $showImage = $result['image'];
 ?>

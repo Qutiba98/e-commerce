@@ -12,7 +12,7 @@ $user_id = $_SESSION['user'];
 $cartId = 21; // Example cartId ------- change it
 $productId = $_SESSION['currentProductId']; // Example productId
 $registerd = false;
-
+var_dump($result);
 // echo $product;
 
 if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
