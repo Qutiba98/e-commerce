@@ -3,6 +3,7 @@ include 'db.php';
 session_start();
 
 $id =$_GET['productId']? $_GET['productId'] :"";
+$_SESSION['currentProductId'] = $_GET['productId'];
 // // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -403,7 +404,7 @@ $showImage = $result['image'];
                         <p class="product-description"><?php echo $result['description'] ?></p>
                         
                         <!-- Quantity -->
-                         <form action="../backend/productpage.php" method="POST" >
+                         <form action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId']  ?>" method="POST" >
                         <div class="quantity">
                         <p class="qty-btn" onclick="decreaseQuantity()">-</p>
                         <input type="text" id="quantity" name="qua" value="1">

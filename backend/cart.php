@@ -2,30 +2,52 @@
 <?php 
 require "./connection_db_pdo.php";
 session_start();
+
 $id = 0;
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
-// $result = json_decode($input,true);
-// unset($_SESSION['products'][0]);
-$registerd = false;
+// $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
 $result = $_SESSION['products'];
-$_SESSION['user'] = 1;
-// var_dump($result);
-// unset($result);
+$_SESSION['user'] = 21;
 $cartId = 21; // Example cartId
-    $productId = 54;
-    // here to check if the item aleardy in database
-if(isset($_SESSION['user'])){
-  $registerd = true;
-  foreach($result as &$row){
-    if( !$row['isInDatabase'] ){
-      
-    $sql = "INSERT INTO cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
-    $res = $conn -> exec($sql); 
-      $row['isInDatabase'] = true;
+$productId = 75; // Example productId
+$registerd = false;
+
+if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+    $registerd = true;
+    
+    // Insert products not in the database
+    foreach($result as &$row) {
+        if(!$row['isInDatabase']) {
+            $sql = "INSERT INTO cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
+            $res = $conn->exec($sql); 
+            $row['isInDatabase'] = true;
+        }
     }
-  }
+    
+    // Remove products that are in the database from the session
+    foreach($result as $key => $row) {
+        if($row['isInDatabase']) {
+            unset($_SESSION['products'][$key]);
+        }
+    }
+    // dont forget to make dynamic based on id of the user
+    $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+    $cartData = json_decode($cartFromDatabase);
+    $sql ="SELECT cart_product.cart_id , cart_product.product_id , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id FROM cart_product 
+INNER JOIN product ON product.id = cart_product.product_id
+INNER JOIN cart ON cart.id = cart_product.cart_id
+INNER JOIN users on users.user_id = cart.user_id
+WHERE cart.user_id =21";
+// $cartDataFromDatabase = $conn -> query($sql);
+$statement = $conn->query($sql);
+$cartDataFromDatabase = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+print_r(($cartDataFromDatabase));
 }
 
+// Optionally reindex the session array to avoid gaps in the keys
+$_SESSION['products'] = array_values($_SESSION['products']);
+
+var_dump($_SESSION['products']);
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +60,7 @@ if(isset($_SESSION['user'])){
       #bigFont {
         font-size: 1rem !important;
       }
+      
     </style>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
@@ -81,6 +104,11 @@ if(isset($_SESSION['user'])){
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+      .h-100 {
+    height: auto !important;
+}
+    </style>
   </head>
   <body>
     <!-- HEADER -->
@@ -256,21 +284,17 @@ if(isset($_SESSION['user'])){
                 </p>
               </div>
             </div>
-            <!-- <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST"> -->
-            <?php foreach($result as $row): ?>
-                <?php
-                $showImage=$row['image'];
-                     ?>
-                     
-                
-            <div class="card rounded-3 mb-4">
+            <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST">
+              <?php if (!$registerd): ?>
+              <?php foreach($result as $row): ?>
+                <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
                 <div
                   class="row d-flex justify-content-between align-items-center"
                 >
                   <div class="col-md-2 col-lg-2 col-xl-2">
                     <img
-                      src="images/<?php echo $showImage ?>"
+                      src="images/<?php echo $row['image'] ?>"
                       class="img-fluid rounded-3"
                       alt="Cotton T-shirt"
                     />
@@ -303,7 +327,51 @@ if(isset($_SESSION['user'])){
                 </div>
               </div>
             </div>
-            <?php endforeach; ?>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <?php foreach($cartDataFromDatabase as $row): ?>
+                <div class="card rounded-3 mb-4">
+              <div class="card-body p-4">
+                <div
+                  class="row d-flex justify-content-between align-items-center"
+                >
+                  <div class="col-md-2 col-lg-2 col-xl-2">
+                    <img
+                      src="images/<?php echo $row['image'] ?>"
+                      class="img-fluid rounded-3"
+                      alt="Cotton T-shirt"
+                    />
+                  </div>
+                  <div class="col-md-3 col-lg-3 col-xl-3">
+                    <p class="lead fw-normal mb-2"><?php echo $row['name'] ?></p>
+                    <p>
+                      <span class="text-muted">description: <?php echo $row['description'] ?> </span>
+                      
+                    </p>
+                  </div>
+                  <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                  
+
+                     
+                    
+                  </div>
+                  <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                    <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
+                  </div>
+                  <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                  <?php 
+                  if ($registerd): ?>
+                      <a href="" class="text-danger"
+                        ><i class="fas fa-trash fa-lg">
+                          </i
+                    >
+                    <?php endif; ?></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <?php endforeach; ?>
+            <?php endif; ?>
 
             <div class="card mb-4">
               <div class="card-body p-4 d-flex flex-row">
@@ -335,7 +403,7 @@ if(isset($_SESSION['user'])){
 
     class="btn btn-warning btn-block btn-lg"
     value="Proceed to Pay"
-  > procc </button>
+  > check out </button>
                 </a>
               
               </div>
@@ -343,7 +411,7 @@ if(isset($_SESSION['user'])){
           </div>
         </div>
       </div>
-      <!-- </form> -->
+      </form>
     </section>
     <!-- end of cart des _______________________________________________________________________ -->
     <!-- BREADCRUMB -->
