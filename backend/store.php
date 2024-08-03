@@ -60,12 +60,12 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+						<li><a href="#"><i class="fa fa-phone"></i> +962 779 199 880</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> Qutiba@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Amman</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+						<li><a href="#"><i class="fa fa-dollar"></i> JOR</a></li>
 						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
 					</ul>
 				</div>
@@ -92,13 +92,32 @@
 						<div class="col-md-6">
 							<div class="header-search">
 							<form id="filterForm">
-								<select class="input-select" name="category" id="categorySelect" onchange="filterCategory()">
-									<option value="">Select Category</option>
-									<option value="1" <?php if (isset($_GET['category']) && $_GET['category'] == '1') echo 'selected'; ?>>PC</option>
-									<option value="2" <?php if (isset($_GET['category']) && $_GET['category'] == '2') echo 'selected'; ?>>Laptop</option>
-									<option value="3" <?php if (isset($_GET['category']) && $_GET['category'] == '3') echo 'selected'; ?>>Accessories</option>
-									<option value="4" <?php if (isset($_GET['category']) && $_GET['category'] == '4') echo 'selected'; ?>>Pieces for PC</option>
-								</select>
+							<?php
+									
+									$api_url = 'http://localhost:8080/project_php/e-commerce/backend/categories_API/read.php';
+
+								
+									$response = file_get_contents($api_url);
+
+									
+									$categories = json_decode($response, true);
+
+									
+									if ($categories['status'] == 200) {
+										$categories = $categories['data'];
+									} else {
+										$categories = [];
+									}
+									?>
+
+									<select class="input-select" name="category" id="categorySelect" onchange="filterCategory()">
+										<option value="">Select Category</option>
+										<?php foreach ($categories as $category): ?>
+											<option value="<?= $category['id'] ?>" <?php if (isset($_GET['category']) && $_GET['category'] == $category['id']) echo 'selected'; ?>>
+												<?= htmlspecialchars($category['name']) ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
 								<input class="input" placeholder="Search here" id="searchInput" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
 								<button type="button" class="search-btn" onclick="filterCategory()">Search</button>
 							</form>
@@ -191,13 +210,13 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/index.php">Home</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4#">Categories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=2#">Laptops</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=1#">PC</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=3#">Accessories</a></li>
+						<li><a href="http://localhost/pref%204/e-commerce/backend/store.php?page=4&category=4#">Pieces For PC </a></li>
+
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -279,13 +298,13 @@ $searchName = isset($_GET['name']) ? trim($_GET['name']) : '';
 // تحديد عنوان الـ API بناءً على المعلمات
 if ($categoryId) {
     // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
+    $apiUrl = "http://localhost/pref%204//e-commerce/backend/products_API/read_by_Categorie_id.php?categories_id={$categoryId}";
 } elseif ($searchName) {
     // $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
-    $apiUrl = "http://127.0.0.1/brief%203/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
+    $apiUrl = "http://localhost/pref%204/e-commerce/backend/products_API/read_by_id.php?name=" . urlencode($searchName);
 } else {
     // $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
-    $apiUrl = 'http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php';
+    $apiUrl = 'http://localhost/pref%204/e-commerce/backend/products_API/read.php';
 }
 
 // جلب البيانات من الـ API
@@ -298,53 +317,63 @@ if ($response === FALSE) {
 
     // التحقق من محتوى البيانات
     if ($data === null) {
-        echo '<div class="col-12"><h1 class="error">Failed to decode JSON response.</h1></div>';
-    } elseif (!isset($data['data']) || empty($data['data'])) {
-        echo '<div class="col-12"><div class="error">Product not found.</div></div>';
-    } else {
-        // عرض المنتجات
-        foreach ($data['data'] as $product) {
-            $productName = htmlspecialchars($product['name']);
-            $imageName = htmlspecialchars($product['image']);
-            $imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // بناء المسار الكامل للصورة
-
-            if (stripos($productName, htmlspecialchars($searchName)) !== false) {
-                echo '<div class="col-md-4 col-xs-6">';
-                echo '<div class="product">';
-                echo '<div class="product-img">';
-                echo '<img src="./images/'.$imagePath.' alt="Product Image">';
-                echo '<div class="product-label">';
-                echo '<span class="sale">-30%</span>';
-                echo '<span class="new">NEW</span>';
-                echo '</div>';
-                echo '</div>';
-                echo '<div class="product-body">';
-                echo '<p class="product-category">Category</p>';
-                echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
-                echo '<h4 class="product-price">$' . htmlspecialchars($product['price']) . ' <del class="product-old-price">$990.00</del></h4>';
-                echo '<div class="product-rating">';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '<i class="fa fa-star"></i>';
-                echo '</div>';
-                echo '<div class="product-btns">';
-                echo '<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>';
-                echo '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>';
-                echo '<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>';
-                echo '</div>';
-                echo '</div>';
-                echo '<div class="add-to-cart">';
-                echo '<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>';
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-            }
-        }
+		echo '<div class="col-12"><h1 class="error">Failed to decode JSON response.</h1></div>';
+	} elseif (!isset($data['data']) || empty($data['data'])) {
+		echo '<div class="col-12"><div class="error">Product not found.</div></div>';
+	} else {
+		// عرض المنتجات
+		foreach ($data['data'] as $product) {
+			$productName = htmlspecialchars($product['name']);
+			$imageName = htmlspecialchars($product['image']);
+			$imagePath = 'http://localhost/pref%204/e-commerce/backend/images/' . $imageName; // src img
+	
+			if (stripos($productName, htmlspecialchars($searchName)) !== false) {
+				echo '<div class="col-md-4 col-xs-6">';
+				echo '<div class="product">';
+				echo '<div class="product-img">';
+				echo '<img src="' . $imagePath . '" alt="Product Image">';
+				echo '<div class="product-label">';
+				echo '<span class="sale">-30%</span>';
+				echo '<span class="new">NEW</span>';
+				echo '</div>'; 
+				echo '</div>'; 
+				echo '<div class="product-body">';
+				
+				// التحقق من وجود الفئة في بيانات المنتج
+				if (isset($product['categoriesName'])) {
+					$categoryName = htmlspecialchars($product['categoriesName']);
+				} else {
+					$categoryName = "No category"; 
+				}
+	
+				echo '<p class="product-category">' . $categoryName . '</p>';
+				echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
+				echo '<h4 class="product-price">$' . htmlspecialchars($product['price']) . ' <del class="product-old-price">$990.00</del></h4>';
+				echo '<div class="product-rating">';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '<i class="fa fa-star"></i>';
+				echo '</div>';
+				echo '<div class="product-btns">';
+				echo '<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>';
+				echo '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>';
+				echo '<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>';
+				echo '</div>'; 
+				echo '</div>';
+				echo '<div class="add-to-cart">';
+				echo '<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>';
+				echo '</div>'; 
+				echo '</div>'; 
+				echo '</div>';
+			}
+		}
+	}
+	
 
 	}
-}
+
 ?>
 
 

@@ -79,7 +79,7 @@
 <div class="container">
       <form
         name="signupForm"
-        action="./login.php"
+        action="./signup.php"
         method="POST"
         enctype="multipart/form-data"
         onsubmit="return validateForm();"
@@ -239,7 +239,7 @@ class UserRegistration
             if ($stmt->execute()) {
                 $userId = $stmt->insert_id; // Get the ID of the newly inserted user
                 $this->addToCart($userId); // Add the user to the cart
-                echo "Registration successful!";
+                echo "RS!";
             } else {
                 echo "Error: " . $stmt->error;
             }
