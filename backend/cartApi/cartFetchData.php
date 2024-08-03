@@ -15,7 +15,6 @@ WHERE cart_product.cart_id ='$id'";
     $result = $conn->query($sql);
     $output = $result-> fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($output ,true );
-
 }else{
     $data = [
         'error' => 'Method Not Allowed',
@@ -24,9 +23,3 @@ WHERE cart_product.cart_id ='$id'";
     echo json_encode($data , true);
 }
 ?>
-<!-- SELECT cart_product.product_id , product.name , product.image , product.description ,product.price ,product.categories_id FROM cart_product 
-INNER JOIN product ON product.id= cart_product.product_id
-INNER JOIN cart ON cart_product.cart_id = cart.user_id
-INNER JOIN users ON users.user_id = cart.user_id
-WHERE users.user_id = 21
- -->
