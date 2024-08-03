@@ -346,7 +346,7 @@
             <?php
 // session_start();
 
-$_SESSION['user_id'] = 22; // Example user ID
+$_SESSION['user_id'] = 21; // Example user ID
 $_SESSION['product_id'] = 75; // Example product ID
 
 $servername = "localhost"; 
@@ -366,8 +366,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_SESSION['user_id'];
 
     if ($product_id && $comment_text && $user_id) {
-        $stmt = $conn->prepare("INSERT INTO comments (product_id, comment_text, user_id) VALUES (?, ?, ?)");
-        $stmt->bind_param("isi", $product_id, $comment_text, $user_id);
+        $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("sii",$comment_text, $product_id , $user_id);
         $stmt->execute();
         $stmt->close();
     }
