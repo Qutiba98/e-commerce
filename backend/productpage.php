@@ -2,6 +2,7 @@
 include 'db.php';
 session_start();
 
+$id =$_GET['productId']? $_GET['productId'] :"";
 // // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -9,7 +10,7 @@ if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
 $isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=58");
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=$id");
 $result = json_decode($input, true);
 
 if ($result) {

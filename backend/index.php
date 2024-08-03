@@ -410,9 +410,8 @@ $resultAccessories = json_decode($inputAccessories, true);
                         <i class="fa fa-star"></i>
                     </div>
                     <div class="product-btns">
-                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Add to Wishlist</span></button>
-                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Add to Compare</span></button>
-                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Quick View</span></button>
+                        
+                        <a href="http://127.0.0.1/brief%203/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
                 <div class="add-to-cart">
