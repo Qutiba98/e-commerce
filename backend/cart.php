@@ -2,26 +2,34 @@
 <?php 
 require "./connection_db_pdo.php";
 session_start();
-
+$discountCode = isset($_POST["discountCode"]) ? $_POST["discountCode"] :"";
 $id = 0;
 // $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
 $result = $_SESSION['products'];
 $_SESSION['user'] = 21;
-$cartId = 21; // Example cartId
-$productId = 75; // Example productId
+$user_id = $_SESSION['user'];
+$cartId = 21; // Example cartId ------- change it
+$productId = $_SESSION['currentProductId']; // Example productId
 $registerd = false;
 
+echo $product;
+
 if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
-    $registerd = true;
-    
-    // Insert products not in the database
-    foreach($result as &$row) {
-        if(!$row['isInDatabase']) {
-            $sql = "INSERT INTO cart_product (`cart_id`, `product_id`) VALUES ('$cartId', '$productId');";
-            $res = $conn->exec($sql); 
-            $row['isInDatabase'] = true;
-        }
-    }
+  $registerd = true;
+  
+ // Ensure that the quantity is properly assigned from the session
+foreach ($result as &$row) {
+  $quantity = isset($_SESSION['quantity'][$productId]) ? $_SESSION['quantity'][$productId] : 0;
+
+  if (!$row['isInDatabase']) {
+      // Construct the SQL query with direct interpolation
+      $sql = "INSERT INTO cart_product (cart_id, product_id, quantity) VALUES ('$cartId', '$productId', '$quantity')";
+
+      // Execute the SQL query
+      $res = $conn->exec($sql);
+      $row['isInDatabase'] = true;
+  }
+}
     
     // Remove products that are in the database from the session
     foreach($result as $key => $row) {
@@ -30,19 +38,53 @@ if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
         }
     }
     // dont forget to make dynamic based on id of the user
-    $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+    $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
     $cartData = json_decode($cartFromDatabase);
-    $sql ="SELECT cart_product.cart_id , cart_product.product_id as productId , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id FROM cart_product 
+    $sql ="SELECT cart_product.cart_id , cart_product.product_id as productId , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id ,SUM(product.price) as totalPrice FROM cart_product 
 INNER JOIN product ON product.id = cart_product.product_id
 INNER JOIN cart ON cart.id = cart_product.cart_id
 INNER JOIN users on users.user_id = cart.user_id
-WHERE cart.user_id =21";
+WHERE cart.user_id =$user_id";
 // $cartDataFromDatabase = $conn -> query($sql);
 $statement = $conn->query($sql);
 $cartDataFromDatabase = $statement->fetchAll(PDO::FETCH_ASSOC);
+$totalPriceBefore = "";
+$totalPriceAfter = "";
+// make operation on total
+if (isset($cartDataFromDatabase[0]['totalPrice']) && !empty($cartDataFromDatabase[0]['totalPrice'])) {
+  $total = $cartDataFromDatabase[0]['totalPrice'];
+  $totalPriceBefore = $total;
+  $_SESSION['total'] = $total;
+  // Prepare the SQL statement
+  $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
+  $stmt->bindParam(':discountCode', $discountCode);
+  
+  // Execute the query
+  if ($stmt->execute()) {
+      $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
 
-print_r(($cartDataFromDatabase));
+      // Check if a result was returned
+      if ($precantage !== false) {
+          
+          $totalPriceAfter = $total - ($precantage['precantage'] * $totalPriceBefore );
+          $_SESSION['total'] =$totalPriceAfter;
+          // Print result for debugging
+          print_r($totalPriceAfter);
+      } else {
+          // Handle the case where no discount was found
+          $dicountErr= "No discount found for the provided code.";
+      }
+  } 
+} 
+
+	
+
+	
 }
+	
+
+
+
 
 // Optionally reindex the session array to avoid gaps in the keys
 $_SESSION['products'] = array_values($_SESSION['products']);
@@ -378,24 +420,47 @@ var_dump($_SESSION['products']);
             <div class="card mb-4">
               <div class="card-body p-4 d-flex flex-row">
                 <div data-mdb-input-init class="form-outline flex-fill">
+                  <form action="../backend/cart.php" method ="POST">
+
+                  
                   <input
                     type="text"
                     id="form1"
+                    name ="discountCode"
                     class="form-control form-control-lg"
                   />
                   <label class="form-label" for="form1">Discound code</label>
                 </div>
                 <button
-                  type="button"
-                  data-mdb-button-init
-                  data-mdb-ripple-init
+                  type="submit"
+                  
                   class="btn btn-outline-warning btn-lg ms-3"
                 >
                   Apply
                 </button>
-              </div>
+              </form>
             </div>
+            <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
+              <?php 
+                  if (!empty($totalPriceAfter)): ?>
+              <div> total after discount :
+                <?php echo number_format($totalPriceAfter ,2) ?>
+              </div>
+              <?php endif; ?>
+              <div>Total price :
+                <?php echo $totalPriceBefore ?>
+              </div>
+              <!-- hidden input to pass the values only  -->
+                <input type="text" name ="afterDiscount" value ="<?php echo $totalPriceBefore ?>" style ="display : none;">
+                <input type="text" name="beforeDiscount" value ="<?php echo $totalPriceAfter ?>" style ="display : none;">
 
+
+
+
+
+              <!-- /hidden input to pass the values only  -->
+            </div>
+            
             <div class="card">
               <div class="card-body">
                 <a href="./checkout.php">

@@ -3,6 +3,11 @@ include 'db.php';
 session_start();
 
 $id =$_GET['productId']? $_GET['productId'] :"";
+<<<<<<< HEAD
+var_dump ($_GET['productId']);
+$_SESSION['currentProductId'] = $_GET['productId'];
+=======
+>>>>>>> 6f38aa7170808e22d10a9defd68ce213e81afdf2
 // // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -44,7 +49,7 @@ if ($result) {
 }
 
 // Debug: Display the session products array
-// print_r($_SESSION['products']);
+print_r($_SESSION['products']);
 
 $showImage = $result['image'];
 ?>
@@ -431,7 +436,7 @@ $showImage = $result['image'];
 // session_start();
 
 $_SESSION['user_id'] = 21; // Example user ID
-$_SESSION['product_id'] = 75; // Example product ID
+// $_SESSION['product_id'] = 75; // Example product ID
 
 $servername = "localhost"; 
 $username = "root"; 
