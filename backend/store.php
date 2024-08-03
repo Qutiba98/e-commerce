@@ -92,13 +92,32 @@
 						<div class="col-md-6">
 							<div class="header-search">
 							<form id="filterForm">
-								<select class="input-select" name="category" id="categorySelect" onchange="filterCategory()">
-									<option value="">Select Category</option>
-									<option value="1" <?php if (isset($_GET['category']) && $_GET['category'] == '1') echo 'selected'; ?>>PC</option>
-									<option value="2" <?php if (isset($_GET['category']) && $_GET['category'] == '2') echo 'selected'; ?>>Laptop</option>
-									<option value="3" <?php if (isset($_GET['category']) && $_GET['category'] == '3') echo 'selected'; ?>>Accessories</option>
-									<option value="4" <?php if (isset($_GET['category']) && $_GET['category'] == '4') echo 'selected'; ?>>Pieces for PC</option>
-								</select>
+							<?php
+									
+									$api_url = 'http://localhost:8080/project_php/e-commerce/backend/categories_API/read.php';
+
+								
+									$response = file_get_contents($api_url);
+
+									
+									$categories = json_decode($response, true);
+
+									
+									if ($categories['status'] == 200) {
+										$categories = $categories['data'];
+									} else {
+										$categories = [];
+									}
+									?>
+
+									<select class="input-select" name="category" id="categorySelect" onchange="filterCategory()">
+										<option value="">Select Category</option>
+										<?php foreach ($categories as $category): ?>
+											<option value="<?= $category['id'] ?>" <?php if (isset($_GET['category']) && $_GET['category'] == $category['id']) echo 'selected'; ?>>
+												<?= htmlspecialchars($category['name']) ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
 								<input class="input" placeholder="Search here" id="searchInput" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
 								<button type="button" class="search-btn" onclick="filterCategory()">Search</button>
 							</form>
