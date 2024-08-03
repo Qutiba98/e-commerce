@@ -1,31 +1,31 @@
 
 <?php 
-
 session_start();
+
 // $id=$_SESSION['user_id'];
 //API 
-
+$_SESSION['total'] = 0;
 //qutiba
 // $input0 = file_get_contents("http://localhost/pref%204/e-commerce/backend/products_API/read.php");
-$input0 = file_get_contents("http://localhost/pref%204/e-commerce/backend/products_API/read.php");
+$input0 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php");
 $result0 = json_decode($input0, true);
 
 //img pc 
 // $input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=54");
-$input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=54");
+$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
 $result = json_decode($input, true);
 $showImage = $result['image'];
 
 
 //img laptop 
 // $input2 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=64");
-$input2 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=64");
+$input2 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=64");
 $result2 = json_decode($input2, true);
 $showImage2 = $result2['image'];
 
 
 //img  Accessories 
-$input3 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=69");
+$input3 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=69");
 // $input3 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=69");
 $result3 = json_decode($input3, true);
 $showImage3 = $result3['image'];
@@ -35,19 +35,19 @@ $showImage3 = $result3['image'];
 //laptop
 $categoryIDLaptop = 1;
 // $inputLaptop = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
-$inputLaptop = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
+$inputLaptop = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
 $resultLaptop = json_decode($inputLaptop, true);
 
 // ا(PC)
 $categoryIDPC = 2;
 // $inputPC = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
-$inputPC = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
+$inputPC = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
 $resultPC = json_decode($inputPC, true);
 
 // Accessories
 $categoryIDAccessories = 3;
 // $inputAccessories = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
-$inputAccessories = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
+$inputAccessories = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
 $resultAccessories = json_decode($inputAccessories, true);
 
 
@@ -96,6 +96,26 @@ $resultAccessories = json_decode($inputAccessories, true);
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+      .view-product-button {
+  float: right;
+  padding: 8px 12px;
+  margin-top: 10px;
+  color: #fff;
+  background-color: #d10024; /* Blue background color */
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.view-product-button:hover {
+  background-color: #ffffff; / Darker blue on hover /
+  transform: scale(1.05); / Slight zoom effect on hover */
+}
+    </style>
 
     <link rel="stylesheet" href="../frontend/css/style.css" />
 
@@ -269,10 +289,10 @@ $resultAccessories = json_decode($inputAccessories, true);
           <!-- NAV -->
           <ul class="main-nav nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="http://localhost/pref%204/e-commerce/backend/store.php?category=1">Categories</a></li>
+            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=1">Categories</a></li>
             <li><a href="store.php">PC</a></li>
-            <li><a href="http://localhost/pref%204/e-commerce/backend/store.php?category=2">Laptops</a></li>
-            <li><a href="http://localhost/pref%204/e-commerce/backend/store.php?category=3">Accessories</a></li>
+            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=2">Laptops</a></li>
+            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=3">Accessories</a></li>
           </ul>
           <!-- /NAV -->
         </div>
@@ -411,7 +431,7 @@ $resultAccessories = json_decode($inputAccessories, true);
                     </div>
                     <div class="product-btns">
                         
-                        <a href="http://localhost/pref%204/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
+                        <a href="http://127.0.0.1/brief%203/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
                 <div class="add-to-cart">
@@ -669,7 +689,18 @@ $resultAccessories = json_decode($inputAccessories, true);
 
 <!-- //------------------------ -->
 
-    </div>
+<?php
+  include './db.php';
+
+  // SQL query to fetch data
+  $sql = "SELECT p.id as productId, p.name, p.image as productImage, p.price, d.discount_amount
+        FROM product p
+        JOIN discount d ON p.id = d.product_id";
+  $result = $conn->query($sql);
+      // var_dump($result);
+  ?>
+
+  
     <div class="discount-section">
       <h2>Limited Time Offers</h2>
       <p>
@@ -677,43 +708,44 @@ $resultAccessories = json_decode($inputAccessories, true);
         unbeatable prices!
       </p>
 
-      <div class="discount-item">
-        <img src="https://via.placeholder.com/120" alt="Product Image" />
-        <div class="info">
-          <h3>Stylish Jacket</h3>
-          <p>
-            Original Price: <span class="price"><s>$75.00</s></span>
-          </p>
-          <p class="discount">Now Only: $45.00</p>
-        </div>
-      </div>
+      <?php
+      // Check if there are results
+      if ($result->num_rows > 0) {
+        // Output data of each row
+        while ($row = $result->fetch_assoc()) {
+          $id = $row['productId'];
+          $originalPrice = $row['price'];
+          $discountAmount = $row['discount_amount'];
+          $discountedPrice = $originalPrice * $discountAmount;
+          $newPrice = $originalPrice  - $discountedPrice;
+      ?>
+          <div class="discount-item">
+            <img src="./images/<?php echo htmlspecialchars($row['productImage']); ?>" alt="Product Image" width="120" height="120" />
+            <div class="info">
+              <h3><?php echo htmlspecialchars($row['name']); ?></h3>
+              <p>
+                Original Price: <span class="price"><s>$<?php echo number_format($row['price'], 2); ?></s></span>
+              </p>
+              <p class="discount">Now Only: $<?php echo number_format($newPrice, 2); ?></p>
+              <a class="view-product-button" href="productpage.php?productId=<?php echo $id; ?>">View</a>
 
-      <div class="discount-item">
-        <img src="https://via.placeholder.com/120" alt="Product Image" />
-        <div class="info">
-          <h3>Wireless Headphones</h3>
-          <p>
-            Original Price: <span class="price"><s>$150.00</s></span>
-          </p>
-          <p class="discount">Now Only: $99.00</p>
-        </div>
-      </div>
+            </div>
+          </div>
+      <?php
+        }
+      } else {
+        echo "No discount products available.";
+      }
 
-      <div class="discount-item">
-        <img src="https://via.placeholder.com/120" alt="Product Image" />
-        <div class="info">
-          <h3>Smart Watch</h3>
-          <p>
-            Original Price: <span class="price"><s>$200.00</s></span>
-          </p>
-          <p class="discount">Now Only: $130.00</p>
-        </div>
-      </div>
+      $conn->close();
+      ?>
 
       <div class="discount-button">
         <a href="discountproducts.php">Shop All Discounts</a>
       </div>
     </div>
+
+
 
 
 

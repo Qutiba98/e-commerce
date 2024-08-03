@@ -1,8 +1,9 @@
 <?php
 require "../backend/connection_db_pdo.php";
 session_start();
-echo $_SESSION['total'];
+// echo $_SESSION['total'];
 // Enable error reporting for debugging
+$_SESSION['emptyCart'] = false;
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -75,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insert order into database
         try {
+            // Prepare and execute the INSERT query
             $sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, zip_code, telephone, amount, cart_id) 
                     VALUES (CURRENT_TIMESTAMP(), :firstName, :lastName, :email, :address, :city, :country, :zipCode, :tel, :amount, :cartId)";
             $stmt = $conn->prepare($sql);
@@ -90,15 +92,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':amount' => $_SESSION['total'],
                 ':cartId' => 21 // Adjust or retrieve dynamically
             ]);
-            $deleteFromCart = "DELETE FROM cart_product where cart_id ='21'";
-            $conn-> exec($deleteFromCart);
-
-            echo "Order placed successfully!";
+        
+            // Prepare and execute the DELETE query
+            $deleteFromCart = "DELETE FROM cart_product WHERE cart_id = :cartId";
+            $deleteStmt = $conn->prepare($deleteFromCart);
+            $deleteStmt->execute([':cartId' => 21]);
+            header('Location: http://127.0.0.1/brief%203/e-commerce/backend/index.php');
+        
+            // Check if rows were affected
+            if ($deleteStmt->rowCount() > 0) {
+                echo "Order placed successfully and cart cleared!";
+            } else {
+                echo "No items found to delete from the cart.";
+            }
+            
             exit;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-    }
+    }        
 } else {
     http_response_code(405);
     echo "Method Not Allowed";
@@ -325,7 +337,7 @@ $result = json_decode($input,true);
                 <div id="checkout" class="col-md-12">
                     <!-- Checkout Form -->
                     <div class="checkout-form">
-                        <form action="" method="POST">
+                        <form action="../backend/checkout.php" method="POST">
                             <div class="row">
 							<div class="col-md-6">
                                     <div class="billing-details">
@@ -376,7 +388,7 @@ $result = json_decode($input,true);
                                         </div>
                                         <div class="order-summary">
     <?php foreach ($result as $row): ?>
-        <p><?php echo htmlspecialchars($row['productName']); ?> <span><b><?php echo htmlspecialchars($row['productPrice']); ?></b></span></p>
+        <p><?php echo htmlspecialchars($row['name']); ?> <span><b><?php echo ($row['price'] * $row['quantity']); ?><br> Quantity :<?php echo $row['quantity'] ?> </b></span></p>
         <!-- <p><?php echo htmlspecialchars($row['productDesc']); ?></p> -->
         <p></p>
         <?php endforeach; ?>

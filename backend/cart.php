@@ -2,6 +2,7 @@
 <?php 
 require "./connection_db_pdo.php";
 session_start();
+$totalPrice= 0;
 $discountCode = isset($_POST["discountCode"]) ? $_POST["discountCode"] :"";
 $id = 0;
 // $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
@@ -12,14 +13,15 @@ $cartId = 21; // Example cartId ------- change it
 $productId = $_SESSION['currentProductId']; // Example productId
 $registerd = false;
 
-echo $product;
+// echo $product;
 
 if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
   $registerd = true;
   
  // Ensure that the quantity is properly assigned from the session
 foreach ($result as &$row) {
-  $quantity = isset($_SESSION['quantity'][$productId]) ? $_SESSION['quantity'][$productId] : 0;
+  $productId = $row['id'];
+  $quantity = isset($row['quantity']) ? $row['quantity'] : 0;
 
   if (!$row['isInDatabase']) {
       // Construct the SQL query with direct interpolation
@@ -38,50 +40,47 @@ foreach ($result as &$row) {
         }
     }
     // dont forget to make dynamic based on id of the user
-    $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
-    $cartData = json_decode($cartFromDatabase);
-    $sql ="SELECT cart_product.cart_id , cart_product.product_id as productId , product.name , product.image,product.description,product.price , product.categories_id ,users.user_id ,SUM(product.price) as totalPrice FROM cart_product 
-INNER JOIN product ON product.id = cart_product.product_id
-INNER JOIN cart ON cart.id = cart_product.cart_id
-INNER JOIN users on users.user_id = cart.user_id
-WHERE cart.user_id =$user_id";
-// $cartDataFromDatabase = $conn -> query($sql);
-$statement = $conn->query($sql);
-$cartDataFromDatabase = $statement->fetchAll(PDO::FETCH_ASSOC);
-$totalPriceBefore = "";
-$totalPriceAfter = "";
-// make operation on total
-if (isset($cartDataFromDatabase[0]['totalPrice']) && !empty($cartDataFromDatabase[0]['totalPrice'])) {
-  $total = $cartDataFromDatabase[0]['totalPrice'];
-  $totalPriceBefore = $total;
-  $_SESSION['total'] = $total;
-  // Prepare the SQL statement
+    $cartFromDatabase = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+    $cartData = json_decode($cartFromDatabase , true);
+    // var_dump($cartData);
+    foreach ($cartData as $row) {
+      // Ensure quantity and price are integers and floats respectively
+      $quantity = intval($row['quantity']);
+      $price = floatval($row['price']);
+      
+      // If quantity is greater than 0, multiply price by quantity and add to total
+      if ($quantity > 0) {
+          $totalPrice += $quantity * $price;
+      }
+  }
+echo  $totalPrice;
+  // Prepare the SQL statement discount sec ---------------
   $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
   $stmt->bindParam(':discountCode', $discountCode);
   
-  // Execute the query
+  // Execute the query for 
   if ($stmt->execute()) {
       $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
 
       // Check if a result was returned
       if ($precantage !== false) {
           
-          $totalPriceAfter = $total - ($precantage['precantage'] * $totalPriceBefore );
+          $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice );
           $_SESSION['total'] =$totalPriceAfter;
           // Print result for debugging
-          print_r($totalPriceAfter);
+          // print_r($totalPriceAfter);
       } else {
           // Handle the case where no discount was found
           $dicountErr= "No discount found for the provided code.";
       }
   } 
 } 
+$cartFromDatabase = json_decode($cartFromDatabase, true);
+
+// var_dump($cartData);
 
 	
 
-	
-}
-	
 
 
 
@@ -89,7 +88,7 @@ if (isset($cartDataFromDatabase[0]['totalPrice']) && !empty($cartDataFromDatabas
 // Optionally reindex the session array to avoid gaps in the keys
 $_SESSION['products'] = array_values($_SESSION['products']);
 
-var_dump($_SESSION['products']);
+// var_dump($_SESSION['products']);
 ?>
 
 <!DOCTYPE html>
@@ -327,7 +326,7 @@ var_dump($_SESSION['products']);
               </div>
             </div>
             <form action="http://127.0.0.1/brief%203/e-commerce/backend/cart.php" method="POST">
-              <?php if (!$registerd): ?>
+              <?php if (!$registerd ): ?>
               <?php foreach($result as $row): ?>
                 <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
@@ -349,10 +348,6 @@ var_dump($_SESSION['products']);
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                  
-
-                     
-                    
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                     <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
@@ -371,7 +366,7 @@ var_dump($_SESSION['products']);
             </div>
               <?php endforeach; ?>
             <?php else: ?>
-              <?php foreach($cartDataFromDatabase as $row): ?>
+              <?php foreach($cartFromDatabase as $row): ?>
                 <div class="card rounded-3 mb-4">
               <div class="card-body p-4">
                 <div
@@ -392,13 +387,17 @@ var_dump($_SESSION['products']);
                     </p>
                   </div>
                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                  
+                    <span class="text-muted">Quantity: <?php echo $row['quantity'] ?> </span>
 
-                     
-                    
                   </div>
                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                    <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
+                    <h5 class="mb-0"><?php 
+                    if($row['quantity'] > 0)
+                     echo $row['price'] * ($row['quantity'] ) ."$" ?> 
+                     <?php 
+                    if($row['quantity'] == 0)
+                     echo $row['price'] ."$"  ?> </h5>
+                   
                   </div>
                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                   <?php 
@@ -414,7 +413,7 @@ var_dump($_SESSION['products']);
                 </div>
               </div>
             </div>
-              <?php endforeach; ?>
+            <?php endforeach; ?>
             <?php endif; ?>
 
             <div class="card mb-4">
@@ -448,10 +447,10 @@ var_dump($_SESSION['products']);
               </div>
               <?php endif; ?>
               <div>Total price :
-                <?php echo $totalPriceBefore ?>
+                <?php echo $totalPrice ?>
               </div>
               <!-- hidden input to pass the values only  -->
-                <input type="text" name ="afterDiscount" value ="<?php echo $totalPriceBefore ?>" style ="display : none;">
+                <input type="text" name ="afterDiscount" value ="<?php echo $totalPrice ?>" style ="display : none;">
                 <input type="text" name="beforeDiscount" value ="<?php echo $totalPriceAfter ?>" style ="display : none;">
 
 
