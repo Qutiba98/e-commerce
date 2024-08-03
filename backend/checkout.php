@@ -1,638 +1,249 @@
 <?php
 require "../backend/connection_db_pdo.php";
-// need to change the cart id to be correct
+session_start();
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $firstNameErr = $lastNameErr = $emailErr = $addressErr = $cityErr = $countryErr = $zipCodeErr = $telephoneErr = "";
-$flag = true; // to decide if the form should be inserted or not
+$flag = true;
 $firstName = $lastName = $email = $address = $city = $country = $zipCode = $tel = "";
-$amount =1000;
+$amount = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //make it show an message in cart class="errorValidCheckOut"
-    // Validate and assign form data
-    $firstName = isset($_POST['first-name']) ? trim($_POST['first-name']) : "";
-    if (empty($firstName) || !preg_match("/^[a-zA-Z-' ]*$/", $firstName)) {
-        $firstNameErr = "First name is required and should only contain letters and spaces";
+	// Validate form data
+	$firstName = isset($_POST['first-name']) ? trim($_POST['first-name']) : "";
+	if (empty($firstName) || !preg_match("/^[a-zA-Z-' ]*$/", $firstName)) {
+		$firstNameErr = "First name is required and should only contain letters and spaces";
 		$flag = false;
-    }
+	}
 
-    $lastName = isset($_POST['last-name']) ? trim($_POST['last-name']) : "";
-    if (empty($lastName) || !preg_match("/^[a-zA-Z-' ]*$/", $lastName)) {
-        $lastNameErr = "Last name is required and should only contain letters and spaces";
+	$lastName = isset($_POST['last-name']) ? trim($_POST['last-name']) : "";
+	if (empty($lastName) || !preg_match("/^[a-zA-Z-' ]*$/", $lastName)) {
+		$lastNameErr = "Last name is required and should only contain letters and spaces";
 		$flag = false;
-    }
+	}
 
-    $email = isset($_POST['email']) ? trim($_POST['email']) : "";
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Valid email is required";
+	$email = isset($_POST['email']) ? trim($_POST['email']) : "";
+	if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$emailErr = "Valid email is required";
 		$flag = false;
-    }
+	}
 
-    $address = isset($_POST['address']) ? trim($_POST['address']) : "";
-    if (empty($address)) {
-        $addressErr = "Address is required";
+	$address = isset($_POST['address']) ? trim($_POST['address']) : "";
+	if (empty($address)) {
+		$addressErr = "Address is required";
 		$flag = false;
-    }
+	}
 
-    $city = isset($_POST['city']) ? trim($_POST['city']) : "";
-    if (empty($city) || !preg_match("/^[a-zA-Z-' ]*$/", $city)) {
-        $cityErr = "City is required and should only contain letters and spaces";
+	$city = isset($_POST['city']) ? trim($_POST['city']) : "";
+	if (empty($city) || !preg_match("/^[a-zA-Z-' ]*$/", $city)) {
+		$cityErr = "City is required and should only contain letters and spaces";
 		$flag = false;
-    }
+	}
 
-    $country = isset($_POST['country']) ? trim($_POST['country']) : "";
-    if (empty($country) || !preg_match("/^[a-zA-Z-' ]*$/", $country)) {
-        $countryErr = "Country is required and should only contain letters and spaces";
+	$country = isset($_POST['country']) ? trim($_POST['country']) : "";
+	if (empty($country) || !preg_match("/^[a-zA-Z-' ]*$/", $country)) {
+		$countryErr = "Country is required and should only contain letters and spaces";
 		$flag = false;
-    }
+	}
 
-    $zipCode = isset($_POST['zip-code']) ? trim($_POST['zip-code']) : "";
-    if (empty($zipCode) || !preg_match("/^\d{5}(-\d{4})?$/", $zipCode)) {
-        $zipCodeErr = "Valid ZIP code is required (e.g., 12345 or 12345-6789)";
+	$zipCode = isset($_POST['zip-code']) ? trim($_POST['zip-code']) : "";
+	if (empty($zipCode) || !preg_match("/^\d{5}(-\d{4})?$/", $zipCode)) {
+		$zipCodeErr = "Valid ZIP code is required (e.g., 12345 or 12345-6789)";
 		$flag = false;
-    }
+	}
 
-    $tel = isset($_POST['tel']) ? trim($_POST['tel']) : "";
-    if (empty($tel) || !preg_match("/^\+?[0-9]{10,15}$/", $tel)) {
-        $telephoneErr = "Valid telephone number is required";
+	$tel = isset($_POST['tel']) ? trim($_POST['tel']) : "";
+	if (empty($tel) || !preg_match("/^\+?[0-9]{10,15}$/", $tel)) {
+		$telephoneErr = "Valid telephone number is required";
 		$flag = false;
-    }
-	
-		if($flag){
-			$sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, zip_code, telephone, amount ,cart_id) VALUES (CURRENT_TIMESTAMP(), '$firstName', '$lastName', '$email', '$address', '$city', '$country', '$zipCode', '$tel', '$amount',21)";
+	}
 
-			$conn->exec($sql);
+	if ($flag) {
+		// Calculate total amount from cart
+		$total = 0;
+		if (!empty($_SESSION['cart'])) {
+			foreach ($_SESSION['cart'] as $item) {
+				if (isset($item['price']) && isset($item['quantity'])) {
+					$total += $item['price'] * $item['quantity'];
+				}
+			}
 		}
-	
 
-   
+		// Insert order into database
+		try {
+			$sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, zip_code, telephone, amount, cart_id) 
+                    VALUES (CURRENT_TIMESTAMP(), :firstName, :lastName, :email, :address, :city, :country, :zipCode, :tel, :amount, :cartId)";
+			$stmt = $conn->prepare($sql);
+			$stmt->execute([
+				':firstName' => $firstName,
+				':lastName' => $lastName,
+				':email' => $email,
+				':address' => $address,
+				':city' => $city,
+				':country' => $country,
+				':zipCode' => $zipCode,
+				':tel' => $tel,
+				':amount' => $total,
+				':cartId' => 21 // Adjust or retrieve dynamically
+			]);
+
+			echo "Order placed successfully!";
+			exit;
+		} catch (PDOException $e) {
+			echo "Error: " . $e->getMessage();
+		}
+	}
 } else {
-
-    http_response_code(405);
-    echo "Method Not Allowed";
+	http_response_code(405);
+	echo "Method Not Allowed";
 }
 ?>
 
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Electro - HTML Ecommerce Template</title>
 	<style>
-		.errorValidCheckOut{
+		.errorValidCheckOut {
 			color: red;
 		}
 	</style>
-		<title>Electro - HTML Ecommerce Template</title>
+	<!-- Add your CSS links here -->
+</head>
 
-		<!-- Google font -->
-		<link
-		href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700"
-		rel="stylesheet"
-		/>
+<body>
+	<!-- HEADER -->
+	<header>
+		<!-- Your header content -->
+	</header>
+	<!-- /HEADER -->
 
-		<!-- Bootstrap -->
-		<link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
-
-		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
-		<link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
-
-		<!-- nouislider -->
-		<link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
-
-		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="../frontend/css/font-awesome.min.css" />
-
-		<!-- Custom stlylesheet -->
-		<link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
-
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-	</head>
-	<body>
-		<!-- HEADER -->
-		<header>
-		<!-- TOP HEADER -->
-		<div id="top-header">
-			<div class="container">
-			<ul class="header-links pull-left">
-				<li>
-				<a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a>
-				</li>
-				<li>
-				<a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a>
-				</li>
-				<li>
-				<a href="#"
-					><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a
-				>
-				</li>
-			</ul>
-			<ul class="header-links pull-right">
-				<li>
-				<a href="#"><i class="fa fa-dollar"></i> USD</a>
-				</li>
-				<li>
-				<a href="#"><i class="fa fa-user-o"></i> My Account</a>
-				</li>
-			</ul>
-			</div>
-		</div>
-		<!-- /TOP HEADER -->
-
-		<!-- MAIN HEADER -->
-		<div id="header">
-			<!-- container -->
-			<div class="container">
-			<!-- row -->
-			<div class="row">
-				<!-- LOGO -->
-				<div class="col-md-3">
-				<div class="header-logo">
-					<a href="#" class="logo">
-					<img src="./img/logo.png" alt="" />
-					</a>
-				</div>
-				</div>
-				<!-- /LOGO -->
-
-				<!-- SEARCH BAR -->
-				<div class="col-md-6">
-				<div class="header-search">
-					<form>
-					<select class="input-select">
-						<option value="0">All Categories</option>
-						<option value="1">Category 01</option>
-						<option value="1">Category 02</option>
-					</select>
-					<input class="input" placeholder="Search here" />
-					<button class="search-btn">Search</button>
-					</form>
-				</div>
-				</div>
-				<!-- /SEARCH BAR -->
-
-				<!-- ACCOUNT -->
-				<div class="col-md-3 clearfix">
-				<div class="header-ctn">
-					<!-- Wishlist -->
-					<div>
-					<a href="#">
-						<i class="fa fa-heart-o"></i>
-						<span>Your Wishlist</span>
-						<div class="qty">2</div>
-					</a>
-					</div>
-					<!-- /Wishlist -->
-
-					<!-- Cart -->
-					<div class="dropdown">
-					<a
-						class="dropdown-toggle"
-						data-toggle="dropdown"
-						aria-expanded="true"
-					>
-						<i class="fa fa-shopping-cart"></i>
-						<span>Your Cart</span>
-						<div class="qty">3</div>
-					</a>
-					<div class="cart-dropdown">
-						<div class="cart-list">
-						<div class="product-widget">
-							<div class="product-img">
-							<img src="./img/product01.png" alt="" />
-							</div>
-							<div class="product-body">
-							<h3 class="product-name">
-								<a href="#">product name goes here</a>
-							</h3>
-							<h4 class="product-price">
-								<span class="qty">1x</span>$980.00
-							</h4>
-							</div>
-							<button class="delete">
-							<i class="fa fa-close"></i>
-							</button>
-						</div>
-
-						<div class="product-widget">
-							<div class="product-img">
-							<img src="./img/product02.png" alt="" />
-							</div>
-							<div class="product-body">
-							<h3 class="product-name">
-								<a href="#">product name goes here</a>
-							</h3>
-							<h4 class="product-price">
-								<span class="qty">3x</span>$980.00
-							</h4>
-							</div>
-							<button class="delete">
-							<i class="fa fa-close"></i>
-							</button>
-						</div>
-						</div>
-						<div class="cart-summary">
-						<small>3 Item(s) selected</small>
-						<h5>SUBTOTAL: $2940.00</h5>
-						</div>
-						<div class="cart-btns">
-						<a href="#">View Cart</a>
-						<a href="#"
-							>Checkout <i class="fa fa-arrow-circle-right"></i
-						></a>
-						</div>
-					</div>
-					</div>
-					<!-- /Cart -->
-
-					<!-- Menu Toogle -->
-					<div class="menu-toggle">
-					<a href="#">
-						<i class="fa fa-bars"></i>
-						<span>Menu</span>
-					</a>
-					</div>
-					<!-- /Menu Toogle -->
-				</div>
-				</div>
-				<!-- /ACCOUNT -->
-			</div>
-			<!-- row -->
-			</div>
-			<!-- container -->
-		</div>
-		<!-- /MAIN HEADER -->
-		</header>
-		<!-- /HEADER -->
-
-	
-
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-		<!-- container -->
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
 		<div class="container">
-			<!-- row -->
 			<div class="row">
-			<div class="col-md-12">
-				<h3 class="breadcrumb-header">Checkout</h3>
-				<ul class="breadcrumb-tree">
-				<li><a href="../frontend/index.html">Home</a></li>
-				<li class="active">Checkout</li>
-				</ul>
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Checkout</h3>
+					<ul class="breadcrumb-tree">
+						<li><a href="../frontend/index.html">Home</a></li>
+						<li class="active">Checkout</li>
+					</ul>
+				</div>
 			</div>
-			</div>
-			<!-- /row -->
 		</div>
-		<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
+	</div>
+	<!-- /BREADCRUMB -->
 
-		<!-- SECTION -->
-		<div class="section">
-		<!-- container -->
+	<!-- SECTION -->
+	<div class="section">
 		<div class="container">
-			<!-- row -->
 			<div class="row">
-			<div class="col-md-7">
-				<!-- Billing Details -->
-				<div class="billing-details">
-				<div class="section-title">
-					<h3 class="title">Billing address</h3>
-				</div>
-				<form action="../backend/checkout.php" method="POST">
-					<div class="form-group">
-					<input
-						class="input"
-						type="text"
-						name="first-name"
-						placeholder="First Name"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $firstNameErr ?></div>
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="text"
-						name="last-name"
-						placeholder="Last Name"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $lastNameErr ?></div>
-
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="email"
-						name="email"
-						placeholder="Email"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $emailErr ?></div>
-
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="text"
-						name="address"
-						placeholder="Address"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $addressErr ?></div>
-
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="text"
-						name="city"
-						placeholder="City"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $cityErr ?></div>
-
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="text"
-						name="country"
-						placeholder="Country"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $countryErr ?></div>
-                    
-                </div>
-                <div class="form-group">
-                    <input
-                    class="input"
-                    type="text"
-                    name="zip-code"
-                    placeholder="ZIP Code"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $zipCodeErr ?></div>
-                    
-					</div>
-					<div class="form-group">
-					<input
-						class="input"
-						type="tel"
-						name="tel"
-						placeholder="Telephone"
-					/>
-                    <div class="errorValidCheckOut"> <?php echo $telephoneErr ?></div>
-
-					</div>
-				<div class="form-group">
-					<div class="input-checkbox">
-					<div class="caption">
-						<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-						sed do eiusmod tempor incididunt.
-						</p>
-						<input
-						class="input"
-						type="password"
-						name="password"
-						placeholder="Enter Your Password"
-						/>
-					</div>
+				<div class="col-md-7">
+					<!-- Billing Details -->
+					<div class="billing-details">
+						<div class="section-title">
+							<h3 class="title">Billing address</h3>
+						</div>
+						<form action="../backend/checkout.php" method="POST">
+							<div class="form-group">
+								<input class="input" type="text" name="first-name" placeholder="First Name" value="<?php echo htmlspecialchars($firstName); ?>" />
+								<div class="errorValidCheckOut"><?php echo $firstNameErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="last-name" placeholder="Last Name" value="<?php echo htmlspecialchars($lastName); ?>" />
+								<div class="errorValidCheckOut"><?php echo $lastNameErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>" />
+								<div class="errorValidCheckOut"><?php echo $emailErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="address" placeholder="Address" value="<?php echo htmlspecialchars($address); ?>" />
+								<div class="errorValidCheckOut"><?php echo $addressErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="city" placeholder="City" value="<?php echo htmlspecialchars($city); ?>" />
+								<div class="errorValidCheckOut"><?php echo $cityErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="country" placeholder="Country" value="<?php echo htmlspecialchars($country); ?>" />
+								<div class="errorValidCheckOut"><?php echo $countryErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="zip-code" placeholder="ZIP Code" value="<?php echo htmlspecialchars($zipCode); ?>" />
+								<div class="errorValidCheckOut"><?php echo $zipCodeErr ?></div>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="tel" placeholder="Telephone" value="<?php echo htmlspecialchars($tel); ?>" />
+								<div class="errorValidCheckOut"><?php echo $telephoneErr ?></div>
+							</div>
+							<!-- /Billing Details -->
+							<!-- Order Details -->
+							<div class="order-details">
+								<div class="order-col">
+									<div><strong>Order Details</strong></div>
+									<div></div>
+								</div>
+								<div class="order-products">
+									<?php
+									// Display cart items
+									if (!empty($_SESSION['cart'])) {
+										foreach ($_SESSION['cart'] as $item) {
+											$quantity = isset($item['quantity']) ? $item['quantity'] : 1;
+											$price = isset($item['price']) ? $item['price'] : 0;
+											$totalPrice = $quantity * $price;
+											echo '<div class="order-col">';
+											echo '<div>' . htmlspecialchars($item['name']) . ' x ' . htmlspecialchars($quantity) . '</div>';
+											echo '<div>$' . number_format($totalPrice, 2) . '</div>';
+											echo '</div>';
+										}
+									} else {
+										echo '<p>No items in cart.</p>';
+									}
+									?>
+								</div>
+								<div class="order-col">
+									<div><strong>Total</strong></div>
+									<div><strong class="order-total">
+											<?php
+											// Calculate total amount
+											if (!empty($_SESSION['cart'])) {
+												foreach ($_SESSION['cart'] as $item) {
+													if (isset($item['price']) && isset($item['quantity'])) {
+														$amount += $item['price'] * $item['quantity'];
+													}
+												}
+											}
+											echo '$' . number_format($amount, 2);
+											?>
+										</strong></div>
+								</div>
+							</div>
+							<!-- /Order Details -->
+							<button type="submit" class="primary-btn order-submit">Place Order</button>
+						</form>
 					</div>
 				</div>
-				</div>
-				<!-- /Billing Details -->
 			</div>
-
-			<!-- Order Details -->
-			<div class="col-md-5 order-details">
-				<div class="section-title text-center">
-				<h3 class="title">Your Order</h3>
-				</div>
-				<div class="order-summary">
-				<div class="order-col">
-					<div><strong>PRODUCT</strong></div>
-					<div><strong>TOTAL</strong></div>
-				</div>
-				<div class="order-products">
-					<div class="order-col">
-					<div>1x Product Name Goes Here</div>
-					<div>$980.00</div>
-					</div>
-					<div class="order-col">
-					<div>2x Product Name Goes Here</div>
-					<div>$980.00</div>
-					</div>
-				</div>
-				<div class="order-col">
-					<div>Shiping</div>
-					<div><strong>FREE</strong></div>
-				</div>
-				<div class="order-col">
-					<div><strong>TOTAL</strong></div>
-					<div><strong class="order-total">$2940.00</strong></div>
-				</div>
-				</div>
-				
-				
-				<button type="submit" class="primary-btn order-submit">Place order </button>
-				
-			</div>
-			</form>
-
-			<!-- /Order Details -->
-			</div>
-			<!-- /row -->
 		</div>
-		<!-- /container -->
-		</div>
-		<!-- /SECTION -->
+	</div>
+	<!-- /SECTION -->
 
-		<!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-			<div class="col-md-12">
-				<div class="newsletter">
-				<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-				<form>
-					<input
-					class="input"
-					type="email"
-					placeholder="Enter Your Email"
-					/>
-					<button class="newsletter-btn">
-					<i class="fa fa-envelope"></i> Subscribe
-					</button>
-				</form>
-				<ul class="newsletter-follow">
-					<li>
-					<a href="#"><i class="fa fa-facebook"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-twitter"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-instagram"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-pinterest"></i></a>
-					</li>
-				</ul>
-				</div>
-			</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-		</div>
-		<!-- /NEWSLETTER -->
+	<!-- FOOTER -->
+	<footer>
+		<!-- Your footer content -->
+	</footer>
+	<!-- /FOOTER -->
 
-		<!-- FOOTER -->
-		<footer id="footer">
-		<!-- top footer -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-3 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-title">About Us</h3>
-					<p>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-					do eiusmod tempor incididunt ut.
-					</p>
-					<ul class="footer-links">
-					<li>
-						<a href="#"
-						><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a
-						>
-					</li>
-					<li>
-						<a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a>
-					</li>
-					<li>
-						<a href="#"
-						><i class="fa fa-envelope-o"></i>email@email.com</a
-						>
-					</li>
-					</ul>
-				</div>
-				</div>
+	<!-- Add your JavaScript links here -->
+</body>
 
-				<div class="col-md-3 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-title">Categories</h3>
-					<ul class="footer-links">
-					<li><a href="#">Hot deals</a></li>
-					<li><a href="#">Laptops</a></li>
-					<li><a href="#">Smartphones</a></li>
-					<li><a href="#">Cameras</a></li>
-					<li><a href="#">Accessories</a></li>
-					</ul>
-				</div>
-				</div>
-
-				<div class="clearfix visible-xs"></div>
-
-				<div class="col-md-3 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-title">Information</h3>
-					<ul class="footer-links">
-					<li><a href="#">About Us</a></li>
-					<li><a href="#">Contact Us</a></li>
-					<li><a href="#">Privacy Policy</a></li>
-					<li><a href="#">Orders and Returns</a></li>
-					<li><a href="#">Terms & Conditions</a></li>
-					</ul>
-				</div>
-				</div>
-
-				<div class="col-md-3 col-xs-6">
-				<div class="footer">
-					<h3 class="footer-title">Service</h3>
-					<ul class="footer-links">
-					<li><a href="#">My Account</a></li>
-					<li><a href="#">View Cart</a></li>
-					<li><a href="#">Wishlist</a></li>
-					<li><a href="#">Track My Order</a></li>
-					<li><a href="#">Help</a></li>
-					</ul>
-				</div>
-				</div>
-			</div>
-			<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /top footer -->
-
-		<!-- bottom footer -->
-		<div id="bottom-footer" class="section">
-			<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12 text-center">
-				<ul class="footer-payments">
-					<li>
-					<a href="#"><i class="fa fa-cc-visa"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-credit-card"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-cc-paypal"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-cc-mastercard"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-cc-discover"></i></a>
-					</li>
-					<li>
-					<a href="#"><i class="fa fa-cc-amex"></i></a>
-					</li>
-				</ul>
-				<span class="copyright">
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					Copyright &copy;
-					<script>
-					document.write(new Date().getFullYear());
-					</script>
-					All rights reserved | This template is made with
-					<i class="fa fa-heart-o" aria-hidden="true"></i> by
-					<a href="https://colorlib.com" target="_blank">Colorlib</a>
-					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-				</span>
-				</div>
-			</div>
-			<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /bottom footer -->
-		</footer>
-		<!-- /FOOTER -->
-
-		<!-- jQuery Plugins -->
-		<script src="../frontend/js/jquery.min.js"></script>
-		<script src="../frontend/js/bootstrap.min.js"></script>
-		<script src="../frontend/js/slick.min.js"></script>
-		<script src="../frontend/js/nouislider.min.js"></script>
-		<script src="../frontend/js/jquery.zoom.min.js"></script>
-		<script src="../frontend/js/main.js"></script>
-
-		
-	</body>
-	</html>
-	
-	<?php 
-	
-	?>
-   
-
+</html>

@@ -1,62 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <link rel="stylesheet" href="../frontend/css/login signup.css">
     <script>
-    function validateForm() {
-        let isValid = true;
+        function validateForm() {
+            let isValid = true;
 
-        // Clear previous error messages
-        document.getElementById('nameError').textContent = '';
-        document.getElementById('emailError').textContent = '';
-        document.getElementById('mobileError').textContent = '';
-        document.getElementById('passwordError').textContent = '';
-        document.getElementById('confirmPasswordError').textContent = '';
+            // Clear previous error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('mobileError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
 
-        const fullName = document.forms["signupForm"]["name"].value.trim();
-        const nameParts = fullName.split(' ').filter(name => name.length > 0);
-        const email = document.forms["signupForm"]["email"].value;
-        const mobile = document.forms["signupForm"]["phone_number"].value;
-        const password = document.forms["signupForm"]["password"].value;
-        const confirmPassword = document.forms["signupForm"]["confirm_password"].value;
+            const fullName = document.forms["signupForm"]["name"].value.trim();
+            const nameParts = fullName.split(' ').filter(name => name.length > 0);
+            const email = document.forms["signupForm"]["email"].value;
+            const mobile = document.forms["signupForm"]["phone_number"].value;
+            const password = document.forms["signupForm"]["password"].value;
+            const confirmPassword = document.forms["signupForm"]["confirm_password"].value;
 
-        // Full name validation
-        if (nameParts.length < 4) {
-            document.getElementById('nameError').textContent = 'Full Name must contain first name, middle name, last name, and family name.';
-            isValid = false;
+            // Full name validation
+            if (nameParts.length < 4) {
+                document.getElementById('nameError').textContent = 'Full Name must contain first name, middle name, last name, and family name.';
+                isValid = false;
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                isValid = false;
+            }
+
+            // Mobile validation
+            const mobilePattern = /^\d{10}$/;
+            if (!mobilePattern.test(mobile)) {
+                document.getElementById('mobileError').textContent = 'Mobile number must be 10 digits.';
+                isValid = false;
+            }
+
+            // Password validation
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordPattern.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long, include an upper case letter, a lower case letter, a number, and a special character.';
+                isValid = false;
+            }
+
+            // Password match validation
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
+                isValid = false;
+            }
+
+            return isValid;
         }
-
-        // Email validation
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
-            document.getElementById('emailError').textContent = 'Please enter a valid email address.';
-            isValid = false;
-        }
-
-        // Mobile validation
-        const mobilePattern = /^\d{10}$/;
-        if (!mobilePattern.test(mobile)) {
-            document.getElementById('mobileError').textContent = 'Mobile number must be 10 digits.';
-            isValid = false;
-        }
-
-        // Password validation
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordPattern.test(password)) {
-            document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long, include an upper case letter, a lower case letter, a number, and a special character.';
-            isValid = false;
-        }
-
-        // Password match validation
-        if (password !== confirmPassword) {
-            document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
-            isValid = false;
-        }
-
-        return isValid;
-    }
     </script>
 
     <style>
@@ -122,27 +123,31 @@
         <p>Already have an account? <a href="login.php">Login here</a></p>
       </form>
 
-      <div id="successMessage" class="success-message"></div>
+        <div id="successMessage" class="success-message"></div>
     </div>
 </body>
+
 </html>
 
 <?php
 include './dbqutipa.php';
 
-class UserRegistration {
+class UserRegistration
+{
     private $conn;
     private $errors = [];
     private $image;
 
-    public function __construct($dbServer, $dbUsername, $dbPassword, $dbDatabase) {
+    public function __construct($dbServer, $dbUsername, $dbPassword, $dbDatabase)
+    {
         $this->conn = new mysqli($dbServer, $dbUsername, $dbPassword, $dbDatabase);
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
     }
 
-    public function validateInput($data, $files) {
+    public function validateInput($data, $files)
+    {
         $this->validateName($data['name']);
         $this->validateEmail($data['email']);
         $this->validatePhoneNumber($data['phone_number']);
@@ -150,34 +155,39 @@ class UserRegistration {
         $this->validateImage($files['image']);
     }
 
-    private function validateName($name) {
+    private function validateName($name)
+    {
         $name = trim($name);
         if (empty($name)) {
             $this->errors[] = 'Full Name is required.';
         }
     }
 
-    private function validateEmail($email) {
+    private function validateEmail($email)
+    {
         $email = trim($email);
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = 'Invalid email format.';
         }
     }
 
-    private function validatePhoneNumber($phoneNumber) {
+    private function validatePhoneNumber($phoneNumber)
+    {
         $phoneNumber = trim($phoneNumber);
         if (empty($phoneNumber) || !preg_match('/^\d{10}$/', $phoneNumber)) {
             $this->errors[] = 'Invalid mobile number. It should be 10 digits.';
         }
     }
 
-    private function validatePasswords($password, $confirmPassword) {
+    private function validatePasswords($password, $confirmPassword)
+    {
         if (empty($password) || $password !== $confirmPassword) {
             $this->errors[] = 'Passwords do not match or are empty.';
         }
     }
 
-    private function validateImage($image) {
+    private function validateImage($image)
+    {
         if (isset($image) && $image['error'] == UPLOAD_ERR_OK) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (in_array($image['type'], $allowedTypes)) {
@@ -196,7 +206,8 @@ class UserRegistration {
         }
     }
 
-    public function checkExistingUser($email, $phoneNumber) {
+    public function checkExistingUser($email, $phoneNumber)
+    {
         $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ? OR phone_number = ?");
         if (!$stmt) {
             die("Prepare failed: " . $this->conn->error);
@@ -212,7 +223,8 @@ class UserRegistration {
         }
     }
 
-    public function registerUser($data) {
+    public function registerUser($data)
+    {
         if (empty($this->errors)) {
             $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, phone_number, image, role_id) VALUES (?, ?, ?, ?, ?, ?)");
             if (!$stmt) {

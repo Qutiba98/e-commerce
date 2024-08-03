@@ -25,10 +25,10 @@ if ($result) {
         'isInDatabase' =>$isInDatabase
     ];
 
-    
+
     $productExists = false;
 
-    
+
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
             $product['quantity'] += $quantity;
@@ -52,6 +52,7 @@ $showImage = $result['image'];
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -62,20 +63,20 @@ $showImage = $result['image'];
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
 
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
 
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stylesheet -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
     <style>
         .qty-btn {
             display: inline-block;
@@ -90,8 +91,7 @@ $showImage = $result['image'];
             background-color: #15161d;
             color: white;
             transition: background-color 0.3s, transform 0.3s;
-            margin :0
-            
+            margin: 0
         }
 
         .qty-btn:hover {
@@ -114,15 +114,18 @@ $showImage = $result['image'];
             outline: none;
             border-color: #d10024;
         }
+
         .quantity {
             display: flex;
             align-items: center;
         }
+
         .quantity input {
             text-align: center;
             width: 50px;
             margin: 0 10px;
         }
+
         .quantity button {
             background: #f2f2f2;
             border: 1px solid #ddd;
@@ -136,6 +139,7 @@ $showImage = $result['image'];
         }
     </style>
 </head>
+
 <body>
     <!-- HEADER -->
     <header>
@@ -283,14 +287,14 @@ $showImage = $result['image'];
                 <!-- Product Image -->
                 <div class="col-md-6">
                     <div class="product-image">
-                        <img src="images/<?php echo $showImage?>" alt="Product Image" class="img-responsive">
+                        <img src="images/<?php echo $showImage ?>" alt="Product Image" class="img-responsive">
                     </div>
                 </div>
                 <!-- /Product Image -->
 
                 <!-- Product Details -->
                 <div class="col-md-6">
-                    
+
                     <div class="product-details">
 
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
@@ -298,25 +302,30 @@ $showImage = $result['image'];
                         <h3 class="product-price">$<?php echo $result['price'] ?></h3>
 
                         <p class="product-description"><?php echo $result['description'] ?></p>
-                        
+
                         <!-- Quantity -->
+<<<<<<< HEAD
+                        <form action="../backend/productpage.php" method="POST">
+                            <div class="quantity">
+                                <p class="qty-btn" onclick="decreaseQuantity()">-</p>
+                                <input type="text" id="quantity" name="qua" value="1">
+                                <p class="qty-btn" onclick="increaseQuantity()">+</p>
+                                <br>
+                            </div>
+                            <!-- /Quantity -->
+
+=======
                          <form action="../backend/productpage.php" method="POST" >
                         <div class="quantity">
                         <p class="qty-btn" onclick="decreaseQuantity()">-</p>
                         <input type="text" id="quantity" name="qua" value="1">
                         <p class="qty-btn" onclick="increaseQuantity()">+</p>
+>>>>>>> 3fe3a25287d1d0a870d2dc1ebd75bcac74541875
                             <br>
-                        </div>
-                        <!-- /Quantity -->
-   
-                        <br>
-                        <!-- Add to Cart Button -->
-                        <div class="product-actions">
-                            <input type="submit"
-                             class="btn"
-                                    style="background-color: #D10024; border-color: #D10024; color: #fff;"
-                                    value ="Add to Cart">
-                        </div>
+                            <!-- Add to Cart Button -->
+                            <div class="product-actions">
+                                <input type="submit" class="btn" style="background-color: #D10024; border-color: #D10024; color: #fff;" value="Add to Cart">
+                            </div>
                         </form>
                         <!-- /Add to Cart Button -->
                     </div>
@@ -446,7 +455,9 @@ $showImage = $result['image'];
                         </ul>
                         <span class="copyright">
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+                            Copyright &copy;<script>
+                                document.write(new Date().getFullYear());
+                            </script> All rights reserved
                         </span>
                     </div>
                 </div>
@@ -468,4 +479,5 @@ $showImage = $result['image'];
     <script src="../frontend/productPage.js"></script>
 
 </body>
+
 </html>
