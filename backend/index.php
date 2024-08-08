@@ -2,30 +2,33 @@
 <?php 
 session_start();
 
-// $id=$_SESSION['user_id'];
+$id=isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "";
+// echo ($_SESSION['user_id']);
+// var_dump($_SESSION['user_id']);
 //API 
+// var_dump($_SESSION['user_id']);
 $_SESSION['total'] = 0;
 //qutiba
-// $input0 = file_get_contents("http://localhost/pref%204/e-commerce/backend/products_API/read.php");
-$input0 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php");
+$input0 = file_get_contents("http://localhost/e-commerce/backend/products_API/read.php");
+// $input0 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/products_API/read.php");
 $result0 = json_decode($input0, true);
 
 //img pc 
 // $input = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=54");
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=54");
+$input = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=54");
 $result = json_decode($input, true);
 $showImage = $result['image'];
 
 
 //img laptop 
 // $input2 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=64");
-$input2 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=64");
+$input2 = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=64");
 $result2 = json_decode($input2, true);
 $showImage2 = $result2['image'];
 
 
 //img  Accessories 
-$input3 = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=69");
+$input3 = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=69");
 // $input3 = file_get_contents("http://localhost/pref%204/e-commerce/backend/productapi/getbyid.php?id=69");
 $result3 = json_decode($input3, true);
 $showImage3 = $result3['image'];
@@ -35,19 +38,19 @@ $showImage3 = $result3['image'];
 //laptop
 $categoryIDLaptop = 1;
 // $inputLaptop = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
-$inputLaptop = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
+$inputLaptop = file_get_contents("http://localhost/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDLaptop);
 $resultLaptop = json_decode($inputLaptop, true);
 
 // ا(PC)
 $categoryIDPC = 2;
 // $inputPC = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
-$inputPC = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
+$inputPC = file_get_contents("http://localhost/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDPC);
 $resultPC = json_decode($inputPC, true);
 
 // Accessories
 $categoryIDAccessories = 3;
 // $inputAccessories = file_get_contents("http://localhost/pref%204/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
-$inputAccessories = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
+$inputAccessories = file_get_contents("http://localhost/e-commerce/backend/categories_API/read_by_id.php?id=" . $categoryIDAccessories);
 $resultAccessories = json_decode($inputAccessories, true);
 
 
@@ -97,6 +100,9 @@ $resultAccessories = json_decode($inputAccessories, true);
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
+      .imageCards{
+        width: 300px !important;
+      }
       .view-product-button {
   float: right;
   padding: 8px 12px;
@@ -122,252 +128,66 @@ $resultAccessories = json_decode($inputAccessories, true);
 
   </head>
   <body>
-    <!-- HEADER -->
-    <header>
-      <!-- TOP HEADER -->
-      <div id="top-header">
-        <div class="container">
-          <ul class="header-links pull-left">
-            <li>
-              <a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a>
-            </li>
-            <li>
-              <a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a>
-            </li>
-            <li>
-              <a href="#"
-                ><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a
-              >
-            </li>
-          </ul>
-          <ul class="header-links pull-right">
-            <li>
-              <a href="#"><i class="fa fa-dollar"></i> JOR</a>
-            </li>
-            <li>
-              <a href="../backend/userProfile/veiw.php?user_id=<?php echo $id?>"
-                ><i class="fa fa-user-o"></i> account </a
-              >
-            </li>
-          </ul>
+
+
+
+	<?php 
+	
+	include'./nav&footr/nav.php';
+	?>
+
+
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <!-- shop1 -->
+    <div class="col-md-4 col-xs-5">
+      <div class="shop">
+        <div class="shop-img">
+          <img src="images/<?php echo $showImage; ?>" alt="" />
+        </div>
+        <div class="shop-body">
+          <h3><?php echo $resultLaptop['data']['name']; ?></h3>
+          <a href="store.php?category=<?php echo $categoryIDLaptop; ?>" class="cta-btn">
+            Shop now <i class="fa fa-arrow-circle-right"></i>
+          </a>
         </div>
       </div>
-      <!-- /TOP HEADER -->
+    </div>
+    <!-- /shop1 -->
 
-      <!-- MAIN HEADER -->
-      <div id="header">
-        <!-- container -->
-        <div class="container">
-          <!-- row -->
-          <div class="row">
-            <!-- LOGO -->
-            <div class="col-md-3">
-              <div class="header-logo">
-                <a href="#" class="logo">
-                  <img src="./img/logo.png" alt="" />
-                </a>
-              </div>
-            </div>
-            <!-- /LOGO -->
-
-            <!-- SEARCH BAR -->
-            <div class="col-md-6">
-              <div class="header-search">
-                <form>
-                  <select class="input-select">
-                    <option value="0">All Categories</option>
-                    <option value="1">Category 01</option>
-                    <option value="1">Category 02</option>
-                  </select>
-                  <input class="input" placeholder="Search here" />
-                  <button class="search-btn">Search</button>
-                </form>
-              </div>
-            </div>
-            <!-- /SEARCH BAR -->
-
-            <!-- ACCOUNT -->
-            <div class="col-md-3 clearfix">
-              <div class="header-ctn">
-                <!-- Wishlist -->
-                <div>
-                  <a href="#">
-                    <i class="fa fa-heart-o"></i>
-                    <span>Your Wishlist</span>
-                    <div class="qty">2</div>
-                  </a>
-                </div>
-                <!-- /Wishlist -->
-
-                <!-- Cart -->
-                <div class="dropdown">
-                  <a
-                    class="dropdown-toggle"
-                    data-toggle="dropdown"
-                    aria-expanded="true"
-                  >
-                    <i class="fa fa-shopping-cart"></i>
-                    <span>Your Cart</span>
-                    <div class="qty">3</div>
-                  </a>
-                  <div class="cart-dropdown">
-                    <div class="cart-list">
-                      <div class="product-widget">
-                        <div class="product-img">
-                          <img src="./backend/img/product01.png" alt="" />
-                        </div>
-                        <div class="product-body">
-                          <h3 class="product-name">
-                            <a href="#">product name goes here</a>
-                          </h3>
-                          <h4 class="product-price">
-                            <span class="qty">1x</span>$980.00
-                          </h4>
-                        </div>
-                        <button class="delete">
-                          <i class="fa fa-close"></i>
-                        </button>
-                      </div>
-
-                      <div class="product-widget">
-                        <div class="product-img">
-                          <img src="./img/product02.png" alt="" />
-                        </div>
-                        <div class="product-body">
-                          <h3 class="product-name">
-                            <a href="#">product name goes here</a>
-                          </h3>
-                          <h4 class="product-price">
-                            <span class="qty">3x</span>$980.00
-                          </h4>
-                        </div>
-                        <button class="delete">
-                          <i class="fa fa-close"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="cart-summary">
-                      <small>3 Item(s) selected</small>
-                      <h5>SUBTOTAL: $2940.00</h5>
-                    </div>
-                    <div class="cart-btns">
-                      <a href="#">View Cart</a>
-                      <a href="#"
-                        >Checkout <i class="fa fa-arrow-circle-right"></i
-                      ></a>
-                    </div>
-                  </div>
-                </div>
-                <!-- /Cart -->
-
-                <!-- Menu Toogle -->
-                <div class="menu-toggle">
-                  <a href="#">
-                    <i class="fa fa-bars"></i>
-                    <span>Menu</span>
-                  </a>
-                </div>
-                <!-- /Menu Toogle -->
-              </div>
-            </div>
-            <!-- /ACCOUNT -->
-          </div>
-          <!-- row -->
+    <!-- shop2 -->
+    <div class="col-md-4 col-xs-5">
+      <div class="shop">
+        <div class="shop-img">
+          <img src="images/<?php echo $showImage2; ?>" alt="" />
         </div>
-        <!-- container -->
-      </div>
-      <!-- /MAIN HEADER -->
-    </header>
-    <!-- /HEADER -->
-
-    <!-- NAVIGATION -->
-    <nav id="navigation">
-      <!-- container -->
-      <div class="container">
-        <!-- responsive-nav -->
-        <div id="responsive-nav">
-          <!-- NAV -->
-          <ul class="main-nav nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=1">Categories</a></li>
-            <li><a href="store.php">PC</a></li>
-            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=2">Laptops</a></li>
-            <li><a href="http://127.0.0.1/brief%203/e-commerce/backend/store.php?category=3">Accessories</a></li>
-          </ul>
-          <!-- /NAV -->
+        <div class="shop-body">
+          <h3><?php echo $resultPC['data']['name']; ?></h3>
+          <a href="store.php?category=<?php echo $categoryIDPC; ?>" class="cta-btn">
+            Shop now <i class="fa fa-arrow-circle-right"></i>
+          </a>
         </div>
-        <!-- /responsive-nav -->
       </div>
-      <!-- /container -->
-    </nav>
-    <!-- /NAVIGATION -->
-
-    <!-- SECTION -->
-    <div class="section">
-      <!-- container -->
-      <div class="container">
-        <!-- row -->
-        <div class="row">
-
-
-
-
-
-<!-- shop1 -->
-        <div class="col-md-4 col-xs-6">
-  <div class="shop">
-    <div class="shop-img">
-      <img src="images/<?php echo $showImage; ?>" alt="" />
     </div>
-    <div class="shop-body">
-      <h3><?php echo $resultLaptop['data']['name']; ?></h3>
-      <a href="store.php?category=<?php echo $categoryIDLaptop; ?>" class="cta-btn">
-        Shop now <i class="fa fa-arrow-circle-right"></i>
-      </a>
+    <!-- /shop2 -->
+
+    <!-- shop3 -->
+    <div class="col-md-4 col-xs-5">
+      <div class="shop">
+        <div class="shop-img">
+          <img src="images/<?php echo $showImage3; ?>" alt="" />
+        </div>
+        <div class="shop-body">
+          <h3><?php echo $resultAccessories['data']['name']; ?></h3>
+          <a href="store.php?category=<?php echo $categoryIDAccessories; ?>" class="cta-btn">
+            Shop now <i class="fa fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
     </div>
+    <!-- /shop3 -->
   </div>
 </div>
-<!-- /shop1 -->
-
-
-
-
-<!-- shop2 -->
-<div class="col-md-4 col-xs-6">
-  <div class="shop">
-    <div class="shop-img">
-
-      <img src="images/<?php echo $showImage2; ?>" alt="" />
-
-    </div>
-    <div class="shop-body">
-      <h3><?php echo $resultPC['data']['name']; ?></h3>
-      <a href="store.php?category=<?php echo $categoryIDPC; ?>" class="cta-btn">
-        Shop now <i class="fa fa-arrow-circle-right"></i>
-      </a>
-    </div>
-  </div>
-</div>
-<!-- /shop2 -->
-
-
-
-
-          <!-- shop3 -->
-<div class="col-md-4 col-xs-6">
-  <div class="shop">
-    <div class="shop-img">
-      <img src="images/<?php echo $showImage3; ?>" alt="" />
-    </div>
-    <div class="shop-body">
-      <h3><?php echo $resultAccessories['data']['name']; ?></h3>
-      <a href="store.php?category=<?php echo $categoryIDAccessories; ?>" class="cta-btn">
-        Shop now <i class="fa fa-arrow-circle-right"></i>
-      </a>
-    </div>
-  </div>
-</div>
-<!-- /shop3 -->
 
         </div>
         <!-- /row -->
@@ -412,31 +232,20 @@ $resultAccessories = json_decode($inputAccessories, true);
             $product = $result0['data'][$index];?>
             <div class="product">
                 <div class="product-img">
-                    <img src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
-                    <div class="product-label">
-                        <span class="sale">-30%</span>
-                        <span class="new">NEW</span>
-                    </div>
+                    <img class="imageCards" src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    
                 </div>
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($product['categoriesName']); ?></p>
                     <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($product['name']); ?></a></h3>
-                    <h4 class="product-price"><?php echo htmlspecialchars($product['price']); ?> JOD <del class="product-old-price">$90</del></h4>
-                    <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
+                    <h4 class="product-price">$<?php echo htmlspecialchars($product['price']); ?>  </h4>
+                    
                     <div class="product-btns">
                         
-                        <a href="http://127.0.0.1/brief%203/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
+                        <a href="http://localhost/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-                </div>
+              
             </div>
     <?php 
         else:
@@ -461,7 +270,7 @@ $resultAccessories = json_decode($inputAccessories, true);
             $product = $result0['data'][$index];?>
             <div class="product">
                 <div class="product-img">
-                    <img src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    <img class="imageCards" src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                     <div class="product-label">
                         <span class="sale">-30%</span>
                         <span class="new">NEW</span>
@@ -470,23 +279,13 @@ $resultAccessories = json_decode($inputAccessories, true);
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($product['categoriesName']); ?></p>
                     <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($product['name']); ?></a></h3>
-                    <h4 class="product-price"><?php echo htmlspecialchars($product['price']); ?> JOD <del class="product-old-price">$90</del></h4>
-                    <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
+                    <h4 class="product-price">$<?php echo htmlspecialchars($product['price']); ?> </h4>
+                    
                     <div class="product-btns">
-                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Add to Wishlist</span></button>
-                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Add to Compare</span></button>
-                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Quick View</span></button>
+                    <a href="http://localhost/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-                </div>
+              
             </div>
     <?php 
         else:
@@ -510,7 +309,7 @@ $resultAccessories = json_decode($inputAccessories, true);
             $product = $result0['data'][$index];?>
             <div class="product">
                 <div class="product-img">
-                    <img src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    <img class="imageCards" src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                     <div class="product-label">
                         <span class="sale">-30%</span>
                         <span class="new">NEW</span>
@@ -519,23 +318,13 @@ $resultAccessories = json_decode($inputAccessories, true);
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($product['categoriesName']); ?></p>
                     <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($product['name']); ?></a></h3>
-                    <h4 class="product-price"><?php echo htmlspecialchars($product['price']); ?> JOD <del class="product-old-price">$90</del></h4>
-                    <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
+                    <h4 class="product-price">$<?php echo htmlspecialchars($product['price']); ?> </h4>
+                    
                     <div class="product-btns">
-                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Add to Wishlist</span></button>
-                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Add to Compare</span></button>
-                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Quick View</span></button>
+                    <a href="http://localhost/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-                </div>
+                
             </div>
     <?php 
         else:
@@ -561,7 +350,7 @@ $resultAccessories = json_decode($inputAccessories, true);
             $product = $result0['data'][$index];?>
             <div class="product">
                 <div class="product-img">
-                    <img src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    <img class="imageCards" src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                     <div class="product-label">
                         <span class="sale">-30%</span>
                         <span class="new">NEW</span>
@@ -570,23 +359,13 @@ $resultAccessories = json_decode($inputAccessories, true);
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($product['categoriesName']); ?></p>
                     <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($product['name']); ?></a></h3>
-                    <h4 class="product-price"><?php echo htmlspecialchars($product['price']); ?> JOD <del class="product-old-price">$90</del></h4>
-                    <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
+                    <h4 class="product-price">$<?php echo htmlspecialchars($product['price']); ?> </h4>
+                    
                     <div class="product-btns">
-                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Add to Wishlist</span></button>
-                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Add to Compare</span></button>
-                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Quick View</span></button>
+                    <a href="http://localhost/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-                </div>
+                
             </div>
     <?php 
         else:
@@ -608,7 +387,7 @@ $resultAccessories = json_decode($inputAccessories, true);
             $product = $result0['data'][$index];?>
             <div class="product">
                 <div class="product-img">
-                    <img src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                    <img class="imageCards" src="images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                     <div class="product-label">
                         <span class="sale">-30%</span>
                         <span class="new">NEW</span>
@@ -617,23 +396,13 @@ $resultAccessories = json_decode($inputAccessories, true);
                 <div class="product-body">
                     <p class="product-category"><?php echo htmlspecialchars($product['categoriesName']); ?></p>
                     <h3 class="product-name"><a href="#"><?php echo htmlspecialchars($product['name']); ?></a></h3>
-                    <h4 class="product-price"><?php echo htmlspecialchars($product['price']); ?> JOD <del class="product-old-price">$90</del></h4>
-                    <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
+                    <h4 class="product-price">$<?php echo htmlspecialchars($product['price']); ?> </h4>
+                    
                     <div class="product-btns">
-                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Add to Wishlist</span></button>
-                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">Add to Compare</span></button>
-                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">Quick View</span></button>
+                    <a href="http://localhost/e-commerce/backend/productpage.php?productId=<?php echo $product['id'] ?>" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"> Quick View</span></a>
                     </div>
                 </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-                </div>
+
             </div>
     <?php 
         else:
@@ -695,7 +464,7 @@ $resultAccessories = json_decode($inputAccessories, true);
   // SQL query to fetch data
   $sql = "SELECT p.id as productId, p.name, p.image as productImage, p.price, d.discount_amount
         FROM product p
-        JOIN discount d ON p.id = d.product_id";
+        JOIN discount d ON p.id = d.product_id LIMIT 3";
   $result = $conn->query($sql);
       // var_dump($result);
   ?>

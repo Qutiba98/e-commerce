@@ -1,7 +1,9 @@
 <?php
 include 'db.php';
 session_start();
-
+// var_dump($_SESSION['user_id']);
+// var_dump($_SESSION['products']);
+// var_dump($_SESSION['qua']);
 $id =$_GET['productId']? $_GET['productId'] :"";
 // var_dump ($_GET['productId']);
 $_SESSION['currentProductId'] = $_GET['productId'];
@@ -12,10 +14,10 @@ if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
 $isInDatabase = false;
 $quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/productapi/getbyid.php?id=$id");
+$input = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=$id");
 $result = json_decode($input, true);
 
-if ($result) {
+if ($result && isset($_POST['qua'])) {
     $productId = $result['id'];
     $productInfo = [
         'id' => $productId,
@@ -47,7 +49,7 @@ if ($result) {
 }
 
 // Debug: Display the session products array
-print_r($_SESSION['products']);
+// print_r($_SESSION['products']);
 
 $showImage = $result['image'];
 ?>
@@ -87,7 +89,7 @@ $showImage = $result['image'];
         }
 
 .container {
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 .customer-reviews {
@@ -243,142 +245,13 @@ $showImage = $result['image'];
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <!-- TOP HEADER -->
-        <div id="top-header">
-            <div class="container">
-                <ul class="header-links pull-left">
-                    <li><a href="#"><i class="fa fa-phone"></i> +962-779-199-880</a></li>
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> Qutiba@gmail.com</a></li>
-                    <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
-                </ul>
-                <ul class="header-links pull-right">
-                    <li><a href="#"><i class="fa fa-dollar"></i> JOR</a></li>
-                    <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
-                </ul>
-            </div>
-        </div>
-        <!-- /TOP HEADER -->
 
-        <!-- MAIN HEADER -->
-        <div id="header">
-            <!-- container -->
-            <div class="container">
-                <!-- row -->
-                <div class="row">
-                    <!-- LOGO -->
-                    <div class="col-md-3">
-                        <div class="header-logo">
-                            <a href="#" class="logo">
-                                <img src="./img/logo.png" alt="">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- /LOGO -->
 
-                    <!-- SEARCH BAR -->
-                    <div class="col-md-6">
-                        <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">All Categories</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /SEARCH BAR -->
+<?php 
+include'./nav&footr/nav.php';
+?>
 
-                    <!-- ACCOUNT -->
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <!-- Wishlist -->
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
-                            <!-- /Wishlist -->
 
-                            <!-- Cart -->
-                            <div>
-                                <a href="./cart.php">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    <div class="qty">3</div>
-                                </a>
-                            </div>
-                            <!-- /Cart -->
-
-                            <!-- Menu Toggle -->
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                            <!-- /Menu Toggle -->
-                        </div>
-                    </div>
-                    <!-- /ACCOUNT -->
-                </div>
-                <!-- row -->
-            </div>
-            <!-- container -->
-        </div>
-        <!-- /MAIN HEADER -->
-    </header>
-    <!-- /HEADER -->
-
-    <!-- NAVIGATION -->
-    <nav id="navigation">
-        <!-- container -->
-        <div class="container">
-            <!-- responsive-nav -->
-            <div id="responsive-nav">
-                <!-- NAV -->
-                <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Hot Deals</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Laptops</a></li>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Cameras</a></li>
-                    <li><a href="#">Accessories</a></li>
-                </ul>
-                <!-- /NAV -->
-            </div>
-            <!-- /responsive-nav -->
-        </div>
-        <!-- /container -->
-    </nav>
-    <!-- /NAVIGATION -->
-
-    <!-- BREADCRUMB -->
-    <div id="breadcrumb" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li class="active">Product</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /BREADCRUMB -->
 
     <!-- SECTION -->
     <div class="section">
@@ -433,8 +306,8 @@ $showImage = $result['image'];
 <?php
 // session_start();
 
-$_SESSION['user_id'] = 21; // Example user ID
-// $_SESSION['product_id'] = 75; // Example product ID
+// $_SESSION['user_id'] = 32; // Example user ID
+$_SESSION['product_id'] = $_GET['productId']; // Example product ID
 
 $servername = "localhost"; 
 $username = "root"; 
@@ -442,7 +315,7 @@ $password = "";
 $dbname = "e-commerce"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-
+$user_id = $_SESSION['user_id'];
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -451,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_id = $_SESSION['product_id'];
     $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
     $name = $_SESSION['name'];
-
+    // 0 "" 
     if ($product_id && $comment_text && $user_id) {
         $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
 
@@ -461,16 +334,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$user_id = $_SESSION['user_id'];
 
 
 
-$result = $conn->query(
-" SELECT comments.* ,users.name FROM comments
-INNER JOIN users
-USING (user_id)
-WHERE comments.user_id =  $user_id"
-);
+
+$sql = "SELECT users.name, comments.comment_text FROM comments 
+        INNER JOIN users ON comments.user_id = users.user_id
+        WHERE comments.product_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION['product_id']);
+$stmt->execute();
+$result = $stmt->get_result();
+// var_dump($result);
+$reviews = [];
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $reviews[] = $row;
+    }
+} else {
+    echo "No reviews found.";
+}
+// $reviews = json_encode($reviews);    
+var_dump($reviews); 
+// print_r ($reviews[0]['name']);
 ?>
 <!-- Customer Reviews Section -->
 <div class="container">
@@ -479,14 +366,14 @@ WHERE comments.user_id =  $user_id"
             <div class="customer-reviews">
                 <h3 class="reviews-title">Customer Reviews</h3>
                 <div class="reviews">
-                    <?php while ($row = $result->fetch_assoc()): ?>
+                <?php foreach ($reviews as $review): ?>
                     <div class="review">
                         <div class="review-author">
-                            <strong> <?php echo $row['name']; ?></strong>
+                            <strong><?php echo htmlspecialchars($review['name'], ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
-                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
+                        <p class="review-text"><?php echo htmlspecialchars($review['comment_text'], ENT_QUOTES, 'UTF-8'); ?></p>
                     </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </div>
                 
                 <!-- Add Review Form -->

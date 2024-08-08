@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET"){
     $stmt->bindParam(':id', $id);  
     $stmt -> execute();
     echo json_encode ("Deleted sucessfully"); 
-    // header('Location: http://127.0.0.1/brief%203/e-commerce/backend/cart.php');
+    header('Location: http://localhost/e-commerce/backend/cart.php');
 
 }else {
     $data = [

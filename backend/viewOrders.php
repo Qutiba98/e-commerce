@@ -28,7 +28,6 @@ $result = $conn->query($sql);
 </head>
 
 <body>
-
     <div class="container mt-5">
         <h2 class="mb-4">Your Orders</h2>
         <table class="table table-bordered table-striped">

@@ -1,6 +1,10 @@
 <?php
 require "../backend/connection_db_pdo.php";
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: http://localhost/e-commerce/backend/login.php');
+    exit(); 
+}
 // echo $_SESSION['total'];
 // Enable error reporting for debugging
 $_SESSION['emptyCart'] = false;
@@ -65,14 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($flag) {
         // Calculate total amount from cart
-        $total = 0;
-        if (!empty($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $item) {
-                if (isset($item['price']) && isset($item['quantity'])) {
-                    $total += $item['price'] * $item['quantity'];
-                }
-            }
-        }
+        // $total = 0;
+        // if (!empty($_SESSION['cart'])) {
+        //     foreach ($_SESSION['cart'] as $item) {
+        //         if (isset($item['price']) && isset($item['quantity'])) {
+        //             $total += $item['price'] * $item['quantity'];
+        //         }
+        //     }
+        // }
 
         // Insert order into database
         try {
@@ -96,8 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Prepare and execute the DELETE query
             $deleteFromCart = "DELETE FROM cart_product WHERE cart_id = :cartId";
             $deleteStmt = $conn->prepare($deleteFromCart);
-            $deleteStmt->execute([':cartId' => 21]);
-            header('Location: http://127.0.0.1/brief%203/e-commerce/backend/index.php');
+            $deleteStmt->execute([':cartId' => $_SESSION['user_id']]);
+            echo "
+            <script>
+alert('Payment Success');
+window.location.href='http://localhost/e-commerce/backend/index.php';
+</script>
+            ";
+            // header('Location: http://localhost/e-commerce/backend/index.php');
         
             // Check if rows were affected
             if ($deleteStmt->rowCount() > 0) {
@@ -113,10 +123,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }        
 } else {
     http_response_code(405);
-    echo "Method Not Allowed";
+    echo "";
 }
+$id = $_SESSION['user_id'];
 // fetch data from cart  -------------------------- make it dynamic
-$input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
+$input = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$id");
 $result = json_decode($input,true);
 // var_dump($result);
 // delete from cart 
@@ -157,155 +168,114 @@ $result = json_decode($input,true);
 	</style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <!-- TOP HEADER -->
-        <div id="top-header">
-            <div class="container">
-                <ul class="header-links pull-left">
-                    <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-                    <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
-                </ul>
-                <ul class="header-links pull-right">
-                    <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-                    <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
-                </ul>
+
+
+<header>
+    <!-- TOP HEADER -->
+    <div id="top-header">
+      <div class="container">
+        <ul class="header-links pull-left">
+          <li><a href="#"><i class="fa fa-phone"></i> +962-779-199-880</a></li>
+          <li><a href="#"><i class="fa fa-envelope-o"></i> Electrospark@gmail.com</a></li>
+          <li><a href="#"><i class="fa fa-map-marker"></i> Amman-Jordan</a></li>
+        </ul>
+        <ul class="header-links pull-right">
+          <?php  if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])):  ?>
+            <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
+            <?php endif; ?>
+            <?php  if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])):  ?>
+          <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
+          <?php endif; ?>
+          <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- /TOP HEADER -->
+
+    <!-- MAIN HEADER -->
+    <div id="header">
+      <!-- container -->
+      <div class="container">
+        <!-- row -->
+        <div class="row">
+          <!-- LOGO -->
+          <div class="col-md-3">
+            <div class="header-logo">
+              <a href="#" class="logo">
+                <img src="./img/logo.png" alt="" />
+              </a>
             </div>
-        </div>
-        <!-- /TOP HEADER -->
+          </div>
+          <!-- /LOGO -->
 
-        <!-- MAIN HEADER -->
-        <div id="header">
-            <!-- container -->
-            <div class="container">
-                <!-- row -->
-                <div class="row">
-                    <!-- LOGO -->
-                    <div class="col-md-3">
-                        <div class="header-logo">
-                            <a href="#" class="logo">
-                                <img src="./img/logo.png" alt="">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- /LOGO -->
+          <!-- SEARCH BAR -->
+          <div class="col-md-6">
+            <div class="header-search">
+              <form style = "  visibility: hidden;">
+                <select class="input-select" id="category-select">
+                  <option value="0" data-url="#">All Categories</option>
+                  <?php
+                  foreach ($categoryData as $category) {
+                    echo '<option value="' . htmlspecialchars($category['id']) . '" data-url="http://localhost/e-commerce/backend/store.php?category=' . htmlspecialchars($category['id']) . '">'
+                      . htmlspecialchars($category['name']) . '</option>';
+                  }
+                  ?>
+                </select>
+                <input class="input" placeholder="Search here" />
+                <button class="search-btn">Search</button>
+              </form>
+            </div>
+          </div>
+          <!-- /SEARCH BAR -->
 
-                    <!-- SEARCH BAR -->
-                    <div class="col-md-6">
-                        <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">All Categories</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /SEARCH BAR -->
-
-                    <!-- ACCOUNT -->
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <!-- Wishlist -->
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
-                            <!-- /Wishlist -->
-
-                            <!-- Cart -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    <div class="qty">3</div>
-                                </a>
-                                <div class="cart-dropdown">
-                                    <div class="cart-list">
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product01.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product02.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="cart-summary">
-                                        <small>3 Item(s) selected</small>
-                                        <h5>SUBTOTAL: $2940.00</h5>
-                                    </div>
-                                    <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Cart -->
-
-                            <!-- Menu Toogle -->
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                            <!-- /Menu Toogle -->
-                        </div>
-                    </div>
-                    <!-- /ACCOUNT -->
+            <!-- ACCOUNT -->
+            <div class="col-md-3 clearfix">
+              <div class="header-ctn">
+                <!-- Wishlist -->
+                <div>
+                  <a href="#">
+                    <span></span>
+                  </a>
                 </div>
-                <!-- row -->
-            </div>
-            <!-- container -->
-        </div>
-        <!-- /MAIN HEADER -->
-    </header>
-    <!-- /HEADER -->
+                <!-- /Wishlist -->
+                 
 
-    <!-- NAVIGATION -->
-    <nav id="navigation">
-        <!-- container -->
-        <div class="container">
-            <!-- responsive-nav -->
-            <div id="responsive-nav">
-                <!-- NAV -->
-                <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Hot Deals</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Laptops</a></li>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Cameras</a></li>
-                    <li><a href="#">Accessories</a></li>
-                </ul>
-                <!-- /NAV -->
+              <!-- Cart -->
+              <div>
+                <a href="./cart.php">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span>Your Cart</span>
+                  <div class="qty">3</div>
+                </a>
+              </div>
+              <!-- /Cart -->
+
+
+              
+
+              <!-- Menu Toggle -->
+              <div class="menu-toggle">
+                <a href="#">
+                  <i class="fa fa-bars"></i>
+                  <span>Menu</span>
+                </a>
+              </div>
+              <!-- /Menu Toggle -->
             </div>
-            <!-- /responsive-nav -->
+          </div>
+          <!-- /ACCOUNT -->
         </div>
-        <!-- /container -->
-    </nav>
-    <!-- /NAVIGATION -->
+        <!-- /row -->
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /MAIN HEADER -->
+  </header>
+  <!-- /HEADER -->
+
+
+
+
 
     <!-- BREADCRUMB -->
     <div id="breadcrumb" class="section">
@@ -315,9 +285,9 @@ $result = json_decode($input,true);
             <div class="row">
                 <div class="col-md-12">
                     <ul class="breadcrumb-tree">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li class="active">Product</li>
+                        <li><a href="http://localhost/e-commerce/backend/">Home</a></li>
+                        <li><a href="http://localhost/e-commerce/backend/store.php?page=4#">Category</a></li>
+                        <li class="active">Checkout</li>
                     </ul>
                 </div>
             </div>
@@ -389,10 +359,29 @@ $result = json_decode($input,true);
                                         <div class="order-summary">
     <?php foreach ($result as $row): ?>
         <p><?php echo htmlspecialchars($row['name']); ?> <span><b><?php echo ($row['price'] * $row['quantity']); ?><br> Quantity :<?php echo $row['quantity'] ?> </b></span></p>
-        <!-- <p><?php echo htmlspecialchars($row['productDesc']); ?></p> -->
+
         <p></p>
         <?php endforeach; ?>
-        <p>Total Price: <?php echo htmlspecialchars($_SESSION['total']); ?></p>
+        <p>Total Price: <b>
+        <?php 
+        if (isset($_SESSION['totalِAfter'])): 
+         
+        echo htmlspecialchars($_SESSION['totalِAfter']); ?> 
+        </b>
+        <del><?php echo htmlspecialchars($_SESSION['total']);
+     
+     ?></del>
+     <?php endif; ?>
+     <?php 
+        if (!isset($_SESSION['totalِAfter'])): 
+         
+         ?> 
+        <?php echo htmlspecialchars($_SESSION['total']);
+     
+     ?>
+     <?php endif; ?>
+
+     </p>
     <button class="primary-btn order-submit">Place Order</button>
 </div>
                                 </div>

@@ -1,134 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="../frontend/css/login signup.css">
-    <script>
-        function validateForm() {
-            let isValid = true;
-
-            // Clear previous error messages
-            document.getElementById('nameError').textContent = '';
-            document.getElementById('emailError').textContent = '';
-            document.getElementById('mobileError').textContent = '';
-            document.getElementById('passwordError').textContent = '';
-            document.getElementById('confirmPasswordError').textContent = '';
-
-            const fullName = document.forms["signupForm"]["name"].value.trim();
-            const nameParts = fullName.split(' ').filter(name => name.length > 0);
-            const email = document.forms["signupForm"]["email"].value;
-            const mobile = document.forms["signupForm"]["phone_number"].value;
-            const password = document.forms["signupForm"]["password"].value;
-            const confirmPassword = document.forms["signupForm"]["confirm_password"].value;
-
-            // Full name validation
-            if (nameParts.length < 4) {
-                document.getElementById('nameError').textContent = 'Full Name must contain first name, middle name, last name, and family name.';
-                isValid = false;
-            }
-
-            // Email validation
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
-                isValid = false;
-            }
-
-            // Mobile validation
-            const mobilePattern = /^\d{10}$/;
-            if (!mobilePattern.test(mobile)) {
-                document.getElementById('mobileError').textContent = 'Mobile number must be 10 digits.';
-                isValid = false;
-            }
-
-            // Password validation
-            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            if (!passwordPattern.test(password)) {
-                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long, include an upper case letter, a lower case letter, a number, and a special character.';
-                isValid = false;
-            }
-
-            // Password match validation
-            if (password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
-                isValid = false;
-            }
-
-            return isValid;
-        }
-    </script>
-
-    <style>
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-        }
-
-        .success-message {
-            color: green;
-            font-size: 1.2em;
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-<div class="container">
-      <form
-        name="signupForm"
-        action="./signup.php"
-        method="POST"
-        enctype="multipart/form-data"
-        onsubmit="return validateForm();"
-      >
-        <div class="form-group">
-          <h2>Sign Up</h2>
-          <label for="name">Full Name:</label>
-          <input type="text" id="name" name="name"  />
-          <span id="nameError" class="error-message"></span>
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email"  />
-          <span id="emailError" class="error-message"></span>
-        </div>
-        <div class="form-group">
-          <label for="phone_number">Mobile:</label>
-          <input type="text" id="phone_number" name="phone_number"  />
-          <span id="mobileError" class="error-message"></span>
-        </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password"  />
-          <span id="passwordError" class="error-message"></span>
-        </div>
-        <div class="form-group">
-          <label for="confirm_password">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirm_password"
-            name="confirm_password"
-            required
-          />
-          <span id="confirmPasswordError" class="error-message"></span>
-        </div>
-        <div class="form-group">
-          <label for="image">Upload Image:</label>
-          <input type="file" id="image" name="image" accept="image/*" />
-        </div>
-        <button type="submit" class="btn">Sign Up</button>
-        <p>Already have an account? <a href="login.php">Login here</a></p>
-      </form>
-
-        <div id="successMessage" class="success-message"></div>
-    </div>
-</body>
-
-</html>
-
 <?php
 include './dbqutipa.php';
 
@@ -159,7 +28,12 @@ class UserRegistration
     {
         $name = trim($name);
         if (empty($name)) {
-            $this->errors[] = 'Full Name is required.';
+            $this->errors['name'] = 'Full Name is required.';
+        } else {
+            $nameParts = explode(' ', $name);
+            if (count($nameParts) < 4) {
+                $this->errors['name'] = 'Full Name must contain first name, middle name, last name, and family name.';
+            }
         }
     }
 
@@ -167,7 +41,7 @@ class UserRegistration
     {
         $email = trim($email);
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->errors[] = 'Invalid email format.';
+            $this->errors['email'] = 'Invalid email format.';
         }
     }
 
@@ -175,14 +49,21 @@ class UserRegistration
     {
         $phoneNumber = trim($phoneNumber);
         if (empty($phoneNumber) || !preg_match('/^\d{10}$/', $phoneNumber)) {
-            $this->errors[] = 'Invalid mobile number. It should be 10 digits.';
+            $this->errors['phone_number'] = 'Invalid mobile number. It should be 10 digits.';
         }
     }
 
     private function validatePasswords($password, $confirmPassword)
     {
-        if (empty($password) || $password !== $confirmPassword) {
-            $this->errors[] = 'Passwords do not match or are empty.';
+        if (empty($password)) {
+            $this->errors['password'] = 'Password is required.';
+        } elseif ($password !== $confirmPassword) {
+            $this->errors['confirm_password'] = 'Passwords do not match.';
+        } else {
+            $passwordPattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+            if (!preg_match($passwordPattern, $password)) {
+                $this->errors['password'] = 'Password must be at least 8 characters long, include an upper case letter, a lower case letter, a number, and a special character.';
+            }
         }
     }
 
@@ -198,10 +79,10 @@ class UserRegistration
                 if (move_uploaded_file($image['tmp_name'], $uploadFile)) {
                     $this->image = $imageName;
                 } else {
-                    $this->errors[] = 'Failed to upload image.';
+                    $this->errors['image'] = 'Failed to upload image.';
                 }
             } else {
-                $this->errors[] = 'Only JPEG, PNG, and GIF files are allowed.';
+                $this->errors['image'] = 'Only JPEG, PNG, and GIF files are allowed.';
             }
         }
     }
@@ -219,7 +100,7 @@ class UserRegistration
         $stmt->close();
 
         if ($count > 0) {
-            $this->errors[] = 'Email or mobile number already exists.';
+            $this->errors['existing'] = 'Email or mobile number already exists.';
         }
     }
 
@@ -227,56 +108,253 @@ class UserRegistration
     {
         if (empty($this->errors)) {
             $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, phone_number, image, role_id) VALUES (?, ?, ?, ?, ?, ?)");
+
             if (!$stmt) {
-                die("Prepare failed: " . $this->conn->error);
-            }
-
-            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-            $roleId = 2; // Default role_id
-
-            $stmt->bind_param("sssssi", $data['name'], $data['email'], $hashedPassword, $data['phone_number'], $this->image, $roleId);
-
-            if ($stmt->execute()) {
-                $userId = $stmt->insert_id; // Get the ID of the newly inserted user
-                $this->addToCart($userId); // Add the user to the cart
-                echo "RS!";
+                $this->errors['db'] = 'Prepare failed: ' . $this->conn->error;
             } else {
-                echo "Error: " . $stmt->error;
-            }
+                $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+                $roleId = 2; // Default role_id
 
-            $stmt->close();
-            $this->conn->close();
-        } else {
-            foreach ($this->errors as $error) {
-                echo "<p>$error</p>";
+                // Bind parameters
+                $stmt->bind_param("sssssi", $data['name'], $data['email'], $hashedPassword, $data['phone_number'], $this->image, $roleId);
+
+                // Execute the statement
+                if ($stmt->execute()) {
+                    $userId = $stmt->insert_id; // Get the ID of the newly inserted user
+                    $this->addToCart($userId); // Add the user to the cart
+
+                    // Close statement and connection
+                    $stmt->close();
+                    $this->conn->close();
+
+                    // Redirect to login page with success message
+                    echo "
+<script>
+    alert('Account Created');
+    window.location.href = 'http://localhost/e-commerce/backend/login.php';
+</script>
+";
+                    exit(); // Ensure no further code is executed
+                } else {
+                    $this->errors['db'] = 'Error: ' . $stmt->error;
+                }
+
+                // Close statement
+                $stmt->close();
             }
         }
+
+        // Store errors in session to display on form page
+        session_start();
+        $_SESSION['errors'] = $this->errors;
+        header("Location: signup.php");
+        exit();
     }
 
-    private function addToCart($userId) {
-        $stmt = $this->conn->prepare("INSERT INTO cart (id, user_id) VALUES (?, ?)");
+    private function addToCart($userId)
+    {
+        $stmt = $this->conn->prepare("INSERT INTO cart (user_id) VALUES (?)");
         if (!$stmt) {
             die("Prepare failed: " . $this->conn->error);
         }
-        $stmt->bind_param("ii", $id, $userId);
-        
+        $stmt->bind_param("i", $userId);
+
         if (!$stmt->execute()) {
-            echo "Error adding user to cart: " . $stmt->error;
+            $this->errors['cart'] = 'Error adding user to cart: ' . $stmt->error;
         }
-        
+
         $stmt->close();
     }
-   
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     $registration = new UserRegistration(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-    // $registration = new UserRegistration($servername, $username, $password, $dbname);
-
     $registration->validateInput($_POST, $_FILES);
     $registration->checkExistingUser($_POST['email'], $_POST['phone_number']);
     $registration->registerUser($_POST);
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="../frontend/css/login_signup.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875em;
+            display: block;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 1em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button[type="submit"] {
+            background: #d10024;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: gray;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        a {
+            color: #d10024;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <?php
+        session_start();
+        if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) :
+        ?>
+            <div class="error-messages">
+                <?php foreach ($_SESSION['errors'] as $key => $error) : ?>
+                    <div class="error-message" id="<?php echo htmlspecialchars($key); ?>Error"><?php echo htmlspecialchars($error); ?></div>
+                <?php endforeach; ?>
+            </div>
+        <?php
+            unset($_SESSION['errors']);
+        endif;
+
+        if (isset($_GET['registration']) && $_GET['registration'] == 'success') :
+        ?>
+            <div class="success-message">Registration successful! You can now <a href="login.php">login here</a>.</div>
+        <?php endif; ?>
+
+        <form id="signupForm" action="./signup.php" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <h2>Sign Up</h2>
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['name']) ? htmlspecialchars($_SESSION['errors']['name']) : ''; ?></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['email']) ? htmlspecialchars($_SESSION['errors']['email']) : ''; ?></span>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Mobile:</label>
+                <input type="text" id="phone_number" name="phone_number" value="<?php echo isset($_POST['phone_number']) ? htmlspecialchars($_POST['phone_number']) : ''; ?>" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['phone_number']) ? htmlspecialchars($_SESSION['errors']['phone_number']) : ''; ?></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['password']) ? htmlspecialchars($_SESSION['errors']['password']) : ''; ?></span>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['confirm_password']) ? htmlspecialchars($_SESSION['errors']['confirm_password']) : ''; ?></span>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" />
+                <span class="error-message"><?php echo isset($_SESSION['errors']['image']) ? htmlspecialchars($_SESSION['errors']['image']) : ''; ?></span>
+            </div>
+            <button type="submit">Sign Up</button>
+            <p>Already have an account? <a href="login.php">Login here</a></p>
+        </form>
+    </div>
+</body>
+
+</html>

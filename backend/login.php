@@ -2,14 +2,17 @@
 session_start();
 require './dbqutipa.php';  // استيراد ملف التكوين
 
-class User {
+class User
+{
     private $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         $stmt = $this->db->prepare("SELECT user_id, name, email, password, role_id, image FROM users WHERE email = ?");
         if ($stmt) {
             $stmt->bind_param("s", $email);
@@ -23,14 +26,17 @@ class User {
     }
 }
 
-class Auth {
+class Auth
+{
     private $user;
 
-    public function __construct($user) {
+    public function __construct($user)
+    {
         $this->user = $user;
     }
 
-    public function validateInput($data) {
+    public function validateInput($data)
+    {
         $errors = ['emailErr' => '', 'passwordErr' => ''];
 
         if (empty(trim($data['email']))) {
@@ -49,7 +55,8 @@ class Auth {
         return $errors;
     }
 
-    public function login($email, $password) {
+    public function login($email, $password)
+    {
         $user = $this->user->getUserByEmail($email);
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['user_id'];
@@ -92,43 +99,125 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="../frontend/css/login signup.css">
+    <link rel="stylesheet" href="../frontend/css/login_signup.css">
     <style>
-        .error {
-            color: red;
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875em;
+            display: block;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 1em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button[type="submit"] {
+            background: #d10024;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: gray;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        a {
+            color: #d10024;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
-    <script>
-        function validateForm() {
-            let email = document.getElementById('email').value.trim();
-            let password = document.getElementById('password').value.trim();
-            let emailErr = "";
-            let passwordErr = "";
-            let valid = true;
-
-            if (email === "") {
-                emailErr = "Email is required.";
-                valid = false;
-            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-                emailErr = "Invalid email format.";
-                valid = false;
-            }
-
-            if (password === "") {
-                passwordErr = "Password is required.";
-                valid = false;
-            }
-
-            document.getElementById('emailErr').innerText = emailErr;
-            document.getElementById('passwordErr').innerText = passwordErr;
-
-            return valid;
-        }
-    </script>
 </head>
+
 <body>
     <div class="container">
         <form action="login.php" method="POST" onsubmit="return validateForm()">
@@ -136,17 +225,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>Login</h2>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
-                <span class="error" id="emailErr"><?php echo $emailErr; ?></span>
+                <span class="error-message" id="emailErr"><?php echo $emailErr; ?></span>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password">
-                <span class="error" id="passwordErr"><?php echo $passwordErr; ?></span>
+                <span class="error-message" id="passwordErr"><?php echo $passwordErr; ?></span>
             </div>
-            <button type="submit" class="btn">Login</button>
+            <button type="submit">Login</button>
             <p>Don't have an account? <a href="./signup.php">Sign up here</a></p>
-            <span class="error"><?php echo $loginErr; ?></span>
+            <span class="error-message"><?php echo $loginErr; ?></span>
         </form>
     </div>
 </body>
+
 </html>

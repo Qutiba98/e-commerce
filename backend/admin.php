@@ -3,9 +3,9 @@ require './db.php'; // Include database connection
 
 // Check user session and role
 session_start();
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('Location: login.php');
-    exit();
+    // exit();
 }
 ?>
 <!DOCTYPE html>

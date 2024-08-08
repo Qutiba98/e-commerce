@@ -10,9 +10,9 @@
 <?php
 session_start();
 
-
-$_SESSION['user_id'] = 22; // Example user ID
-$_SESSION['product_id'] = 75; // Example product ID
+// $id =$_SESSION['user_id'];
+// $_SESSION['user_id'] = 22; // Example user ID
+// $_SESSION['product_id'] = 75; // Example product ID
 
 $servername = "localhost"; 
 $username = "root"; 
@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT users.name, comments.comment_text FROM comments 
         INNER JOIN users ON comments.user_id = users.user_id
-        WHERE comments.user_id = ?";
+        WHERE comments.product_id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("i", $_SESSION['product_id']);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -56,7 +56,8 @@ if ($result->num_rows > 0) {
 } else {
     echo "No reviews found.";
 }
-$stmt->close();
+var_dump($reviews);
+// $stmt->close();
 $conn->close();
 ?>
 
