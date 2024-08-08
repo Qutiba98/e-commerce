@@ -36,41 +36,39 @@
 
 		.product-img img {
 			width: 100%;
-			height: 250px;
-			object-fit: cover;
-			/* Changed to cover for better alignment */
-		}
-
-		/* Store top filter */
-		.store-filter .store-sort {
-			float: right;
+			height: 300px; /* زيادة الطول إلى 300px للحصول على حجم أكبر */
+			object-fit: contain; /* الحفاظ على نسبة الصورة وعدم قطعها */
 		}
 
 		/* Ensure product cards align properly and have spacing */
 		.product {
-			margin-bottom: 30px;
-			/* Space between rows */
+			margin-bottom: 30px; /* مسافة بين الصفوف */
+			border: 1px solid #eaeaea; /* إضافة حدود خفيفة للبطاقات */
+			border-radius: 10px; /* حواف مستديرة للبطاقات */
+			padding: 10px; /* إضافة مساحة داخلية للبطاقات */
+			transition: box-shadow 0.3s ease; /* تأثير عند التحريك بالماوس */
 		}
 
-		.product-img img {
-			height: 250px;
-			object-fit: cover;
+		.product:hover {
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* إضافة ظل عند تمرير الماوس */
 		}
 
+		/* Adjust the container to center the content */
 		.container1 {
 			justify-content: center;
 			display: flex;
-			margin-right: 280px;
-			gap: 20px;
+			flex-wrap: wrap; /* لتوزيع العناصر بشكل متناسق */
+			gap: 20px; /* مسافة بين البطاقات */
+			padding-left: 200px; /* مسافة من جهة اليسار */
+			padding-right: 200px; /* مسافة من جهة اليمين */
 		}
 
-		/* Additional styles for responsiveness */
+		/* Responsive design adjustments */
 		@media (max-width: 768px) {
 			.product-img img {
-				height: auto;
+				height: auto; /* لجعل الصور تتناسب مع العرض */
 			}
 		}
-
 
 		.store-filter .store-sort select {
 			width: 150px;
@@ -125,24 +123,16 @@
 		<div class="container1">
 			<!-- row -->
 			<div class="row">
-				<!-- ASIDE -->
-				<div id="aside" class="col-md-3">
-					<!-- aside Widget -->
-					<div class="aside">
-						<!-- Add any aside widgets here if needed -->
-					</div>
-				</div>
-				<!-- /ASIDE -->
-
 				<!-- STORE -->
-				<div id="store" class="col-md-9">
+				<div id="store" class="col-md-12">
 					<!-- store products -->
 					<div class="row">
-
+						
 						<?php
 						// Define the page number (default is 1)
 						$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 						$page = $page > 0 ? $page : 1;
+
 
 						// Get other parameters
 						$categoryId = isset($_GET['category']) ? $_GET['category'] : '';
@@ -194,8 +184,6 @@
 										echo '<div class="product-img">';
 										echo '<img src="' . $imagePath . '" alt="Product Image">';
 										echo '<div class="product-label">';
-										echo '<span class="sale">-30%</span>';
-										echo '<span class="new">NEW</span>';
 										echo '</div>';
 										echo '</div>';
 										echo '<div class="product-body">';
@@ -203,14 +191,9 @@
 										$categoryName = isset($product['categoriesName']) ? htmlspecialchars($product['categoriesName']) : "No category";
 
 										echo '<p class="product-category">' . $categoryName . '</p>';
+										
 										echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
-										echo '<h4 class="product-price">$' . htmlspecialchars($product['price']) . ' <del class="product-old-price">$990.00</del></h4>';
 										echo '<div class="product-rating">';
-										echo '<i class="fa fa-star"></i>';
-										echo '<i class="fa fa-star"></i>';
-										echo '<i class="fa fa-star"></i>';
-										echo '<i class="fa fa-star"></i>';
-										echo '<i class="fa fa-star"></i>';
 										echo '</div>';
 										echo '<div class="product-btns">';
 										echo "<a href='http://localhost/e-commerce/backend/productpage.php?productId=" . $product['id'] . "' class='quick-view'><i class='fa fa-eye'></i><span class='tooltipp'> Quick View</span></a>";
@@ -233,34 +216,7 @@
 	<!-- /row -->
 
 
-	<!-- NEWSLETTER -->
-	<div id="newsletter" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="newsletter">
-						<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-						<form>
-							<input class="input" type="email" placeholder="Enter Your Email">
-							<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-						</form>
-						<ul class="newsletter-follow">
-							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
-							<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /NEWSLETTER -->
-
+	
 	<!-- FOOTER -->
 	<?php require '../frontend/footer.php'; ?>
 	<!-- /FOOTER -->

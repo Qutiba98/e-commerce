@@ -65,14 +65,16 @@ class Auth
             $_SESSION['role'] = $user['role_id'] == 1 ? 'admin' : 'user';
             $_SESSION['image'] = $user['image'];
 
-            if ($_SESSION['role'] == 'admin') {
-                header("Location: ./admin.php");
-            } else {
-                header("Location: index.php");
-            }
-            exit();
+            return [
+                'status' => 'success',
+                'message' => 'Login successful',
+                'role' => $_SESSION['role']
+            ];
         } else {
-            return "Invalid email or password.";
+            return [
+                'status' => 'error',
+                'message' => 'Invalid email or password.'
+            ];
         }
     }
 }
@@ -92,7 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($emailErr) && empty($passwordErr)) {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
-        $loginErr = $auth->login($email, $password);
+        $response = $auth->login($email, $password);
+        echo json_encode($response);
+        exit();
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Validation errors',
+            'emailErr' => $emailErr,
+            'passwordErr' => $passwordErr
+        ]);
+        exit();
     }
 }
 ?>
@@ -104,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="../frontend/css/login_signup.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -220,23 +233,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="container">
-        <form action="login.php" method="POST" onsubmit="return validateForm()">
+        <form id="loginForm">
             <div class="form-group">
                 <h2>Login</h2>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
-                <span class="error-message" id="emailErr"><?php echo $emailErr; ?></span>
+                <input type="email" id="email" name="email">
+                <span class="error-message" id="emailErr"></span>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password">
-                <span class="error-message" id="passwordErr"><?php echo $passwordErr; ?></span>
+                <span class="error-message" id="passwordErr"></span>
             </div>
             <button type="submit">Login</button>
             <p>Don't have an account? <a href="./signup.php">Sign up here</a></p>
-            <span class="error-message"><?php echo $loginErr; ?></span>
         </form>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from submitting
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Clear previous error messages
+            document.getElementById('emailErr').textContent = '';
+            document.getElementById('passwordErr').textContent = '';
+
+            if (!email || !password) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please enter both email and password.",
+                    customClass: {
+                        confirmButton: 'swal-custom-button' // Custom class for the OK button
+                    }
+                });
+            } else {
+                const formData = new FormData();
+                formData.append('email', email);
+                formData.append('password', password);
+
+                fetch('login.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            title: "Welcome!",
+                            text: "Login successful",
+                            icon: "success",
+                            customClass: {
+                                confirmButton: 'swal-custom-button' // Custom class for the OK button
+                            }
+                        }).then(() => {
+                            window.location.href = data.role === 'admin' ? 'admin.php' : 'index.php';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'swal-custom-button' // Custom class for the OK button
+                            }
+                        });
+                        if (data.emailErr) {
+                            document.getElementById('emailErr').textContent = data.emailErr;
+                        }
+                        if (data.passwordErr) {
+                            document.getElementById('passwordErr').textContent = data.passwordErr;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </body>
 
 </html>
+
+

@@ -1,3 +1,5 @@
+
+
 <?php
 include './dbqutipa.php';
 
@@ -127,14 +129,12 @@ class UserRegistration
                     $stmt->close();
                     $this->conn->close();
 
-                    // Redirect to login page with success message
-                    echo "
-<script>
-    alert('Account Created');
-    window.location.href = 'http://localhost/e-commerce/backend/login.php';
-</script>
-";
-                    exit(); // Ensure no further code is executed
+                    // Return success response
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Account created successfully.'
+                    ]);
+                    exit();
                 } else {
                     $this->errors['db'] = 'Error: ' . $stmt->error;
                 }
@@ -144,10 +144,11 @@ class UserRegistration
             }
         }
 
-        // Store errors in session to display on form page
-        session_start();
-        $_SESSION['errors'] = $this->errors;
-        header("Location: signup.php");
+        // Return error response
+        echo json_encode([
+            'status' => 'error',
+            'errors' => $this->errors
+        ]);
         exit();
     }
 
@@ -175,6 +176,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -182,6 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <link rel="stylesheet" href="../frontend/css/login_signup.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -301,60 +306,108 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="container">
-        <?php
-        session_start();
-        if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) :
-        ?>
-            <div class="error-messages">
-                <?php foreach ($_SESSION['errors'] as $key => $error) : ?>
-                    <div class="error-message" id="<?php echo htmlspecialchars($key); ?>Error"><?php echo htmlspecialchars($error); ?></div>
-                <?php endforeach; ?>
-            </div>
-        <?php
-            unset($_SESSION['errors']);
-        endif;
-
-        if (isset($_GET['registration']) && $_GET['registration'] == 'success') :
-        ?>
-            <div class="success-message">Registration successful! You can now <a href="login.php">login here</a>.</div>
-        <?php endif; ?>
-
         <form id="signupForm" action="./signup.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <h2>Sign Up</h2>
                 <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['name']) ? htmlspecialchars($_SESSION['errors']['name']) : ''; ?></span>
+                <input type="text" id="name" name="name" />
+                <span class="error-message" id="nameError"></span>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['email']) ? htmlspecialchars($_SESSION['errors']['email']) : ''; ?></span>
+                <input type="email" id="email" name="email" />
+                <span class="error-message" id="emailError"></span>
             </div>
             <div class="form-group">
                 <label for="phone_number">Mobile:</label>
-                <input type="text" id="phone_number" name="phone_number" value="<?php echo isset($_POST['phone_number']) ? htmlspecialchars($_POST['phone_number']) : ''; ?>" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['phone_number']) ? htmlspecialchars($_SESSION['errors']['phone_number']) : ''; ?></span>
+                <input type="text" id="phone_number" name="phone_number" />
+                <span class="error-message" id="phoneNumberError"></span>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['password']) ? htmlspecialchars($_SESSION['errors']['password']) : ''; ?></span>
+                <span class="error-message" id="passwordError"></span>
             </div>
             <div class="form-group">
                 <label for="confirm_password">Confirm Password:</label>
                 <input type="password" id="confirm_password" name="confirm_password" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['confirm_password']) ? htmlspecialchars($_SESSION['errors']['confirm_password']) : ''; ?></span>
+                <span class="error-message" id="confirmPasswordError"></span>
             </div>
             <div class="form-group">
                 <label for="image">Upload Image:</label>
                 <input type="file" id="image" name="image" accept="image/*" />
-                <span class="error-message"><?php echo isset($_SESSION['errors']['image']) ? htmlspecialchars($_SESSION['errors']['image']) : ''; ?></span>
+                <span class="error-message" id="imageError"></span>
             </div>
             <button type="submit">Sign Up</button>
             <p>Already have an account? <a href="login.php">Login here</a></p>
         </form>
     </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from submitting
+
+            // Clear previous error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('phoneNumberError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
+            document.getElementById('imageError').textContent = '';
+
+            const formData = new FormData(this);
+
+            fetch('./signup.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: "Welcome!",
+                        text: data.message,
+                        icon: "success",
+                        customClass: {
+                            confirmButton: 'swal-custom-button' // Custom class for the OK button
+                        }
+                    }).then(() => {
+                        window.location.href = 'login.php';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please fix the errors and try again.",
+                        customClass: {
+                            confirmButton: 'swal-custom-button' // Custom class for the OK button
+                        }
+                    });
+                    if (data.errors) {
+                        if (data.errors.name) {
+                            document.getElementById('nameError').textContent = data.errors.name;
+                        }
+                        if (data.errors.email) {
+                            document.getElementById('emailError').textContent = data.errors.email;
+                        }
+                        if (data.errors.phone_number) {
+                            document.getElementById('phoneNumberError').textContent = data.errors.phone_number;
+                        }
+                        if (data.errors.password) {
+                            document.getElementById('passwordError').textContent = data.errors.password;
+                        }
+                        if (data.errors.confirm_password) {
+                            document.getElementById('confirmPasswordError').textContent = data.errors.confirm_password;
+                        }
+                        if (data.errors.image) {
+                            document.getElementById('imageError').textContent = data.errors.image;
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 
 </html>
