@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        width: 80%;
+        max-width: 600px; /* Set a maximum width */
+        margin: 0 auto;
+      }
+
+      h2 {
+        color: #15161d;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        background: #fff;
+        padding: 24px;
+        margin: 0 auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        max-height: 90vh; /* Ensure form fits within viewport height */
+        overflow-y: hidden; /* Add scroll if content overflows */
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      form:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #15161d;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="password"],
+      .form-group input[type="file"],
+      .form-group select {
+        width: 97%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .form-group input[type="text"]:focus,
+      .form-group input[type="email"]:focus,
+      .form-group input[type="password"]:focus {
+        border-color: #d10024;
+        box-shadow: 0 0 5px rgba(209, 0, 36, 0.5);
+        outline: none;
+      }
+
+      .btn {
+        display: inline-block;
+        background: #d10024;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .btn:hover {
+        background: #b1001e;
+        transform: scale(1.05);
+      }
+
+      .btn:active {
+        transform: scale(0.95);
+      }
+
+      p {
+        text-align: center;
+        color: #15161d;
+        margin-top: 15px;
+      }
+
+      .error-message {
+        color: #d10024;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+      }
+
+      a {
+        color: #d10024;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease, text-decoration 0.3s ease;
+      }
+
+      a:hover {
+        color: #b1001e;
+        text-decoration: underline;
+      }
+
+      img {
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      img:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form
+        name="signupForm"
+        action="signup.php"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="return validateForm();"
+      >
+        <div class="form-group">
+          <h2>Sign Up</h2>
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" />
+          <span id="nameError" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" />
+          <span id="emailError" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="phone_number">Mobile:</label>
+          <input type="text" id="phone_number" name="phone_number" />
+          <span id="mobileError" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" />
+          <span id="passwordError" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            required
+          />
+          <span id="confirmPasswordError" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="image">Upload Image:</label>
+          <input type="file" id="image" name="image" accept="image/*" />
+        </div>
+        <button type="submit" class="btn">Sign Up</button>
+        <p>Already have an account? <a href="login.php">Login here</a></p>
+      </form>
+
+      <div id="successMessage" class="success-message"></div>
+    </div>
+    <script></script>
+  </body>
+</html>

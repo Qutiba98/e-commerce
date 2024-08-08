@@ -1,0 +1,219 @@
+/* Base Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4; /* Light gray background for the page */
+}
+
+.discount-section {
+  background-color: #fff; /* White background for the discount section */
+  padding: 40px 0;
+  text-align: center;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+h1 {
+  color: #d10024; /* Red color for the title */
+  margin-bottom: 30px;
+  font-size: 24px; /* Adjusted font size for the title */
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust spacing between cards as needed */
+}
+
+.card {
+  flex: 1 1 calc(50% - 20px); /* Takes 50% width minus gap to fit two cards per line */
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.card-content h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #d10024; /* Red color for product name */
+}
+
+.card-content .price {
+  font-size: 14px; /* Adjusted font size for the original price */
+  color: #333; /* Dark gray for the original price */
+  margin: 0;
+  text-decoration: line-through;
+}
+
+.card-content .discount {
+  font-size: 14px; /* Adjusted font size for discount amount */
+  color: #d10024; /* Red color for discount amount */
+  margin: 8px 0; /* Reduced margin */
+}
+
+.card-content .sale-price {
+  font-size: 16px; /* Adjusted font size for the discounted price */
+  color: #d10024; /* Red color for the discounted price */
+  font-weight: bold;
+  margin: 8px 0; /* Reduced margin */
+}
+
+.card-content .button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #d10024; /* Red color for the button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px; /* Adjusted font size for button */
+  transition: background-color 0.3s;
+}
+
+.card-content .button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+#top-header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #1e1f29;
+}
+
+.header-links li {
+  display: inline-block;
+  margin-right: 15px;
+  font-size: 12px;
+}
+
+.header-links li:last-child {
+  margin-right: 0px;
+}
+
+.header-links li a {
+  color: #fff;
+}
+
+.header-links li a:hover {
+  color: #d10024;
+}
+
+.header-links li i {
+  color: #d10024;
+  margin-right: 5px;
+}
+
+#header {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #15161d;
+}
+
+.header-logo {
+  float: left;
+}
+
+.header-logo .logo img {
+  display: block;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .card {
+    flex: 1 1 calc(33.33% - 20px); /* 3 cards per line on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 calc(50% - 20px); /* 2 cards per line on smaller screens */
+  }
+
+  .grid {
+    gap: 15px; /* Adjust spacing for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex: 1 1 100%; /* 1 card per line on very small screens */
+  }
+
+  .card-content h3 {
+    font-size: 16px; /* Adjust font size for smaller screens */
+  }
+
+  .card-content .price,
+  .card-content .discount,
+  .card-content .sale-price {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  .card-content .button {
+    font-size: 14px; /* Adjust font size for button on smaller screens */
+  }
+}
+/* ---------------------------------------- */
+
+
+/* Main Header Styles */
+#header {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #15161d;
+}
+
+.header-ctn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-icon a,
+.cart-icon a {
+  color: white;
+ 
+  font-size: 16px;
+  flex-direction: column;
+  align-items:normal;
+
+}
+
+.homestyle{
+   
+    margin-left: 1.6rem;
+    margin-top: 15px;
+   
+    display: block;
+    font-size: 18px;
+
+}
+
+.qty {
+  background-color: #d10024;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 12px;
+  margin-left: 5px;
+}
