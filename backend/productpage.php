@@ -1,13 +1,9 @@
-
-
 <?php
 include 'db.php';
 session_start();
-// var_dump($_SESSION['user_id']);
-// var_dump($_SESSION['products']);
-// var_dump($_SESSION['qua']);
+
 $id = $_GET['productId'] ? $_GET['productId'] : "";
-// var_dump ($_GET['productId']);
+$isInDatabase = false;
 $_SESSION['currentProductId'] = $_GET['productId'];
 $isInDatabase =false;
 // Initialize the session variable if it doesn't exist
@@ -32,9 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         'isInDatabase' => $isInDatabase
     ];
 
-
     $productExists = false;
-
 
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
@@ -52,9 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     // exit();
 }
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -99,9 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             border-radius: 13px;
             border: 1px solid red;
             box-shadow: 0px 0px 19px -8px red;
-
-            
-               }
+        }
 
         .reviews-title {
             font-size: 24px;
@@ -180,17 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             cursor: pointer;
         }
 
-        /* .product-details{
-            font-size: 18px;
-        } */
-
-
-        /* 
-.product-image{
-    width: 320px !important;
-} */
-
-
         .qty-btn {
             display: inline-block;
             width: 30px;
@@ -255,12 +233,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 
 <body>
 
-
     <?php
     include './nav&footr/nav.php';
     ?>
-
-
 
     <!-- SECTION -->
     <div class="section">
@@ -284,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
-                        <form action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId'] ?>" method="POST">
+                        <form id="addToCartForm" action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId'] ?>" method="POST">
                             <div class="quantity">
                                 <p class="qty-btn" onclick="decreaseQuantity()">-</p>
                                 <input type="text" id="quantity" name="qua" value="1">
@@ -296,10 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                             <br>
                             <!-- Add to Cart Button -->
                             <div class="product-actions">
-                                <input type="submit"
-                                    class="btn"
-                                    style="background-color: #C9302C; border-color: #C9302C; color: #fff;"
-                                    value="Add to Cart">
+                                <input type="submit" class="btn" style="background-color: #C9302C; border-color: #C9302C; color: #fff;" value="Add to Cart">
                             </div>
                         </form>
                         <!-- /Add to Cart Button -->
@@ -308,8 +280,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                 <!-- /Product Details -->
             </div>
             <!-- /row -->
-            <?php
-            // session_start();
 
             // $_SESSION['user_id'] = 32; // Example user ID
             $_SESSION['product_id'] = $_GET['productId']; // Example product ID
@@ -369,6 +339,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                         <div class="customer-reviews">
                             <h3 class="reviews-title">Customer Reviews</h3>
                             <div class="reviews">
+                                <?php
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "";
+                                $dbname = "e-commerce";
+
+                                $conn = new mysqli($servername, $username, $password, $dbname);
+                                $user_id = $_SESSION['user_id'];
+
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
+                                    $product_id = $_SESSION['product_id'];
+                                    $comment_text = $_POST['comment_text'];
+                                    $name = $_SESSION['name'];
+
+                                    if ($product_id && $comment_text && $user_id) {
+                                        $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
+                                        $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
+                                        $stmt->execute();
+                                        $stmt->close();
+                                    }
+                                }
+
+                                $sql = "SELECT users.name, comments.comment_text FROM comments 
+                                        INNER JOIN users ON comments.user_id = users.user_id
+                                        WHERE comments.product_id = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("i", $_SESSION['product_id']);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $reviews = [];
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        $reviews[] = $row;
+                                    }
+                                }
+                                ?>
+
                                 <?php foreach ($reviews as $review): ?>
                                     <div class="review">
                                         <div class="review-author">
@@ -388,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                         <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn" style="background: #C9302C; color: white;">Submit Review</button>
-                                    </form>
+                                </form>
                             </div>
                             <!-- /Add Review Form -->
                         </div>
@@ -506,6 +518,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     <script src="../frontend/js/nouislider.min.js"></script>
     <script src="../frontend/js/jquery.zoom.min.js"></script>
     <script src="../frontend/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function decreaseQuantity() {
@@ -535,20 +548,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                 title: 'Success!',
                                 text: data.message,
                                 icon: 'success',
-                                confirmButtonText: 'OK',
-                                customClass: {
-                                    confirmButton: 'swal-custom-button'
-                                }
+                                confirmButtonText: 'OK'
                             });
                         } else {
                             Swal.fire({
                                 title: 'Error!',
                                 text: 'There was a problem adding the product to the cart.',
                                 icon: 'error',
-                                confirmButtonText: 'OK',
-                                customClass: {
-                                    confirmButton: 'swal-custom-button'
-                                }
+                                confirmButtonText: 'OK'
                             });
                         }
                     },
@@ -557,10 +564,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                             title: 'Error!',
                             text: 'There was a problem with the server. Please try again later.',
                             icon: 'error',
-                            confirmButtonText: 'OK',
-                            customClass: {
-                                confirmButton: 'swal-custom-button'
-                            }
+                            confirmButtonText: 'OK'
                         });
                     }
                 });
