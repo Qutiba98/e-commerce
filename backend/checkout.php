@@ -5,6 +5,7 @@ if (empty($_SESSION['user_id'])) {
  header('Location: http://localhost/e-commerce/backend/login.php');
     exit(); 
 }
+$_SESSION['cart_id']=$_SESSION['user_id'];
 // echo $_SESSION['total'];
 // Enable error reporting for debugging
 $_SESSION['emptyCart'] = false;
@@ -81,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert order into database
         try {
             // Prepare and execute the INSERT query
-            $sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, zip_code, telephone, amount, cart_id) 
-                    VALUES (CURRENT_TIMESTAMP(), :firstName, :lastName, :email, :address, :city, :country, :zipCode, :tel, :amount, :cartId)";
+            $sql = "INSERT INTO payment_recipe (payment_date, first_name, last_name, email, address, city, country, telephone, amount, cart_id) 
+                    VALUES (CURRENT_TIMESTAMP(), :firstName, :lastName, :email, :address, :city, :country,  :tel, :amount, :cartId)";
             $stmt = $conn->prepare($sql);
             $stmt->execute([
                 ':firstName' => $firstName,
@@ -91,10 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':address' => $address,
                 ':city' => $city,
                 ':country' => $country,
-                ':zipCode' => $zipCode,
                 ':tel' => $tel,
                 ':amount' => $_SESSION['total'],
-                ':cartId' => 21 // Adjust or retrieve dynamically
+                ':cartId' => $_SESSION['cart_id'] // Adjust or retrieve dynamically
             ]);
         
             // Prepare and execute the DELETE query

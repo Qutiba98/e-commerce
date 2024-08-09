@@ -86,9 +86,8 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
         unset($_SESSION['products'][$key]);
         $isEmptySesstion = false;
     }
-
     // جلب بيانات السلة من قاعدة البيانات
-    if ($_SESSION['user_id']) {
+    if (isset($_SESSION['user_id'])) {
         $cartFromDatabase = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
         $cartData = json_decode($cartFromDatabase, true);
 
@@ -100,24 +99,29 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
                 $totalPrice += $quantity * $price;
             }
         }
-
         // تطبيق الكود الخصم إذا كان موجودًا
         $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
         $stmt->bindParam(':discountCode', $discountCode);
+        $_SESSION['totalPriceAfter'] = isset($_SESSION['totalPriceAfter']) ? $_SESSION['totalPriceAfter'] :"";
 
         if ($stmt->execute()) {
             $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($precantage !== false) {
                 $discountAmount = ($precantage['precantage'] / 100) * $totalPrice;
-                $totalPriceAfter = $totalPrice - $discountAmount;
-                $_SESSION['total'] = $totalPriceAfter;
-            } else {
+                $totalPriceAfter  = $totalPrice- $discountAmount;
+                $_SESSION['totalPriceAfter'] = $totalPriceAfter;
+              } else {
+                
                 $dicountErr = "No discount found for the provided code.";
+              }
             }
+          }
+          $cartFromDatabase = json_decode($cartFromDatabase, true);
         }
-    }
-    $cartFromDatabase = json_decode($cartFromDatabase, true);
-}
+        echo $_SESSION['totalPriceAfter'];
+// unset( $_SESSION['totalPriceAfter']);
+
+
 
 if (isset($_SESSION['products'])) {
     $_SESSION['products'] = array_values($_SESSION['products']);
@@ -149,7 +153,8 @@ if (isset($_SESSION['products'])) {
     .h-100 { height: auto !important; }
     .totalPriceStyle {
       color: black;
-      font-size: 14px;
+      font-weight: bold;
+      font-size: 18px;
       background-color: white;
       padding: 10px 20px;
       border-radius: 5px;
@@ -375,6 +380,7 @@ if (isset($_SESSION['products'])) {
             <?php endif; ?>
             <div class="card mb-4">
               <form action="../backend/cart.php" method="POST">
+                <?php if($registerd): ?>
               <div class="card-body p-4 d-flex flex-row">
                 <div data-mdb-input-init class="form-outline flex-fill">
                     <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
@@ -382,21 +388,23 @@ if (isset($_SESSION['products'])) {
                 </div>
                 <button type="submit" class="btn btn-warning btn-lg ms-3" style="width: 35%; background-color:#d10024">Apply</button>
               </div>
+              <?php endif; ?>
               <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
               <?php if (!empty($totalPriceAfter)) : ?>
-                <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
+                <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2)?></div>
                 <?php endif; ?>
               </form>
             <?php if($registerd): ?>
-              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
-              <input type="text" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
-              <input type="text" name="beforeDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo number_format($totalPrice, 2)?></span></div>
+              <!-- <div class="totalPriceStyle">discounted price: <span id="total-price"><?php echo $totalPriceAfter ?></span></div> -->
+              <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+              <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
             </div>
             <?php endif; ?>
             <?php if(!$registerd): ?>
-              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $_SESSION['total'] ?></span></div>
-              <input type="text" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
-              <input type="text" name="beforeDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+              <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+              <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
             </div>
             <?php endif; ?>
           <div class="card">
