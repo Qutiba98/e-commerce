@@ -380,7 +380,7 @@ if (isset($_SESSION['products'])) {
                     <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
                     <label class="form-label" for="form1">Discount code</label>
                 </div>
-                <button type="submit" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
+                <button type="submit" class="btn btn-warning btn-lg ms-3" style="width: 35%; background-color:#d10024">Apply</button>
               </div>
               <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
               <?php if (!empty($totalPriceAfter)) : ?>
@@ -390,19 +390,19 @@ if (isset($_SESSION['products'])) {
             <?php if($registerd): ?>
               <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
               <input type="text" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
-              <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
+              <input type="text" name="beforeDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
             </div>
             <?php endif; ?>
             <?php if(!$registerd): ?>
               <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $_SESSION['total'] ?></span></div>
-              <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
-              <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
+              <input type="text" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+              <input type="text" name="beforeDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
             </div>
             <?php endif; ?>
           <div class="card">
             <div class="card-body">
               <a href="./checkout.php">
-                <button href="" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay">Check out</button>
+                <button href="" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay"style=" background-color:#d10024">Check out</button>
               </a>
             </div>
           </div>
