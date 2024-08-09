@@ -9,7 +9,8 @@ session_start();
 $id = $_GET['productId'] ? $_GET['productId'] : "";
 // var_dump ($_GET['productId']);
 $_SESSION['currentProductId'] = $_GET['productId'];
-// // Initialize the session variable if it doesn't exist
+$isInDatabase =false;
+// Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
@@ -47,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         $_SESSION['products'][] = $productInfo;
     }
 
-    echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
-    exit();
+    // echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
+    // exit();
 }
 ?>
 
@@ -323,8 +324,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// alert if not logged in  ------------------------------------------------------------------------------------
+            if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['user_id']) {
                 $product_id = $_SESSION['product_id'];
                 $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
                 $name = $_SESSION['name'];
@@ -356,9 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                 while ($row = $result->fetch_assoc()) {
                     $reviews[] = $row;
                 }
-            } else {
-                echo "No reviews found.";
-            }
+            } 
             // $reviews = json_encode($reviews);    
 
             // print_r ($reviews[0]['name']);

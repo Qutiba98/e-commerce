@@ -1,5 +1,7 @@
 <?php
+// session_start();
 // Fetch categories from API
+$_SESSION['user_id']  = isset($_SESSION['user_id'] ) ? $_SESSION['user_id']  :"";
 $categoriesJson = file_get_contents("http://localhost/e-commerce/backend/categories_API/read.php");
 $categories = json_decode($categoriesJson, true);
 
@@ -54,7 +56,7 @@ if (isset($categories['data'])) {
           if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :  ?>
             <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
           <?php endif; ?>
-          <?php if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])) :  ?>
+          <?php if (empty($_SESSION['user_id'])) :  ?>
             <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
           <?php endif; ?>
           <li><a href="http://localhost/e-commerce/backend/userProfile/veiw.php?user_id=<?php echo $_SESSION['user_id'] ?>"><i class="fa fa-user-o"></i> My Account</a></li>
