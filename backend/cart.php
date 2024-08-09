@@ -128,20 +128,18 @@ if (isset($_SESSION['products']))
 
 <!DOCTYPE html>
 <html lang="en" style="font-size: 14px">
-
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  
   <style>
     #bigFont {
       font-size: 1rem !important;
     }
 
     .empty-cart {
-      /* color: #d10024; Red color */
-      /* background-color: #15161d; Dark blue background */
-      /* border:1px solid black; */
       padding: 20px;
       border-radius: 10px;
       text-align: center;
@@ -154,70 +152,100 @@ if (isset($_SESSION['products']))
       align-items: center;
       justify-content: center;
     }
-  </style>
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-  <title>Electro - HTML Ecommerce Template</title>
-  <!-- Google Fonts Roboto -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet" />
-
-  <!-- Bootstrap -->
-  <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
-
-  <!-- Slick -->
-  <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
-  <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
-  <!-- MDB -->
-  <link rel="stylesheet" href="../frontend/css/mdb.min.css" />
-  <!-- nouislider -->
-  <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
-
-  <!-- Font Awesome Icon -->
-  <link rel="stylesheet" href="../frontend/css/font-awesome.min.css" />
-
-  <!-- Custom stlylesheet -->
-  <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
-
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  <style>
     .h-100 {
       height: auto !important;
     }
 
     .totalPriceStyle {
       color: black;
-      /* Red color */
       font-size: 14px;
-      /* Font size */
       background-color: white;
-      /* Dark blue background */
       padding: 10px 20px;
-      /* Padding around the text */
       border-radius: 5px;
-      /* Rounded corners */
       margin-top: 20px;
-      /* Margin at the top */
-
     }
 
     .emptyCartImage {
       width: 50px;
     }
-  </style>
-</head>
 
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-outline {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .form-control {
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-controls button {
+      background-color: #f8f9fa;
+      border: 1px solid #ced4da;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .quantity-controls input {
+      text-align: center;
+      width: 50px;
+      border: 1px solid #ced4da;
+      margin: 0 5px; /* Add space between the input and buttons */
+    }
+
+    .quantity-controls button:hover {
+      background-color: #e9ecef;
+    }
+
+    .btn-red {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+    }
+
+    .btn-red:hover {
+      background-color: #c82333;
+    }
+  </style>
+
+  <title>Electro - HTML Ecommerce Template</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet" />
+  <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
+  <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
+  <link rel="stylesheet" href="../frontend/css/mdb.min.css" />
+  <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
+  <link rel="stylesheet" href="../frontend/css/font-awesome.min.css" />
+  <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
 <body>
   <header>
-    <!-- TOP HEADER -->
     <div id="top-header">
       <div class="container">
         <ul class="header-links pull-left">
@@ -236,15 +264,9 @@ if (isset($_SESSION['products']))
         </ul>
       </div>
     </div>
-    <!-- /TOP HEADER -->
-
-    <!-- MAIN HEADER -->
     <div id="header">
-      <!-- container -->
       <div class="container">
-        <!-- row -->
         <div class="row">
-          <!-- LOGO -->
           <div class="col-md-3">
             <div class="header-logo">
               <a href="#" class="logo">
@@ -252,9 +274,6 @@ if (isset($_SESSION['products']))
               </a>
             </div>
           </div>
-          <!-- /LOGO -->
-
-          <!-- SEARCH BAR -->
           <div class="col-md-6">
             <div class="header-search">
               <form>
@@ -272,21 +291,13 @@ if (isset($_SESSION['products']))
               </form>
             </div>
           </div>
-          <!-- /SEARCH BAR -->
-
-          <!-- ACCOUNT -->
           <div class="col-md-3 clearfix">
             <div class="header-ctn">
-              <!-- Wishlist -->
               <div>
                 <a href="#">
                   <span></span>
                 </a>
               </div>
-              <!-- /Wishlist -->
-
-
-              <!-- Cart -->
               <div>
                 <a href="./cart.php">
                   <i class="fa fa-shopping-cart"></i>
@@ -294,39 +305,20 @@ if (isset($_SESSION['products']))
                   <div class="qty">3</div>
                 </a>
               </div>
-              <!-- /Cart -->
-
-
-
-
-              <!-- Menu Toggle -->
               <div class="menu-toggle">
                 <a href="#">
                   <i class="fa fa-bars"></i>
                   <span>Menu</span>
                 </a>
               </div>
-              <!-- /Menu Toggle -->
             </div>
           </div>
-          <!-- /ACCOUNT -->
         </div>
-        <!-- /row -->
       </div>
-      <!-- /container -->
     </div>
-    <!-- /MAIN HEADER -->
   </header>
-  <!-- /HEADER -->
-
-
-
-
-  <!-- BREADCRUMB -->
   <div id="breadcrumb" class="section">
-    <!-- container -->
     <div class="container">
-      <!-- row -->
       <div class="row">
         <div class="col-md-12">
           <ul class="breadcrumb-tree">
@@ -336,25 +328,14 @@ if (isset($_SESSION['products']))
           </ul>
         </div>
       </div>
-      <!-- /row -->
     </div>
-    <!-- /container -->
   </div>
-  <!-- /BREADCRUMB -->
-
-
-
-
-
-  <!-- start of cart des _______________________________________________________________________ -->
-
   <section class="h-100">
     <div class="container h-100 py-5">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-10">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-normal mb-0">Shopping Cart</h3>
-
           </div>
           <form action="http://localhost/e-commerce/backend/cart.php" method="POST">
             <?php if (!$registerd) : ?>
@@ -370,20 +351,20 @@ if (isset($_SESSION['products']))
                         <p class="lead fw-normal mb-2"><?php echo $row['name'] ?></p>
                         <p>
                           <span class="text-muted">description: <?php echo $row['description'] ?> </span>
-
                         </p>
                       </div>
-                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex quantity-controls">
+                        <button type="button" class="btn-decrease">-</button>
+                        <input type="number" class="form-control quantity" value="<?php echo $row['quantity'] ?>" min="1">
+                        <button type="button" class="btn-increase">+</button>
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                        <h5 class="mb-0">$<?php echo $row['price'] ?> </h5>
+                        <h5 class="mb-0 price" data-price="<?php echo $row['price'] ?>">$<?php echo $row['price'] * $row['quantity'] ?> </h5>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <?php
-                        if ($registerd) : ?>
-                          <a href="http://localhost/e-commerce/backend/cartapi/deleteFromCart.php?product_id=<?php echo $row['productId'] ?>" class="text-danger"><i class="fas fa-trash fa-lg">
-                            </i>
-                          <?php endif; ?></a>
+                        <?php if ($registerd) : ?>
+                          <a href="http://localhost/e-commerce/backend/cartapi/deleteFromCart.php?product_id=<?php echo $row['productId'] ?>" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                        <?php endif; ?>
                       </div>
                     </div>
                   </div>
@@ -401,29 +382,19 @@ if (isset($_SESSION['products']))
                         <p class="lead fw-normal mb-2"><?php echo $row['name'] ?></p>
                         <p>
                           <span class="text-muted">description: <?php echo $row['description'] ?> </span>
-
                         </p>
                       </div>
-                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                        <span class="text-muted">Quantity: <?php echo $row['quantity'] ?> </span>
-
+                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex quantity-controls">
+                        <button type="button" class="btn-decrease">-</button>
+                        <input type="number" class="form-control quantity" value="<?php echo $row['quantity'] ?>" min="1">
+                        <button type="button" class="btn-increase">+</button>
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                        <h5 class="mb-0"><?php
-                                          if ($row['quantity'] > 0)
-                                            echo $row['price'] * ($row['quantity']) . "$" ?>
-                          <?php
-                          if ($row['quantity'] == 0)
-                            echo $row['price'] . "$"  ?> </h5>
-
+                        <h5 class="mb-0 price" data-price="<?php echo $row['price'] ?>">$<?php echo $row['price'] * $row['quantity'] ?> </h5>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <?php
-                        if ($registerd) : ?>
-                          <a href="http://localhost/e-commerce/backend/cartapi/deleteFromCart.php?productId=<?php echo $row['productId'] ?>" class="text-danger"><i class="fas fa-trash fa-lg">
-
-                            </i>
-                          </a>
+                        <?php if ($registerd) : ?>
+                          <a href="http://localhost/e-commerce/backend/cartapi/deleteFromCart.php?productId=<?php echo $row['productId'] ?>" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                         <?php endif; ?>
                       </div>
                     </div>
@@ -431,95 +402,118 @@ if (isset($_SESSION['products']))
                 </div>
               <?php endforeach; ?>
             <?php endif; ?>
-            <!-- <?php
-                  if ($registerd) : ?>
-            <?php
-                    if ($isEmptyDatabase && !$isEmptySesstion) : ?>
-                  <div class="empty-cart">
-                    <img class="emptyCartImage" src="../backend/images/emptycart.png" alt="">empty cart
-                  </div>
-                    <?php endif; ?>
-                    <?php endif; ?>
-            <?php
-            if (!$registerd) : ?>
-            <?php
-              if ($isEmptyDatabase) : ?>
-                  <div class="empty-cart">
-                    <img class="emptyCartImage" src="../backend/images/emptycart.png" alt="">empty cart
-                  </div>
-                    <?php endif; ?>
-                    <?php endif; ?> -->
-
             <div class="card mb-4">
               <div class="card-body p-4 d-flex flex-row">
                 <div data-mdb-input-init class="form-outline flex-fill">
                   <form action="../backend/cart.php" method="POST">
-
-
                     <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
-                    <label class="form-label" for="form1">Discound code</label>
+                    <label class="form-label" for="form1">Discount code</label>
                 </div>
-                <button type="submit" class="btn btn-outline-warning btn-lg ms-3">
-                  Apply
-                </button>
-          </form>
-        </div>
-        <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
-        <?php
-        if (!empty($totalPriceAfter)) : ?>
-          <div class="totalPriceStyle "> total after discount :
-            <?php echo number_format($totalPriceAfter, 2) ?>
+                <button type="submit" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
+              </form>
+            </div>
+            <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
+            <?php if (!empty($totalPriceAfter)) : ?>
+              <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
+            <?php endif; ?>
+            <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+            <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
+            <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
           </div>
-        <?php endif; ?>
-        <div class="totalPriceStyle">Total price :
-          <?php echo $totalPrice ?>
-        </div>
-        <!-- hidden input to pass the values only  -->
-        <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
-        <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
-
-
-
-
-
-        <!-- /hidden input to pass the values only  -->
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <a href="./checkout.php">
-            <button href="./admin_create_user.php" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay"> check out </button>
-          </a>
-
+          <div class="card">
+            <div class="card-body">
+              <a href="./checkout.php">
+                <button href="./admin_create_user.php" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay">Check out</button>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
-    </form>
   </section>
-  <!-- end of cart des _______________________________________________________________________ -->
-
-
-
-  <!-- FOOTER -->
-  <?php
-
-  require '../frontend/footer.php';
-
-  ?>
-  <!-- /FOOTER -->
-
-  <!-- jQuery Plugins -->
+  <footer>
+    <!-- Footer content -->
+  </footer>
   <script src="../frontend/js/jquery.min.js"></script>
   <script src="../frontend/js/bootstrap.min.js"></script>
   <script src="../frontend/js/slick.min.js"></script>
   <script src="../frontend/js/nouislider.min.js"></script>
   <script src="../frontend/js/jquery.zoom.min.js"></script>
-  <!-- MDB -->
   <script type="text/javascript" src="../frontend/js/mdb.umd.min.js"></script>
-  <!--  -->
   <script src="js/main.js"></script>
-</body>
+  <?php
+  $alertMessage = "";
+  $alertType = "error";
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['discountCode'])) {
+    $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
+    $stmt->bindParam(':discountCode', $discountCode);
+    if ($stmt->execute()) {
+        $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($precantage !== false) {
+            $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
+            $_SESSION['total'] = $totalPriceAfter;
+            $alertMessage = "Discount applied successfully! Total after discount: $" . number_format($totalPriceAfter, 2);
+            $alertType = "success";
+        } else {
+            $alertMessage = "No discount found for the provided code.";
+            $alertType = "error";
+        }
+    }
+  }
+  ?>
+  <section class="cart-section">
+    <!-- Cart content -->
+  </section>
+  <script>
+    <?php if (!empty($alertMessage)): ?>
+        Swal.fire({
+            icon: '<?php echo $alertType; ?>',
+            title: '<?php echo $alertType === "success" ? "Success" : "Error"; ?>',
+            text: '<?php echo $alertMessage; ?>',
+            confirmButtonText: 'OK',
+            customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                icon: 'swal2-icon',
+                confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel'
+            }
+        });
+    <?php endif; ?>
 
+    // JavaScript to handle quantity change and update price
+    $(document).ready(function() {
+      $('.btn-increase').click(function() {
+        var $input = $(this).siblings('.quantity');
+        var quantity = parseInt($input.val());
+        $input.val(quantity + 1);
+        updatePrice($(this));
+      });
+
+      $('.btn-decrease').click(function() {
+        var $input = $(this).siblings('.quantity');
+        var quantity = parseInt($input.val());
+        if (quantity > 1) {
+          $input.val(quantity - 1);
+          updatePrice($(this));
+        }
+      });
+
+      function updatePrice($element) {
+        var $row = $element.closest('.row');
+        var price = parseFloat($row.find('.price').data('price'));
+        var quantity = parseInt($row.find('.quantity').val());
+        var total = price * quantity;
+        $row.find('.price').text('$' + total.toFixed(2));
+
+        // Update total price
+        var totalPrice = 0;
+        $('.price').each(function() {
+          totalPrice += parseFloat($(this).text().replace('$', ''));
+        });
+        $('#total-price').text(totalPrice.toFixed(2));
+      }
+    });
+  </script>
+</body>
 </html>

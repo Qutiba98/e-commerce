@@ -1,6 +1,9 @@
+
+
 <?php
 include 'db.php';
 session_start();
+<<<<<<< HEAD
 // var_dump($_SESSION['user_id']);
 // var_dump($_SESSION['products']);
 // var_dump($_SESSION['qua']);
@@ -8,16 +11,23 @@ $id = $_GET['productId'] ? $_GET['productId'] : "";
 // var_dump ($_GET['productId']);
 $_SESSION['currentProductId'] = $_GET['productId'];
 // // Initialize the session variable if it doesn't exist
+=======
+
+$id = $_GET['productId'] ? $_GET['productId'] : "";
+$_SESSION['currentProductId'] = $id;
+
+// Initialize the session variable if it doesn't exist
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
-$isInDatabase = false;
-$quantity = isset($_POST['qua']) ? $_POST['qua'] : 0;
 
 $input = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=$id");
 $result = json_decode($input, true);
+$showImage = $result['image'];
 
-if ($result && isset($_POST['qua'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
+    $quantity = $_POST['qua'];
     $productId = $result['id'];
     $productInfo = [
         'id' => $productId,
@@ -26,6 +36,7 @@ if ($result && isset($_POST['qua'])) {
         'description' => $result['description'],
         'image' => $result['image'],
         'quantity' => $quantity,
+<<<<<<< HEAD
         'isInDatabase' => $isInDatabase
     ];
 
@@ -33,26 +44,29 @@ if ($result && isset($_POST['qua'])) {
     $productExists = false;
 
 
+=======
+    ];
+
+    $productExists = false;
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
             $product['quantity'] += $quantity;
-            // $_SESSION['quaProduct'][] = $quantity;
             $productExists = true;
             break;
         }
     }
 
-    // Add the product if it doesn't exist
     if (!$productExists) {
         $_SESSION['products'][] = $productInfo;
     }
+
+    echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
+    exit();
 }
-
-// Debug: Display the session products array
-// print_r($_SESSION['products']);
-
-$showImage = $result['image'];
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -81,8 +95,18 @@ $showImage = $result['image'];
     <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stylesheet -->
+<<<<<<< HEAD
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
     <style>
+=======
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Your existing CSS */
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .quantity {
             display: flex;
             align-items: center;
@@ -149,6 +173,7 @@ $showImage = $result['image'];
         .form-control {
             border-radius: 5px;
         }
+<<<<<<< HEAD
 
         .btn-primary {
             background-color: #D10024;
@@ -158,6 +183,17 @@ $showImage = $result['image'];
             font-size: 16px;
         }
 
+=======
+
+        .btn-primary {
+            background-color: #D10024;
+            border-color: black;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .quantity input {
             text-align: center;
             width: 50px;
@@ -176,6 +212,7 @@ $showImage = $result['image'];
             cursor: pointer;
         }
 
+<<<<<<< HEAD
         /* .product-details{
             font-size: 18px;
         } */
@@ -187,6 +224,8 @@ $showImage = $result['image'];
 } */
 
 
+=======
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .qty-btn {
             display: inline-block;
             width: 30px;
@@ -197,10 +236,14 @@ $showImage = $result['image'];
             cursor: pointer;
             border: 1px solid #d10024;
             border-radius: 5px;
-            background-color: #15161d;
-            color: white;
+            background-color: black;
+            color: black;
             transition: background-color 0.3s, transform 0.3s;
+<<<<<<< HEAD
             margin: 0
+=======
+            margin :0
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         }
 
         .qty-btn:hover {
@@ -223,6 +266,7 @@ $showImage = $result['image'];
             outline: none;
             border-color: #d10024;
         }
+<<<<<<< HEAD
 
         .quantity {
             display: flex;
@@ -246,10 +290,13 @@ $showImage = $result['image'];
             justify-content: center;
             cursor: pointer;
         }
+=======
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     </style>
 </head>
 
 <body>
+<<<<<<< HEAD
 
 
     <?php
@@ -257,6 +304,9 @@ $showImage = $result['image'];
     ?>
 
 
+=======
+    <?php include './nav&footr/nav.php'; ?>
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
 
     <!-- SECTION -->
     <div class="section">
@@ -274,16 +324,17 @@ $showImage = $result['image'];
 
                 <!-- Product Details -->
                 <div class="col-md-6">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
                     <div class="product-details">
-
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
-
                         <h3 class="product-price">$<?php echo $result['price'] ?></h3>
-
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
+<<<<<<< HEAD
                         <form action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId'] ?>" method="POST">
                             <div class="quantity">
                                 <p class="qty-btn" onclick="decreaseQuantity()">-</p>
@@ -300,6 +351,22 @@ $showImage = $result['image'];
                                     class="btn"
                                     style="background-color: #D10024; border-color: #D10024; color: #fff;"
                                     value="Add to Cart">
+=======
+                        <form id="addToCartForm">
+                            <div class="quantity">
+                                <button type="button" class="qty-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="text" id="quantity" name="qua" value="1">
+                                <button type="button" class="qty-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+                            <!-- /Quantity -->
+   
+                            <br>
+                            <!-- Add to Cart Button -->
+                            <div class="product-actions">
+                                <button type="submit" class="btn" style="background-color: #D10024; border-color: #D10024; color: #fff;">
+                                    Add to Cart
+                                </button>
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
                             </div>
                         </form>
                         <!-- /Add to Cart Button -->
@@ -308,6 +375,7 @@ $showImage = $result['image'];
                 <!-- /Product Details -->
             </div>
             <!-- /row -->
+<<<<<<< HEAD
             <?php
             // session_start();
 
@@ -399,6 +467,8 @@ $showImage = $result['image'];
             </div>
             <!-- /Customer Reviews -->
 
+=======
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         </div>
         <!-- /container -->
     </div>
@@ -406,6 +476,7 @@ $showImage = $result['image'];
 
     <!-- FOOTER -->
     <footer id="footer">
+<<<<<<< HEAD
         <!-- top footer -->
         <div class="section">
             <!-- container -->
@@ -498,6 +569,9 @@ $showImage = $result['image'];
             <!-- /container -->
         </div>
         <!-- /bottom footer -->
+=======
+        <!-- Your footer content -->
+>>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     </footer>
     <!-- /FOOTER -->
 
@@ -508,8 +582,67 @@ $showImage = $result['image'];
     <script src="../frontend/js/nouislider.min.js"></script>
     <script src="../frontend/js/jquery.zoom.min.js"></script>
     <script src="../frontend/js/main.js"></script>
-    <script src="../frontend/productPage.js"></script>
 
+    <script>
+        function decreaseQuantity() {
+            let quantity = parseInt(document.getElementById('quantity').value);
+            if (quantity > 1) {
+                document.getElementById('quantity').value = quantity - 1;
+            }
+        }
+
+        function increaseQuantity() {
+            let quantity = parseInt(document.getElementById('quantity').value);
+            document.getElementById('quantity').value = quantity + 1;
+        }
+
+        $(document).ready(function() {
+            $('#addToCartForm').on('submit', function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: '../backend/productpage.php?productId=<?php echo $id ?>',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        let data = JSON.parse(response);
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'swal-custom-button'
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'There was a problem adding the product to the cart.',
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'swal-custom-button'
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'There was a problem with the server. Please try again later.',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'swal-custom-button'
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
