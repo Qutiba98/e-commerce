@@ -28,6 +28,4 @@ if ($requestMethod == "POST") {
     exit();
 }
 
-
-
 ?>

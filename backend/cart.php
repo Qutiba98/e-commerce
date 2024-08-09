@@ -1,7 +1,8 @@
 <?php
-// try group by and user id product id
+// اتصال بقاعدة البيانات وبدء الجلسة
 require "./connection_db_pdo.php";
 session_start();
+
 $totalPrice = 0;
 $isEmptyDatabase = true;
 $isEmptySesstion = false;
@@ -9,121 +10,81 @@ $discountCode = isset($_POST["discountCode"]) ? $_POST["discountCode"] : "";
 $id = 0;
 $_SESSION['cartId'] = isset($_SESSION['user_id']) ? ($_SESSION['user_id']) : "";
 $user_id = isset($_SESSION['user_id']) ? ($_SESSION['user_id']) : "";
-// $input = file_get_contents("http://127.0.0.1/brief%203/e-commerce/backend/cartApi/cartFetchData.php?id=21");
 $_SESSION['products'] = isset($_SESSION['products']) ? $_SESSION['products'] : [];
 $_SESSION['currentProductId'] = isset($_SESSION['currentProductId']) ? $_SESSION['currentProductId'] : "";
 $result = $_SESSION['products'];
 
-// change it to make the things appear
-// $_SESSION['user'] ;
-// $cartId = isset($_SESSION['user_id']) ? isset($_SESSION['user_id']) : ""; // Example cartId ------- change it
 $cartId = $_SESSION['cartId'];
-// echo $_SESSION['user_id'];
-$productId = $_SESSION['currentProductId']; // Example productId
+$productId = $_SESSION['currentProductId'];
 $registerd = false;
 
-
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-  $registerd = true;
+    $registerd = true;
 
-  // Ensure that the quantity is properly assigned from the session
-  foreach ($result as &$row) {
-    $productId = $row['id'];
-    $quantity = isset($row['quantity']) ? $row['quantity'] : 0;
-    $checkSql = "SELECT COUNT(*) FROM cart_product WHERE cart_id = '$cartId' AND product_id = '$productId'";
-    $stmt = $conn->prepare($checkSql);
-    $stmt->execute();
-    $count = $stmt->fetchColumn();
-    if (!$row['isInDatabase']) {
-
-      if ($count == 0) {
-        $sql = "INSERT INTO cart_product (cart_id, product_id, quantity) VALUES ('$cartId', '$productId', '$quantity')";
-        $res = $conn->exec($sql);
-        $row['isInDatabase'] = true;
-        $isEmptyDatabase = false;
-      } else {
-        // Product exists, update the quantity
-        $sql = "UPDATE cart_product 
-                SET quantity = quantity + '$quantity' 
-                WHERE cart_id = '$cartId' AND product_id = '$productId'";
-        $res = $conn->exec($sql);
-        $row['isInDatabase'] = true;
-        $isEmptyDatabase = false;
-      }
+    // تأكد من أن الكمية يتم تعيينها بشكل صحيح من الجلسة
+    foreach ($result as &$row) {
+        $productId = $row['id'];
+        $quantity = isset($row['quantity']) ? $row['quantity'] : 0;
+        $checkSql = "SELECT COUNT(*) FROM cart_product WHERE cart_id = '$cartId' AND product_id = '$productId'";
+        $stmt = $conn->prepare($checkSql);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        if (!$row['isInDatabase']) {
+            if ($count == 0) {
+                $sql = "INSERT INTO cart_product (cart_id, product_id, quantity) VALUES ('$cartId', '$productId', '$quantity')";
+                $conn->exec($sql);
+                $row['isInDatabase'] = true;
+                $isEmptyDatabase = false;
+            } else {
+                $sql = "UPDATE cart_product SET quantity = quantity + '$quantity' WHERE cart_id = '$cartId' AND product_id = '$productId'";
+                $conn->exec($sql);
+                $row['isInDatabase'] = true;
+                $isEmptyDatabase = false;
+            }
+        }
     }
-  }
 
-
-  // Remove products that are in the database from the session
-  foreach ($result as $key => $row) {
-    unset($_SESSION['products'][$key]);
-    $isEmptySesstion = false;
-  }
-
-  // dont forget to make dynamic based on id of the user
-  if ($_SESSION['user_id']) {
-
-    $cartFromDatabase = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
-    $cartData = json_decode($cartFromDatabase, true);
-    // var_dump($cartData);
-    // var_dump($cartData);
-    foreach ($cartData as $row) {
-      // Ensure quantity and price are integers and floats respectively
-      $quantity = intval($row['quantity']);
-      $price = floatval($row['price']);
-
-      // If quantity is greater than 0, multiply price by quantity and add to total
-      if ($quantity > 0) {
-        $totalPrice += $quantity * $price;
-      }
+    // إزالة المنتجات التي تم إدخالها في قاعدة البيانات من الجلسة
+    foreach ($result as $key => $row) {
+        unset($_SESSION['products'][$key]);
+        $isEmptySesstion = false;
     }
-    // echo  $totalPrice;
-    // Prepare the SQL statement discount sec ---------------
-    $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
-    $stmt->bindParam(':discountCode', $discountCode);
 
-    // Execute the query for 
-    if ($stmt->execute()) {
+    // جلب بيانات السلة من قاعدة البيانات
+    if ($_SESSION['user_id']) {
+        $cartFromDatabase = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
+        $cartData = json_decode($cartFromDatabase, true);
 
-      $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
+        foreach ($cartData as $row) {
+            $quantity = intval($row['quantity']);
+            $price = floatval($row['price']);
 
-      // Check if a result was returned
-      if ($precantage !== false) {
+            if ($quantity > 0) {
+                $totalPrice += $quantity * $price;
+            }
+        }
 
-        $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
-        $_SESSION['total'] = $totalPriceAfter;
-        // Print result for debugging
-        // print_r($totalPriceAfter);
-      } else {
-        // Handle the case where no discount was found
-        $dicountErr = "No discount found for the provided code.";
-      }
+        // تطبيق الكود الخصم إذا كان موجودًا
+        $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
+        $stmt->bindParam(':discountCode', $discountCode);
+
+        if ($stmt->execute()) {
+            $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($precantage !== false) {
+                $discountAmount = $precantage['precantage'] * $totalPrice;
+                $totalPriceAfter = $totalPrice - $discountAmount;
+                $_SESSION['total'] = $totalPriceAfter;
+            } else {
+                $dicountErr = "No discount found for the provided code.";
+            }
+        }
     }
-  }
-  // var_dump($cartFromDatabase);
-  // if(empty($cartFromDatabase)){
-  //   echo 'entered if';
-  //   $isEmptyDatabase = true;
-  // }
-  $cartFromDatabase = json_decode($cartFromDatabase, true);
+    $cartFromDatabase = json_decode($cartFromDatabase, true);
 }
 
-// var_dump($isEmptyDatabase);
-// var_dump($isEmptySesstion);
-
-
-
-
-
-
-
-// Optionally reindex the session array to avoid gaps in the keys
-if (isset($_SESSION['products']))
-  $_SESSION['products'] = array_values($_SESSION['products']); // 0  1
-// if(isset($_SESSION['products']))
-// $isEmpty = true;
-
-// var_dump($isEmpty);
+if (isset($_SESSION['products'])) {
+    $_SESSION['products'] = array_values($_SESSION['products']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -132,13 +93,8 @@ if (isset($_SESSION['products']))
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  
   <style>
-    #bigFont {
-      font-size: 1rem !important;
-    }
-
+    #bigFont { font-size: 1rem !important; }
     .empty-cart {
       padding: 20px;
       border-radius: 10px;
@@ -152,11 +108,7 @@ if (isset($_SESSION['products']))
       align-items: center;
       justify-content: center;
     }
-
-    .h-100 {
-      height: auto !important;
-    }
-
+    .h-100 { height: auto !important; }
     .totalPriceStyle {
       color: black;
       font-size: 14px;
@@ -165,70 +117,46 @@ if (isset($_SESSION['products']))
       border-radius: 5px;
       margin-top: 20px;
     }
-
-    .emptyCartImage {
-      width: 50px;
-    }
-
+    .emptyCartImage { width: 50px; }
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
     .form-outline {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
-
-    .form-control {
-      margin-bottom: 10px;
-    }
-
-    .btn {
-      width: 100%;
-    }
-
+    .form-control { margin-bottom: 10px; }
+    .btn { width: 100%; }
     .quantity-controls {
       display: flex;
       align-items: center;
     }
-
     .quantity-controls button {
       background-color: #f8f9fa;
       border: 1px solid #ced4da;
       padding: 5px 10px;
       cursor: pointer;
     }
-
     .quantity-controls input {
       text-align: center;
       width: 50px;
       border: 1px solid #ced4da;
       margin: 0 5px; /* Add space between the input and buttons */
     }
-
     .quantity-controls button:hover {
       background-color: #e9ecef;
     }
-
     .btn-red {
       background-color: #dc3545;
       color: white;
       border: none;
     }
-
     .btn-red:hover {
       background-color: #c82333;
     }
   </style>
-
   <title>Electro - HTML Ecommerce Template</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -504,14 +432,14 @@ if (isset($_SESSION['products']))
         var price = parseFloat($row.find('.price').data('price'));
         var quantity = parseInt($row.find('.quantity').val());
         var total = price * quantity;
-        $row.find('.price').text('$' + total.toFixed(2));
+        $row.find('.price').text('$' + total.toFixed(1));
 
         // Update total price
         var totalPrice = 0;
         $('.price').each(function() {
           totalPrice += parseFloat($(this).text().replace('$', ''));
         });
-        $('#total-price').text(totalPrice.toFixed(2));
+        $('#total-price').text(totalPrice.toFixed(1));
       }
     });
   </script>
