@@ -375,19 +375,19 @@ if (isset($_SESSION['products'])) {
               <?php endforeach; ?>
             <?php endif; ?>
             <div class="card mb-4">
+              <form action="../backend/cart.php" method="POST">
               <div class="card-body p-4 d-flex flex-row">
                 <div data-mdb-input-init class="form-outline flex-fill">
-                  <form action="../backend/cart.php" method="POST">
                     <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
                     <label class="form-label" for="form1">Discount code</label>
                 </div>
                 <button type="submit" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
+              </div>
+              <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
+              <?php if (!empty($totalPriceAfter)) : ?>
+                <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
+                <?php endif; ?>
               </form>
-            </div>
-            <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
-            <?php if (!empty($totalPriceAfter)) : ?>
-              <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
-            <?php endif; ?>
             <?php if($registerd): ?>
               <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
               <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
