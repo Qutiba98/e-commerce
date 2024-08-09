@@ -68,9 +68,14 @@ $conn->close();
                 <h5 class="profile-phone_number">Phone Number: <?php echo htmlspecialchars($row['phone_number']); ?></h5><br>
             </div>
         </div class="buttonsprofile">
-        <a href="http://localhost/e-commerce/backend/index.php" class="btn btn-secondary">Back</a>
+        <div  class="Button">
+        <button href="http://localhost/e-commerce/backend/index.php" >Back</button>
+                    <button href="./edit.php?user_id=<?php echo $id ?>">Update My Profile</button></div>
 
-        <a href="./edit.php?user_id=<?php echo $id ?>" class="btn btn-danger">Update My Profile</a>
+      
+
+        </div>
+     
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>

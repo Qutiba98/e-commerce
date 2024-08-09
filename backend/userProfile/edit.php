@@ -112,8 +112,12 @@ $conn->close();
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <a class="btn btn-secondary profile-button" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Cancel</a>
-                            <a class="btn btn-secondary profile-button" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Save Changes</a>
+                            <a class="btn btn-secondary profile-button" style="  width: 17%;   border-radius: 8px;
+
+  height:5vh;" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Cancel</a>
+                            <a class="btn btn-secondary profile-button" style="  width: 17%;  border-radius: 8px;
+
+  height:5vh;" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Save Changes</a>
                         </div>
                     </form>
                 </div>

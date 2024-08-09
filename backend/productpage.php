@@ -3,7 +3,6 @@
 <?php
 include 'db.php';
 session_start();
-<<<<<<< HEAD
 // var_dump($_SESSION['user_id']);
 // var_dump($_SESSION['products']);
 // var_dump($_SESSION['qua']);
@@ -11,13 +10,6 @@ $id = $_GET['productId'] ? $_GET['productId'] : "";
 // var_dump ($_GET['productId']);
 $_SESSION['currentProductId'] = $_GET['productId'];
 // // Initialize the session variable if it doesn't exist
-=======
-
-$id = $_GET['productId'] ? $_GET['productId'] : "";
-$_SESSION['currentProductId'] = $id;
-
-// Initialize the session variable if it doesn't exist
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
@@ -36,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         'description' => $result['description'],
         'image' => $result['image'],
         'quantity' => $quantity,
-<<<<<<< HEAD
         'isInDatabase' => $isInDatabase
     ];
 
@@ -44,11 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     $productExists = false;
 
 
-=======
-    ];
-
-    $productExists = false;
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
             $product['quantity'] += $quantity;
@@ -95,18 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stylesheet -->
-<<<<<<< HEAD
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
     <style>
-=======
-    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
-
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        /* Your existing CSS */
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .quantity {
             display: flex;
             align-items: center;
@@ -119,9 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         .customer-reviews {
             background: #ffffff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px #D10024;
-        }
+            border-radius: 13px;
+            border: 1px solid red;
+            box-shadow: 0px 0px 19px -8px red;
+
+            
+               }
 
         .reviews-title {
             font-size: 24px;
@@ -142,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             padding: 15px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
-            border-radius: 10px;
+            border-radius: 5px;
             background: #f9f9f9;
         }
 
@@ -173,7 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         .form-control {
             border-radius: 5px;
         }
-<<<<<<< HEAD
 
         .btn-primary {
             background-color: #D10024;
@@ -183,17 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             font-size: 16px;
         }
 
-=======
-
-        .btn-primary {
-            background-color: #D10024;
-            border-color: black;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .quantity input {
             text-align: center;
             width: 50px;
@@ -212,7 +179,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             cursor: pointer;
         }
 
-<<<<<<< HEAD
         /* .product-details{
             font-size: 18px;
         } */
@@ -224,8 +190,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 } */
 
 
-=======
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         .qty-btn {
             display: inline-block;
             width: 30px;
@@ -236,14 +200,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             cursor: pointer;
             border: 1px solid #d10024;
             border-radius: 5px;
-            background-color: black;
+            background-color: white;
             color: black;
             transition: background-color 0.3s, transform 0.3s;
-<<<<<<< HEAD
             margin: 0
-=======
-            margin :0
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         }
 
         .qty-btn:hover {
@@ -266,7 +226,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             outline: none;
             border-color: #d10024;
         }
-<<<<<<< HEAD
 
         .quantity {
             display: flex;
@@ -290,13 +249,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             justify-content: center;
             cursor: pointer;
         }
-=======
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     </style>
 </head>
 
 <body>
-<<<<<<< HEAD
 
 
     <?php
@@ -304,9 +260,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     ?>
 
 
-=======
-    <?php include './nav&footr/nav.php'; ?>
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
 
     <!-- SECTION -->
     <div class="section">
@@ -324,17 +277,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 
                 <!-- Product Details -->
                 <div class="col-md-6">
-<<<<<<< HEAD
-
-=======
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
                     <div class="product-details">
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
                         <h3 class="product-price">$<?php echo $result['price'] ?></h3>
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
-<<<<<<< HEAD
                         <form action="../backend/productpage.php?productId=<?php echo $_SESSION['currentProductId'] ?>" method="POST">
                             <div class="quantity">
                                 <p class="qty-btn" onclick="decreaseQuantity()">-</p>
@@ -349,24 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                             <div class="product-actions">
                                 <input type="submit"
                                     class="btn"
-                                    style="background-color: #D10024; border-color: #D10024; color: #fff;"
+                                    style="background-color: #C9302C; border-color: #C9302C; color: #fff;"
                                     value="Add to Cart">
-=======
-                        <form id="addToCartForm">
-                            <div class="quantity">
-                                <button type="button" class="qty-btn" onclick="decreaseQuantity()">-</button>
-                                <input type="text" id="quantity" name="qua" value="1">
-                                <button type="button" class="qty-btn" onclick="increaseQuantity()">+</button>
-                            </div>
-                            <!-- /Quantity -->
-   
-                            <br>
-                            <!-- Add to Cart Button -->
-                            <div class="product-actions">
-                                <button type="submit" class="btn" style="background-color: #D10024; border-color: #D10024; color: #fff;">
-                                    Add to Cart
-                                </button>
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
                             </div>
                         </form>
                         <!-- /Add to Cart Button -->
@@ -375,7 +307,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                 <!-- /Product Details -->
             </div>
             <!-- /row -->
-<<<<<<< HEAD
             <?php
             // session_start();
 
@@ -457,8 +388,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                         <label for="review-text">Your Review:</label>
                                         <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                                </form>
+                                    <button type="submit" class="btn btn" style="background: #C9302C; color: white;">Submit Review</button>
+                                    </form>
                             </div>
                             <!-- /Add Review Form -->
                         </div>
@@ -467,8 +398,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             </div>
             <!-- /Customer Reviews -->
 
-=======
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
         </div>
         <!-- /container -->
     </div>
@@ -476,7 +405,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 
     <!-- FOOTER -->
     <footer id="footer">
-<<<<<<< HEAD
         <!-- top footer -->
         <div class="section">
             <!-- container -->
@@ -569,9 +497,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             <!-- /container -->
         </div>
         <!-- /bottom footer -->
-=======
-        <!-- Your footer content -->
->>>>>>> 89984275bb5bc85076694ffa3695aa9da36f42d1
     </footer>
     <!-- /FOOTER -->
 
