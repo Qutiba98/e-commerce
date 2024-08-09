@@ -89,3 +89,8 @@ body {
 .btn {
   margin-left: 75% !important;
 }
+.buttonsprofile {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}

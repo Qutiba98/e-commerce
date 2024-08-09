@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -19,16 +18,12 @@ $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
 $name = $email = $phone_number = '';
 
 
-// $image = $_FILES['image']['name'];
-//     $image_tmp = $_FILES['image']['tmp_name'];
-//     $image_folder = 'uploads/' . basename($image);
-
 if ($userId > 0) {
 
-    $stmt = $conn->prepare("SELECT `name`, `email`, `phone_number` FROM `users` WHERE `user_id`=? LIMIT 1");
+    $stmt = $conn->prepare("SELECT `name`, `email`, `phone_number`,`image` FROM `users` WHERE `user_id`=? LIMIT 1");
     $stmt->bind_param("i", $userId);
     $stmt->execute();
-    $stmt->bind_result($name, $email, $phone_number);
+    $stmt->bind_result($name, $email, $phone_number, $image);
     $stmt->fetch();
     $stmt->close();
 }
@@ -64,6 +59,7 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +67,7 @@ $conn->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="edit.css">
 </head>
+
 <body>
     <div class="container rounded bg-white mt-5 mb-5">
         <?php if ($successMessage): ?>
@@ -86,7 +83,7 @@ $conn->close();
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <img class="rounded-circle mt-5" width="150px" src="http://localhost/e-commerce/backend/img/<?php echo htmlspecialchars($image); ?>">
                     <span class="font-weight-bold"><?php echo htmlspecialchars($name); ?></span>
                     <span class="text-black-50"><?php echo htmlspecialchars($email); ?></span>
                 </div>
@@ -115,7 +112,8 @@ $conn->close();
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <button class="btn btn-primary profile-button" type="submit" name="submit">Save Profile</button>
+                            <a class="btn btn-secondary profile-button" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Cancel</a>
+                            <a class="btn btn-secondary profile-button" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Save Changes</a>
                         </div>
                     </form>
                 </div>
@@ -123,5 +121,5 @@ $conn->close();
         </div>
     </div>
 </body>
-</html>
 
+</html>
