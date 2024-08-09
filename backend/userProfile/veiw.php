@@ -60,14 +60,16 @@ $conn->close();
 
         <div class="profile-container">
             <div class="profile-image">
-                <img src="https://th.bing.com/th/id/OIP.Z306v3XdxhOaxBFGfHku7wHaHw?rs=1&pid=ImgDetMain" alt="Profile Picture">
+                <img src="http://localhost/e-commerce/backend/img/<?php echo htmlspecialchars($row['image']); ?>" alt="Profile Image">
             </div>
             <div class="profile-details">
                 <h5 class="profile-name">Name: <?php echo htmlspecialchars($row['name']); ?></h5><br>
                 <h5 class="profile-email">Email: <?php echo htmlspecialchars($row['email']); ?></h5><br>
                 <h5 class="profile-phone_number">Phone Number: <?php echo htmlspecialchars($row['phone_number']); ?></h5><br>
             </div>
-        </div>
+        </div class="buttonsprofile">
+        <a href="http://localhost/e-commerce/backend/index.php" class="btn btn-secondary">Back</a>
+
         <a href="./edit.php?user_id=<?php echo $id ?>" class="btn btn-danger">Update My Profile</a>
 
     </div>

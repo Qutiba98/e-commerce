@@ -50,13 +50,14 @@ if (isset($categories['data'])) {
           <li><a href="#"><i class="fa fa-map-marker"></i> Amman-Jordan</a></li>
         </ul>
         <ul class="header-links pull-right">
-          <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :  ?>
+          <?php
+          if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :  ?>
             <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
           <?php endif; ?>
           <?php if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])) :  ?>
             <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
           <?php endif; ?>
-          <li><a href="/backend/userProfile/veiw.php"><i class="fa fa-user-o"></i> My Account</a></li>
+          <li><a href="http://localhost/e-commerce/backend/userProfile/veiw.php?user_id=<?php echo $_SESSION['user_id'] ?>"><i class="fa fa-user-o"></i> My Account</a></li>
         </ul>
       </div>
     </div>

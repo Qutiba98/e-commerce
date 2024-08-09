@@ -232,6 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="password" id="password" name="password">
                 <span class="error-message" id="passwordErr"><?php echo $passwordErr; ?></span>
             </div>
+
             <button type="submit">Login</button>
             <p>Don't have an account? <a href="./signup.php">Sign up here</a></p>
             <span class="error-message"><?php echo $loginErr; ?></span>

@@ -1221,8 +1221,8 @@ textarea.input {
   -webkit-transform: none;
   -ms-transform: none;
   transform: none;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   display: inline-block !important;
   margin: 0px 2px;
 }
@@ -2329,10 +2329,6 @@ textarea.input {
   }
 }
 
-
-
-
-
 .discount-section {
   background: #ffffff;
   padding: 40px;
@@ -2392,7 +2388,7 @@ textarea.input {
 }
 .discount-item .info .price {
   font-size: 20px;
-  color: #d10024; 
+  color: #d10024;
   font-weight: 600;
 }
 .discount-item .info .discount {
@@ -2415,7 +2411,47 @@ textarea.input {
   display: inline-block;
 }
 .discount-button a:hover {
-  background: #d10024; 
+  background: #d10024;
   transform: scale(1.05);
 }
+.about-us-section {
+  background: #ffffff; /* White background for clean look */
+  padding: 40px; /* Padding inside the border */
+  margin: 20px auto; /* Center the section with margin */
+  max-width: 1200px; /* Maximum width for larger screens */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border: 3px solid #e0e0e0; /* Light gray border */
+  border-image: linear-gradient(135deg, #f8f9fa, #e9ecef); /* Gradient border */
+  border-image-slice: 1; /* Ensure the gradient covers the border */
+}
 
+.about-us-content h2 {
+  font-size: 30px; /* Larger heading size */
+  margin-bottom: 20px; /* Space below the heading */
+  color: #343a40; /* Dark text color for better contrast */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+  text-align: center; /* Center align the heading */
+}
+
+.about-us-content p {
+  font-size: 18px; /* Slightly larger text size for readability */
+  line-height: 1.8; /* Increased line height for better readability */
+  color: #495057; /* Darker text color for better contrast */
+  margin-bottom: 15px; /* Space below each paragraph */
+  text-align: justify; /* Justify text alignment for a clean look */
+  background: #ffffff;
+  padding: 40px;
+  margin: 20px auto;
+  max-width: 1200px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.about-us-content p:last-of-type {
+  margin-bottom: 0; /* Remove bottom margin from the last paragraph */
+}
+.products-container {
+  border: #333;
+}

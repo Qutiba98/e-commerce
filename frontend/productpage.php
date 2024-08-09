@@ -1,109 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Details</title>
 
-    
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-   
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
 
-    
-    <link type="text/css" rel="stylesheet" href="css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 
-    
-    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
 
-    
+    <link type="text/css" rel="stylesheet" href="css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+
+    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+
     <link rel="stylesheet" href="css/font-awesome.min.css">
 
-    
-    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
     <style>
         .quantity {
             display: flex;
             align-items: center;
         }
 
-.container {
-    margin-top: 50px;
-}
+        .container {
+            margin-top: 50px;
+        }
 
-.customer-reviews {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px #D10024;
-}
+        .customer-reviews {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px #D10024;
+        }
 
-.reviews-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #D10024;
-    padding-bottom: 10px;
-}
+        .reviews-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #D10024;
+            padding-bottom: 10px;
+        }
 
-.reviews {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding-right: 10px;
-}
+        .reviews {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
 
-.review {
-    padding: 15px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #f9f9f9;
-}
+        .review {
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
 
-.review-author {
-    font-weight: bold;
-    color: #D10024;
-}
+        .review-author {
+            font-weight: bold;
+            color: #D10024;
+        }
 
-.review-text {
-    margin-top: 10px;
-    font-size: 16px;
-    line-height: 1.5;
-}
+        .review-text {
+            margin-top: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
-.add-review-form {
-    margin-top: 30px;
-}
+        .add-review-form {
+            margin-top: 30px;
+        }
 
-.add-review-form h4 {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
+        .add-review-form h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
 
-.form-group {
-    margin-bottom: 20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.form-control {
-    border-radius: 5px;
-}
+        .form-control {
+            border-radius: 5px;
+        }
 
-.btn-primary {
-    background-color: #D10024;
-    border-color: black;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-}
+        .btn-primary {
+            background-color: #D10024;
+
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
         .quantity input {
             text-align: center;
             width: 50px;
             margin: 0 10px;
         }
+
         .quantity button {
             background: #f2f2f2;
             border: 1px solid #ddd;
@@ -121,13 +124,13 @@
         } */
 
 
-/* 
+        /* 
 .product-image{
     width: 320px !important;
 } */
-
     </style>
 </head>
+
 <body>
     <!-- HEADER -->
     <header>
@@ -229,7 +232,7 @@
                                     </div>
                                     <div class="cart-btns">
                                         <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -319,24 +322,24 @@
                         <h2 class="product-name">Product Name</h2>
                         <h3 class="product-price">$Price</h3>
                         <p class="product-description">Product description goes here. You can write detailed features and specifications of the product here.</p>
-                        
+
                         <!-- Quantity -->
                         <div class="quantity">
                             <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
                             <input type="text" id="quantity" value="1">
                             <button class="qty-btn" onclick="changeQuantity(1)">+</button>
-							<br>
+                            <br>
 
                         </div>
                         <!-- /Quantity -->
                         <br>
                         <!-- Add to Cart Button -->
-						<div class="product-actions">
-							<button class="btn" 
-									style="background-color: #D10024; border-color: #D10024; color: #fff;"
-									onclick="addToCart()">Add to Cart</button>
-						</div>
-												<!-- /Add to Cart Button -->
+                        <div class="product-actions">
+                            <button class="btn"
+                                style="background-color: #D10024; border-color: #D10024; color: #fff;"
+                                onclick="addToCart()">Add to Cart</button>
+                        </div>
+                        <!-- /Add to Cart Button -->
                     </div>
                 </div>
                 <!-- /Product Details -->
@@ -344,84 +347,84 @@
             <!-- /row -->
 
             <?php
-// session_start();
+            // session_start();
 
-$_SESSION['user_id'] = 21; // Example user ID
-$_SESSION['product_id'] = 75; // Example product ID
+            $_SESSION['user_id'] = 21; // Example user ID
+            $_SESSION['product_id'] = 75; // Example product ID
 
-$servername = "localhost"; 
-$username = "root"; 
-$password = ""; 
-$dbname = "e-commerce"; 
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "e-commerce";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $product_id = $_SESSION['product_id'];
-    $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
-    $user_id = $_SESSION['user_id'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $product_id = $_SESSION['product_id'];
+                $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
+                $user_id = $_SESSION['user_id'];
 
-    if ($product_id && $comment_text && $user_id) {
-        $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
-        $stmt->bind_param("sii",$comment_text, $product_id , $user_id);
-        $stmt->execute();
-        $stmt->close();
-    }
-}
+                if ($product_id && $comment_text && $user_id) {
+                    $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
+                    $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+            }
 
-$product_id = $_SESSION['product_id'];
-$result = $conn->query("SELECT * FROM comments WHERE product_id = $product_id");
-?>
-<!-- Customer Reviews Section -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="customer-reviews">
-                <h3 class="reviews-title">Customer Reviews</h3>
-                <div class="reviews">
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="review">
-                        <div class="review-author">
-                            <strong>User <?php echo $row['user_id']; ?></strong>
+            $product_id = $_SESSION['product_id'];
+            $result = $conn->query("SELECT * FROM comments WHERE product_id = $product_id");
+            ?>
+            <!-- Customer Reviews Section -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="customer-reviews">
+                            <h3 class="reviews-title">Customer Reviews</h3>
+                            <div class="reviews">
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <div class="review">
+                                        <div class="review-author">
+                                            <strong>User <?php echo $row['user_id']; ?></strong>
+                                        </div>
+                                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
+                                    </div>
+                                <?php endwhile; ?>
+                            </div>
+
+                            <!-- Add Review Form -->
+                            <div class="add-review-form">
+                                <h4>Add Your Review</h4>
+                                <form method="POST" action="">
+                                    <div class="form-group">
+                                        <label for="review-text">Your Review:</label>
+                                        <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="background-color:#D10024">Submit Review</button>
+                                </form>
+                            </div>
+                            <!-- /Add Review Form -->
                         </div>
-                        <p class="review-text"><?php echo $row['comment_text']; ?></p>
                     </div>
-                    <?php endwhile; ?>
                 </div>
-                
-                <!-- Add Review Form -->
-                <div class="add-review-form">
-                    <h4>Add Your Review</h4>
-                    <form method="POST" action="">
-                        <div class="form-group">
-                            <label for="review-text">Your Review:</label>
-                            <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
-                    </form>
-                </div>
-                <!-- /Add Review Form -->
             </div>
-        </div>
-    </div>
-</div>
             <!-- /Customer Reviews -->
         </div>
         <!-- /container -->
     </div>
     <!-- /SECTION -->
 
-		<!-- FOOTER -->
-		<?php
-        
-        require '../frontend/footer.php';
-        
-        ?>
-		<!-- /FOOTER -->
+    <!-- FOOTER -->
+    <?php
+
+    require '../frontend/footer.php';
+
+    ?>
+    <!-- /FOOTER -->
 
 
     <!-- jQuery Plugins -->
@@ -448,5 +451,5 @@ $result = $conn->query("SELECT * FROM comments WHERE product_id = $product_id");
         }
     </script>
 </body>
-</html>
 
+</html>
