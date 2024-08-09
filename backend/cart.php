@@ -24,7 +24,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "";
 $_SESSION['products'] = isset($_SESSION['products']) ? $_SESSION['products'] : [];
 $_SESSION['currentProductId'] = isset($_SESSION['currentProductId']) ? $_SESSION['currentProductId'] : "";
 $result = $_SESSION['products'];
-var_dump($_SESSION['products']);
 $cartId = $_SESSION['cartId'];
 $productId = $_SESSION['currentProductId'];
 $registerd = false;
@@ -42,7 +41,7 @@ if (!$registerd) {
           }
         }
       }
-
+$_SESSION['total'] = $totalPrice;
 // Check if the 'products' session is set and not empty
 // if (isset($_SESSION['products']) && !empty($_SESSION['products'])) {
 //   foreach ($_SESSION['products'] as $key => $product) {
@@ -358,7 +357,7 @@ if (isset($_SESSION['products'])) {
                       </div>
                       <div class="col-md-3 col-lg-3 col-xl-2 d-flex quantity-controls">
                         <button type="button" class="btn-decrease">-</button>
-                        <input type="number" class="form-control quantity" value="<?php echo $row['quantity'] ?>" min="1">
+                        <input type="text" class="form-control quantity" value="<?php echo $row['quantity'] ?>" min="1">
                         <button type="button" class="btn-increase">+</button>
                       </div>
                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -390,12 +389,12 @@ if (isset($_SESSION['products'])) {
               </form>
             <?php if($registerd): ?>
               <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
-              <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
+              <input type="text" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
               <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
             </div>
             <?php endif; ?>
             <?php if(!$registerd): ?>
-              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $_SESSION['total'] ?></span></div>
               <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
               <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
             </div>
@@ -403,7 +402,7 @@ if (isset($_SESSION['products'])) {
           <div class="card">
             <div class="card-body">
               <a href="./checkout.php">
-                <button href="./admin_create_user.php" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay">Check out</button>
+                <button href="" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay">Check out</button>
               </a>
             </div>
           </div>

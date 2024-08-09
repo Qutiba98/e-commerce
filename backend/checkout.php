@@ -1,8 +1,8 @@
 <?php
 require "../backend/connection_db_pdo.php";
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: http://localhost/e-commerce/backend/login.php');
+if (empty($_SESSION['user_id'])) {
+ header('Location: http://localhost/e-commerce/backend/login.php');
     exit(); 
 }
 // echo $_SESSION['total'];
