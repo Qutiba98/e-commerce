@@ -2,22 +2,60 @@
 // اتصال بقاعدة البيانات وبدء الجلسة
 require "./connection_db_pdo.php";
 session_start();
+if (isset($_POST['delete_product'])) {
+  $productIdToDelete = $_POST['product_id'];
 
-$totalPrice = 0;
+  // Loop through the products in the session and remove the one with the matching ID
+  foreach ($_SESSION['products'] as $key => $product) {
+      if ($product['id'] == $productIdToDelete) {
+          unset($_SESSION['products'][$key]);
+          // Reindex the array to avoid gaps in the keys
+          $_SESSION['products'] = array_values($_SESSION['products']);
+          break;
+      }
+  }
+}
 $isEmptyDatabase = true;
 $isEmptySesstion = false;
 $discountCode = isset($_POST["discountCode"]) ? $_POST["discountCode"] : "";
 $id = 0;
-$_SESSION['cartId'] = isset($_SESSION['user_id']) ? ($_SESSION['user_id']) : "";
-$user_id = isset($_SESSION['user_id']) ? ($_SESSION['user_id']) : "";
+$_SESSION['cartId'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "";
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "";
 $_SESSION['products'] = isset($_SESSION['products']) ? $_SESSION['products'] : [];
 $_SESSION['currentProductId'] = isset($_SESSION['currentProductId']) ? $_SESSION['currentProductId'] : "";
 $result = $_SESSION['products'];
-
+var_dump($_SESSION['products']);
 $cartId = $_SESSION['cartId'];
 $productId = $_SESSION['currentProductId'];
 $registerd = false;
 
+// Initialize the total price
+$totalPrice = isset($totalPrice) ? $totalPrice : 0;
+
+// Get the total price if the user is not logged in
+if (!$registerd) {
+    if (isset($_SESSION['products'])) {
+        // Loop through each product in the session
+        foreach ($_SESSION['products'] as $product) {
+            // Calculate the total price for each product (price * quantity)
+            $totalPrice += (float)$product['price'] * (int)$product['quantity'];
+          }
+        }
+      }
+
+// Check if the 'products' session is set and not empty
+// if (isset($_SESSION['products']) && !empty($_SESSION['products'])) {
+//   foreach ($_SESSION['products'] as $key => $product) {
+//       // Check if the 'isInDatabase' key is false
+//       if (isset($product['isInDatabase']) && $product['isInDatabase'] === false) {
+//           // Remove the product from the session
+//           unset($_SESSION['products'][$key]);
+//       }
+//   }
+  
+//   // Re-index the session array to remove any gaps in the keys
+//   $_SESSION['products'] = array_values($_SESSION['products']);
+// }
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     $registerd = true;
 
@@ -71,7 +109,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
         if ($stmt->execute()) {
             $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($precantage !== false) {
-                $discountAmount = $precantage['precantage'] * $totalPrice;
+                $discountAmount = ($precantage['precantage'] / 100) * $totalPrice;
                 $totalPriceAfter = $totalPrice - $discountAmount;
                 $_SESSION['total'] = $totalPriceAfter;
             } else {
@@ -86,6 +124,7 @@ if (isset($_SESSION['products'])) {
     $_SESSION['products'] = array_values($_SESSION['products']);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en" style="font-size: 14px">
@@ -290,8 +329,13 @@ if (isset($_SESSION['products'])) {
                         <h5 class="mb-0 price" data-price="<?php echo $row['price'] ?>">$<?php echo $row['price'] * $row['quantity'] ?> </h5>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <?php if ($registerd) : ?>
-                          <a href="http://localhost/e-commerce/backend/cartapi/deleteFromCart.php?product_id=<?php echo $row['productId'] ?>" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                        
+                        <?php if (!$registerd) : ?>
+                          <form action="" method="POST" style="display:inline;">
+    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+    <button type="submit" name="delete_product" class="btn btn-link text-danger p-0 m-0"><i class="fas fa-trash fa-lg"></i></button>
+</form>
+
                         <?php endif; ?>
                       </div>
                     </div>
@@ -344,10 +388,18 @@ if (isset($_SESSION['products'])) {
             <?php if (!empty($totalPriceAfter)) : ?>
               <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
             <?php endif; ?>
-            <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
-            <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
-            <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
-          </div>
+            <?php if($registerd): ?>
+              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+              <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
+              <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
+            </div>
+            <?php endif; ?>
+            <?php if(!$registerd): ?>
+              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+              <input type="text" name="afterDiscount" value="<?php echo $totalPrice ?>" style="display : none;">
+              <input type="text" name="beforeDiscount" value="<?php echo $totalPriceAfter ?>" style="display : none;">
+            </div>
+            <?php endif; ?>
           <div class="card">
             <div class="card-body">
               <a href="./checkout.php">

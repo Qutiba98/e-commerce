@@ -5,7 +5,7 @@ session_start();
 $id = $_GET['productId'] ? $_GET['productId'] : "";
 $isInDatabase = false;
 $_SESSION['currentProductId'] = $_GET['productId'];
-$isInDatabase =false;
+
 // Initialize the session variable if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
         $_SESSION['products'][] = $productInfo;
     }
 
-    // echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
-    // exit();
+    echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
+    exit();
 }
 ?>
 
@@ -281,57 +281,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
             </div>
             <!-- /row -->
 
-            // $_SESSION['user_id'] = 32; // Example user ID
-            $_SESSION['product_id'] = $_GET['productId']; // Example product ID
-
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "e-commerce";
-
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            $user_id = $_SESSION['user_id'];
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-// alert if not logged in  ------------------------------------------------------------------------------------
-            if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['user_id']) {
-                $product_id = $_SESSION['product_id'];
-                $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
-                $name = $_SESSION['name'];
-                // 0 "" 
-                if ($product_id && $comment_text && $user_id) {
-                    $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
-
-                    $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
-                    $stmt->execute();
-                    $stmt->close();
-                }
-            }
-
-
-
-
-
-            $sql = "SELECT users.name, comments.comment_text FROM comments 
-        INNER JOIN users ON comments.user_id = users.user_id
-        WHERE comments.product_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $_SESSION['product_id']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            // var_dump($result);
-            $reviews = [];
-
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $reviews[] = $row;
-                }
-            } 
-            // $reviews = json_encode($reviews);    
-
-            // print_r ($reviews[0]['name']);
-            ?>
             <!-- Customer Reviews Section -->
             <div class="container">
                 <div class="row">
