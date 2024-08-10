@@ -26,6 +26,7 @@ $_SESSION['products'] = isset($_SESSION['products']) ? $_SESSION['products'] : [
 $_SESSION['currentProductId'] = isset($_SESSION['currentProductId']) ? $_SESSION['currentProductId'] : "";
 $result = $_SESSION['products'];
 $cartId = $_SESSION['cartId'];
+
 // $productId = $_SESSION['currentProductId'];
 $registerd = false;
 
