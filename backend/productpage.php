@@ -301,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                 if ($conn->connect_error) {
                                     die("Connection failed: " . $conn->connect_error);
                                 }
-
+                                
                                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text']) && $_SESSION['user_id']) {
                                     $product_id = $_SESSION['product_id'];
                                     $comment_text = $_POST['comment_text'];
@@ -313,10 +313,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                         $stmt->execute();
                                         $stmt->close();
                                     }
-                                }else{
-                                    echo "<script>alert ('login or signup to comment')</script>";
                                 }
-
+                                if(isset($_POST['comment_text'])){
+                                    if(!$_SESSION['user_id']){
+                                        echo "<script>alert ('login or signup to comment')</script>";
+                                    }
+                                }  
+                                    // }else{
+                                    //     echo "<script>alert ('login or signup to comment')</script>";
+                                    // }
                                 $sql = "SELECT users.name, comments.comment_text FROM comments 
                                         INNER JOIN users ON comments.user_id = users.user_id
                                         WHERE comments.product_id = ?";
