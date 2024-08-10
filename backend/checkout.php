@@ -175,105 +175,7 @@ $result = json_decode($input,true);
 
 
 <header>
-    <!-- TOP HEADER -->
-    <div id="top-header">
-      <div class="container">
-        <ul class="header-links pull-left">
-          <li><a href="#"><i class="fa fa-phone"></i> +962-779-199-880</a></li>
-          <li><a href="#"><i class="fa fa-envelope-o"></i> Electrospark@gmail.com</a></li>
-          <li><a href="#"><i class="fa fa-map-marker"></i> Amman-Jordan</a></li>
-        </ul>
-        <ul class="header-links pull-right">
-          <?php  if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])):  ?>
-            <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
-            <?php endif; ?>
-            <?php  if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])):  ?>
-          <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
-          <?php endif; ?>
-          <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
-        </ul>
-      </div>
-    </div>
-    <!-- /TOP HEADER -->
-
-    <!-- MAIN HEADER -->
-    <div id="header">
-      <!-- container -->
-      <div class="container">
-        <!-- row -->
-        <div class="row">
-          <!-- LOGO -->
-          <div class="col-md-3">
-            <div class="header-logo">
-              <a href="#" class="logo">
-                <img src="./img/logo.png" alt="" />
-              </a>
-            </div>
-          </div>
-          <!-- /LOGO -->
-
-          <!-- SEARCH BAR -->
-          <div class="col-md-6">
-            <div class="header-search">
-              <form style = "  visibility: hidden;">
-                <select class="input-select" id="category-select">
-                  <option value="0" data-url="#">All Categories</option>
-                  <?php
-                  foreach ($categoryData as $category) {
-                    echo '<option value="' . htmlspecialchars($category['id']) . '" data-url="http://localhost/e-commerce/backend/store.php?category=' . htmlspecialchars($category['id']) . '">'
-                      . htmlspecialchars($category['name']) . '</option>';
-                  }
-                  ?>
-                </select>
-                <input class="input" placeholder="Search here" />
-                <button class="search-btn">Search</button>
-              </form>
-            </div>
-          </div>
-          <!-- /SEARCH BAR -->
-
-            <!-- ACCOUNT -->
-            <div class="col-md-3 clearfix">
-              <div class="header-ctn">
-                <!-- Wishlist -->
-                <div>
-                  <a href="#">
-                    <span></span>
-                  </a>
-                </div>
-                <!-- /Wishlist -->
-                 
-
-              <!-- Cart -->
-              <div>
-                <a href="./cart.php">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span>Your Cart</span>
-                  <div class="qty">3</div>
-                </a>
-              </div>
-              <!-- /Cart -->
-
-
-              
-
-              <!-- Menu Toggle -->
-              <div class="menu-toggle">
-                <a href="#">
-                  <i class="fa fa-bars"></i>
-                  <span>Menu</span>
-                </a>
-              </div>
-              <!-- /Menu Toggle -->
-            </div>
-          </div>
-          <!-- /ACCOUNT -->
-        </div>
-        <!-- /row -->
-      </div>
-      <!-- /container -->
-    </div>
-    <!-- /MAIN HEADER -->
+    <?php  require'../backend/navAndfooter/navwithoutsearch.php';?>
   </header>
   <!-- /HEADER -->
 
@@ -281,25 +183,7 @@ $result = json_decode($input,true);
 
 
 
-    <!-- BREADCRUMB -->
-    <div id="breadcrumb" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="breadcrumb-tree">
-                        <li><a href="http://localhost/e-commerce/backend/">Home</a></li>
-                        <li><a href="http://localhost/e-commerce/backend/store.php?page=4#">Category</a></li>
-                        <li class="active">Checkout</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /BREADCRUMB -->
+    
 
     <!-- MAIN -->
     <div class="main">

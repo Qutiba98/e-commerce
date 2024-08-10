@@ -134,7 +134,7 @@ $resultAccessories = json_decode($inputAccessories, true);
 
   <?php
 
-  include './nav&footr/nav.php';
+  include './navAndfooter/nav.php';
   ?>
 
 
@@ -382,7 +382,7 @@ $resultAccessories = json_decode($inputAccessories, true);
                   <div class="products-container" id="products-list">
                     <?php
                     if (isset($result0['data']) && count($result0['data']) > 0):
-                      $index = 5;
+                      $index = 6;
                       if (isset($result0['data'][$index])):
                         $product = $result0['data'][$index]; ?>
                         <div class="product">
@@ -538,7 +538,7 @@ $resultAccessories = json_decode($inputAccessories, true);
   <!-- FOOTER -->
   <?php
 
-  require '../frontend/footer.php';
+  require '../backend/navAndfooter/footer.php';
 
   ?>
   <!-- /FOOTER -->

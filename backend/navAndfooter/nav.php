@@ -43,46 +43,24 @@ if (isset($categories['data'])) {
 
 <body>
   <header>
-    <!-- TOP HEADER -->
-    <div id="top-header">
-      <div class="container">
-        <ul class="header-links pull-left">
-          <li><a href="#"><i class="fa fa-phone"></i> +962-779-199-880</a></li>
-          <li><a href="#"><i class="fa fa-envelope-o"></i> electrospark@gmail.com</a></li>
-          <li><a href="#"><i class="fa fa-map-marker"></i> Amman-Jordan</a></li>
-        </ul>
-        <ul class="header-links pull-right">
-          <?php
-          if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :  ?>
-            <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
-          <?php endif; ?>
-          <?php if (empty($_SESSION['user_id'])) :  ?>
-            <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
-          <?php endif; ?>
-          <li><a href="http://localhost/e-commerce/backend/userProfile/veiw.php?user_id=<?php echo $_SESSION['user_id'] ?>"><i class="fa fa-user-o"></i> My Account</a></li>
-        </ul>
-      </div>
-    </div>
-    <!-- /TOP HEADER -->
-
     <!-- MAIN HEADER -->
     <div id="header">
       <!-- container -->
       <div class="container">
         <!-- row -->
-        <div class="row">
+        <div class="row align-items-center">
           <!-- LOGO -->
-          <div class="col-md-3">
+          <div class="col-md-3 d-flex justify-content-start">
             <div class="header-logo">
               <a href="#" class="logo">
-                <img src="./img/logo.png" alt="" />
+                <img src="/e-commerce/backend/img/logooooooo.png" alt="Logo" style="max-width: 200px;margin-top: 5px" />
               </a>
             </div>
           </div>
           <!-- /LOGO -->
 
           <!-- SEARCH BAR -->
-          <div class="col-md-6">
+          <div class="col-md-6 d-flex justify-content-center">
             <div class="header-search">
               <form>
                 <select class="input-select" id="category-select">
@@ -102,38 +80,19 @@ if (isset($categories['data'])) {
           <!-- /SEARCH BAR -->
 
           <!-- ACCOUNT -->
-          <div class="col-md-3 clearfix">
-            <div class="header-ctn">
-              <!-- Wishlist -->
-              <div>
-                <a href="#">
-                  <span></span>
-                </a>
-              </div>
-              <!-- /Wishlist -->
-
-
-              <!-- Cart -->
-              <div>
-                <a href="./cart.php">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span>Your Cart</span>
-                  <div class="qty">3</div>
-                </a>
-              </div>
-              <!-- /Cart -->
-
-
-
-
-              <!-- Menu Toggle -->
-              <div class="menu-toggle">
-                <a href="#">
-                  <i class="fa fa-bars"></i>
-                  <span>Menu</span>
-                </a>
-              </div>
-              <!-- /Menu Toggle -->
+          <div class="col-md-3 d-flex justify-content-end">
+            <div class="header-ctn" style="margin-top: 5px;">
+              <ul class="header-links">
+                <?php if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) :  ?>
+                  <li><a href="http://localhost/e-commerce/backend/logout.php"> Logout</a></li>
+                  <li><a href="/backend/userProfile/veiw.php"><i class="fa fa-user-o"></i> My Account</a></li>
+                <?php else : ?>
+                  <li><a href="http://localhost/e-commerce/backend/login.php"> Login</a></li>
+                  <li><a href="http://localhost/e-commerce/backend/signup.php"><i class="fa fa-user-o"></i> Sign up</a></li>
+                <?php endif; ?>
+                <li><a href="./cart.php"><i class="fa fa-shopping-cart"></i> Your Cart</a></li>
+              </ul>
+            
             </div>
           </div>
           <!-- /ACCOUNT -->
@@ -159,8 +118,7 @@ if (isset($categories['data'])) {
           <li><a href="http://localhost/e-commerce/backend/store.php?page=4&category=2#">Laptops</a></li>
           <li><a href="http://localhost/e-commerce/backend/store.php?page=4&category=1#">PC</a></li>
           <li><a href="http://localhost/e-commerce/backend/store.php?page=4&category=3#">Accessories</a></li>
-          <li><a href="http://localhost/e-commerce/backend/store.php?page=4&category=4#">Pieces For PC </a></li>
-
+          <li><a href="http://localhost/e-commerce/backend/store.php?page=4&category=4#">Pieces For PC</a></li>
         </ul>
         <!-- /NAV -->
       </div>
@@ -170,13 +128,11 @@ if (isset($categories['data'])) {
   </nav>
   <!-- /NAVIGATION -->
 
-
-
   <!-- Additional content goes here -->
 
   <!-- jQuery Plugins -->
   <script>
-    document.getElementById('category-select').addEventListener('change', function() {
+    document.getElementById('category-select').addEventListener('change', function () {
       var url = this.options[this.selectedIndex].getAttribute('data-url');
       if (url) {
         window.location.href = url;
