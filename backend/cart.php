@@ -26,23 +26,46 @@ $_SESSION['products'] = isset($_SESSION['products']) ? $_SESSION['products'] : [
 $_SESSION['currentProductId'] = isset($_SESSION['currentProductId']) ? $_SESSION['currentProductId'] : "";
 $result = $_SESSION['products'];
 $cartId = $_SESSION['cartId'];
-$productId = $_SESSION['currentProductId'];
+// $productId = $_SESSION['currentProductId'];
 $registerd = false;
 
 // Initialize the total price
 $totalPrice = isset($totalPrice) ? $totalPrice : 0;
+// var_dump($_SESSION['products']);
 
 // Get the total price if the user is not logged in
 if (!$registerd) {
     if (isset($_SESSION['products'])) {
-        // Loop through each product in the session
-        foreach ($_SESSION['products'] as $product) {
+      // echo "entered products";
+      // Loop through each product in the session
+      foreach ($_SESSION['products'] as $product) {
+          // echo "entered products";
             // Calculate the total price for each product (price * quantity)
             $totalPrice += (float)$product['price'] * (int)$product['quantity'];
           }
         }
       }
-$_SESSION['total'] = $totalPrice;
+      if ($totalPrice > 0) {
+        $_SESSION['total'] = $totalPrice;
+    } else {
+      $productIdSum =$_SESSION['product_id'];
+        $sql = "SELECT (product.price) ,quantity,(product.price* quantity ) as totalPrice
+                FROM cart_product
+                INNER JOIN product ON product.id = cart_product.product_id
+                WHERE cart_product.product_id = '$productIdSum'";
+        
+        $resultOfSum = $conn->query($sql);
+        $rows = $resultOfSum->fetchAll(PDO::FETCH_ASSOC);
+        var_dump($rows);
+        foreach ($rows as $row) {
+          $totalPrice += $row['totalPrice']; // Sum up the total price for all products
+      }
+        
+            $_SESSION['total'] = $totalPrice;
+            
+      
+        print_r( $_SESSION['total']);
+    }
 // Check if the 'products' session is set and not empty
 // if (isset($_SESSION['products']) && !empty($_SESSION['products'])) {
 //   foreach ($_SESSION['products'] as $key => $product) {
@@ -108,9 +131,12 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
         if ($stmt->execute()) {
             $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($precantage !== false) {
-                $discountAmount = ($precantage['precantage'] / 100) * $totalPrice;
+                $discountAmount = ($precantage['precantage'] /100 ) * $totalPrice;
+                var_dump($totalPrice);
                 $totalPriceAfter  = $totalPrice- $discountAmount;
+                var_dump($totalPriceAfter);
                 $_SESSION['totalPriceAfter'] = $totalPriceAfter;
+                var_dump($_SESSION['totalPriceAfter']);
               } else {
                 
                 $dicountErr = "No discount found for the provided code.";
@@ -119,7 +145,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
           }
           $cartFromDatabase = json_decode($cartFromDatabase, true);
         }
-        echo $_SESSION['totalPriceAfter'];
+        // echo $_SESSION['totalPriceAfter'];
 // unset( $_SESSION['totalPriceAfter']);
 
 
@@ -397,7 +423,6 @@ if (isset($_SESSION['products'])) {
               </form>
             <?php if($registerd): ?>
               <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo number_format($totalPrice, 2)?></span></div>
-              <!-- <div class="totalPriceStyle">discounted price: <span id="total-price"><?php echo $totalPriceAfter ?></span></div> -->
               <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
               <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
             </div>
@@ -438,9 +463,9 @@ if (isset($_SESSION['products'])) {
     if ($stmt->execute()) {
         $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($precantage !== false) {
-            $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
-            $_SESSION['total'] = $totalPriceAfter;
-            $alertMessage = "Discount applied successfully! Total after discount: $" . number_format($totalPriceAfter, 2);
+            // $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
+            $_SESSION['totalPriceAfter'] = $totalPriceAfter;
+            $alertMessage = "Discount applied successfully! Total after discount: $" . number_format($totalPriceAfter,2);
             $alertType = "success";
         } else {
             $alertMessage = "No discount found for the provided code.";

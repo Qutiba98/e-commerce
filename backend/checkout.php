@@ -1,6 +1,9 @@
 <?php
 require "../backend/connection_db_pdo.php";
 session_start();
+var_dump($_SESSION['total']);
+$totalpriceFromCart =$_SESSION['total'];
+// echo $totalpriceFromCart;
 if (empty($_SESSION['user_id'])) {
  header('Location: http://localhost/e-commerce/backend/login.php');
     exit(); 
@@ -132,6 +135,7 @@ $result = json_decode($input,true);
 // var_dump($result);
 // delete from cart 
 // -------------------- redo it to be as dynamic
+
 ?>
 
 
@@ -364,20 +368,20 @@ $result = json_decode($input,true);
         <?php endforeach; ?>
         <p>Total Price: <b>
         <?php 
-        if (isset($_SESSION['totalِAfter'])): 
+        if (isset($_SESSION['totalPriceAfter']  )&& $_SESSION['totalPriceAfter']  > 0): 
          
-        echo htmlspecialchars($_SESSION['totalِAfter']); ?> 
+        echo htmlspecialchars(number_format(floatval($_SESSION['totalPriceAfter']) , 2)); ?> 
         </b>
-        <del><?php echo htmlspecialchars($_SESSION['total']);
+        <!-- <del><?php 
+         echo htmlspecialchars(number_format( $row['quantity'] *$row['price'] ,2));
+            // $totalpriceFromCart += $row['quantity'] *$row['price'];
+            
+     ?></del> -->
+     <?php else: ?>
      
-     ?></del>
-     <?php endif; ?>
-     <?php 
-        if (!isset($_SESSION['totalِAfter'])): 
-         
-         ?> 
-        <?php echo htmlspecialchars($_SESSION['total']);
-     
+        <?php 
+         echo htmlspecialchars(number_format($totalpriceFromCart,2));
+    
      ?>
      <?php endif; ?>
 
