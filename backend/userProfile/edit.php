@@ -93,8 +93,8 @@ $conn->close();
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Profile Settings</h4>
                     </div>
-                    <form action="edit.php?user_id=<?php echo htmlspecialchars($userId); ?>" method="post">
-                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($userId); ?>">
+                    <form action="http://localhost/e-commerce/backend/users_API/updateProfile.php?id=<?php echo htmlspecialchars($userId); ?>" method="POST">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($userId); ?>">
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <label class="labels">Name</label>
@@ -104,7 +104,7 @@ $conn->close();
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <label class="labels">Mobile</label>
-                                <input type="text" name="phone_number" class="form-control" placeholder="Mobile" value="<?php echo htmlspecialchars($phone_number); ?>">
+                                <input type="text" name="mobile" class="form-control" placeholder="Mobile" value="<?php echo htmlspecialchars($phone_number); ?>">
                             </div>
                             <div class="col-md-12">
                                 <label class="labels">Email</label>
@@ -114,10 +114,13 @@ $conn->close();
                         <div class="mt-5 text-center">
                             <a class="btn btn-secondary profile-button" style="  width: 17%;   border-radius: 8px;
 
-  height:5vh;" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Cancel</a>
-                            <a class="btn btn-secondary profile-button" style="  width: 17%;  border-radius: 8px;
+  height:6vh;" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Cancel</a>
+  <button type="submit" class="btn btn-secondary profile-button"  style="  width: 17%;   border-radius: 8px;
 
-  height:5vh;" href="./veiw.php?user_id=<?php echo htmlspecialchars($userId); ?>">Save Changes</a>
+height:6vh;">Save Changes</button>
+                            <!-- <a class="btn btn-secondary profile-button" style="  width: 17%;  border-radius: 8px;
+
+  height:5vh;" href="http://localhost/e-commerce/backend/admin_users_API/update.php?user_id=<?php echo htmlspecialchars($userId); ?>">Save Changes</a> -->
                         </div>
                     </form>
                 </div>
