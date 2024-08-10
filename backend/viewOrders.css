@@ -1,0 +1,185 @@
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Black background for the entire page */
+  color: #fff; /* White text color for better readability */
+}
+
+.container {
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #222; /* Dark gray background for container */
+  border-radius: 8px;
+}
+
+h2 {
+  color: #d10024; /* Red color for headings */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures borders are collapsed */
+  margin-top: 20px;
+  max-width: 100%; /* Ensures table fits within container */
+  color: #fff; /* White text color for better readability */
+}
+
+thead {
+  background-color: #000; /* Black background for table headers */
+  color: #d10024; /* Red color for table headers */
+}
+
+thead th {
+  text-transform: capitalize;
+  padding: 15px; /* Increased padding for better spacing */
+  font-size: 16px; /* Larger font size for readability */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #383838; /* Darker gray background for odd rows */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #333; /* Darker gray background for even rows */
+}
+
+tbody tr:hover {
+  background-color: #444; /* Slightly lighter gray on hover */
+  color: #ffffff; /* Ensure text is readable on hover */
+}
+
+tbody td {
+  color: white;
+  padding: 12px; /* Increased padding for better readability */
+  border-bottom: 1px solid #333; /* Subtle border for separation */
+}
+
+/* Bordered table */
+.table-bordered {
+  border: 2px solid #333; /* Matching color for table border */
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #333; /* Matching color for table cell borders */
+  padding: 12px; /* Increased padding for better readability */
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    border: 1px solid #333; /* Dark border for rows */
+    margin-bottom: 10px;
+    background-color: #222; /* Darker background for rows */
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #333; /* Darker bottom border */
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+
+  td:before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    font-weight: bold; /* Bold labels for better readability */
+    color: #d10024; /* Red color for labels */
+  }
+
+  td:nth-of-type(1):before {
+    content: "ID";
+  }
+  td:nth-of-type(2):before {
+    content: "Payment Date";
+  }
+  td:nth-of-type(3):before {
+    content: "First Name";
+  }
+  td:nth-of-type(4):before {
+    content: "Last Name";
+  }
+  td:nth-of-type(5):before {
+    content: "Email";
+  }
+  td:nth-of-type(6):before {
+    content: "Address";
+  }
+  td:nth-of-type(7):before {
+    content: "City";
+  }
+  td:nth-of-type(8):before {
+    content: "Country";
+  }
+  td:nth-of-type(9):before {
+    content: "Zip Code";
+  }
+  td:nth-of-type(10):before {
+    content: "Telephone";
+  }
+  td:nth-of-type(11):before {
+    content: "Amount";
+  }
+  td:nth-of-type(12):before {
+    content: "Cart ID";
+  }
+}
+
+/* Additional styling for table buttons */
+button.edit-btn,
+button.delete-btn {
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+  padding: 12px 20px; /* Larger padding for prominent buttons */
+  font-size: 16px; /* Larger font size */
+  border-radius: 8px; /* More rounded corners */
+  border: none;
+  color: #fff; /* White text */
+  cursor: pointer;
+}
+
+/* Edit Button */
+button.edit-btn {
+  background-color: #333; /* Dark gray background for edit buttons */
+}
+
+button.edit-btn:hover {
+  background-color: #000; /* Black background on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Delete Button */
+button.delete-btn {
+  background-color: #d10024; /* Red background for delete buttons */
+}
+
+button.delete-btn:hover {
+  background-color: #b8001d; /* Darker red on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}

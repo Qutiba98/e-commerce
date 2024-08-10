@@ -1,0 +1,113 @@
+body {
+  background-color: #f2f2f2;
+  font-family: "Arial", sans-serif;
+}
+.Button {
+  width: 100%;
+  height: auto;
+  display: flex;
+
+  align-items: end;
+  justify-content: end;
+  gap: 15px;
+}
+.Button button {
+  outline: none;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  width: 15%;
+  height: 5vh;
+  background-color: #d10024;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 100px;
+  border: #ff0000 1px solid;
+  width: 60%;
+  height: 70%;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.card h1 {
+  color: #ff5252;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 200px;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details {
+  width: 400px;
+}
+
+.profile-details h2 {
+  color: #ff5252;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.profile-details p {
+  font-size: 16px;
+  color: #000;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.profile-details ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.profile-details ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.profile-details ul li i {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #ff0000;
+}
+
+.profile-details ul li span {
+  font-size: 16px;
+  color: #000;
+}
+.btn {
+  margin-left: 75% !important;
+}
+.buttonsprofile {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}

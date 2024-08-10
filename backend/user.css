@@ -1,0 +1,192 @@
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Black background for the entire page */
+  color: #fff; /* White text color for better readability */
+}
+
+.container {
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #222; /* Dark gray background for container */
+  border-radius: 8px;
+}
+
+h2 {
+  color: #d10024; /* Red color for headings */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+form input,
+form select,
+form button {
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid #444; /* Dark gray border for inputs and buttons */
+  border-radius: 4px;
+}
+
+/* Placeholder styling */
+form input::placeholder,
+form select::placeholder {
+  color: #fff; /* White color for placeholder text */
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"], /* Ensure email input matches other inputs */
+form select {
+  background-color: #333; /* Darker background for text input and select */
+  color: #fff; /* White text for input and select */
+}
+
+/* Styling for dropdown (select) */
+form select {
+  appearance: none; /* Remove default styling */
+  background: #444
+    url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="%23fff" d="M143 352l-143-144h286l-143 144z"/></svg>')
+    no-repeat right 10px center;
+  background-size: 12px;
+  padding-right: 40px; /* Space for the arrow */
+}
+
+/* Styling for buttons */
+form button {
+  background-color: #d10024; /* Red background for buttons */
+  color: #fff; /* White text for buttons */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease; /* Smooth transitions */
+  padding: 12px 20px; /* Larger padding for more prominent buttons */
+  font-size: 16px; /* Larger font size */
+  border-radius: 8px; /* More rounded corners */
+}
+
+form button:hover {
+  opacity: 0.8; /* Slightly transparent on hover */
+}
+
+form button:active {
+  opacity: 0.6; /* More transparent when active */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #444; /* Dark gray border for table cells */
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #000; /* Black background for table headers */
+  color: #d10024; /* Red text for table headers */
+}
+
+table tr:nth-child(even) {
+  background-color: #333; /* Darker gray background for even rows */
+}
+
+table tr:nth-child(odd) {
+  background-color: #222; /* Darker gray background for odd rows */
+}
+
+/* Table buttons */
+button.edit-btn,
+button.delete-btn {
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+  padding: 12px 20px; /* Larger padding for prominent buttons */
+  font-size: 16px; /* Larger font size */
+  border-radius: 8px; /* More rounded corners */
+  border: none;
+  color: #fff; /* White text */
+  cursor: pointer;
+}
+
+button.edit-btn {
+  background-color: #333; /* Dark gray background for edit buttons */
+}
+
+button.edit-btn:hover {
+  background-color: #000; /* Black background on hover */
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+button.delete-btn {
+  background-color: #d10024; /* Red background for delete buttons */
+}
+
+button.delete-btn:hover {
+  background-color: #b8001d; /* Darker red on hover */
+  transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 22px; /* Slightly smaller heading on small screens */
+    margin-bottom: 15px;
+  }
+
+  form input,
+  form select,
+  form button {
+    padding: 10px;
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  table th,
+  table td {
+    padding: 10px; /* Adjust padding for table cells */
+    font-size: 14px; /* Adjust font size for table cells */
+  }
+
+  table {
+    font-size: 14px; /* Adjust font size for table */
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 18px; /* Even smaller heading on very small screens */
+  }
+
+  form input,
+  form select,
+  form button {
+    padding: 8px;
+    font-size: 12px; /* Smaller font size for very small screens */
+  }
+
+  table th,
+  table td {
+    font-size: 12px; /* Smaller font size for very small screens */
+  }
+
+  /* Responsive table */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
