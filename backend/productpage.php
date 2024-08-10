@@ -75,6 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 
     <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
+
+
+<!-- SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+
     <style>
         .quantity {
             display: flex;
@@ -314,11 +322,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                                         $stmt->close();
                                     }
                                 }
-                                if(isset($_POST['comment_text'])){
-                                    if(!$_SESSION['user_id']){
-                                        echo "<script>alert ('login or signup to comment')</script>";
-                                    }
-                                }  
+if(isset($_POST['comment_text'])){
+    if(!$_SESSION['user_id']){
+        echo "<script>
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Please login or signup to comment',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        </script>";
+    }
+}  
                                     // }else{
                                     //     echo "<script>alert ('login or signup to comment')</script>";
                                     // }
