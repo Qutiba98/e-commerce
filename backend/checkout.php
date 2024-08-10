@@ -1,7 +1,7 @@
 <?php
 require "../backend/connection_db_pdo.php";
 session_start();
-var_dump($_SESSION['total']);
+// var_dump($_SESSION['total']);
 $totalpriceFromCart =$_SESSION['total'];
 // echo $totalpriceFromCart;
 if (empty($_SESSION['user_id'])) {
@@ -373,7 +373,7 @@ $result = json_decode($input,true);
         echo htmlspecialchars(number_format(floatval($_SESSION['totalPriceAfter']) , 2)); ?> 
         </b>
         <!-- <del><?php 
-         echo htmlspecialchars(number_format( $row['quantity'] *$row['price'] ,2));
+         echo htmlspecialchars(number_format($_SESSION['total']  ,2));
             // $totalpriceFromCart += $row['quantity'] *$row['price'];
             
      ?></del> -->

@@ -45,27 +45,27 @@ if (!$registerd) {
           }
         }
       }
-      if ($totalPrice > 0) {
-        $_SESSION['total'] = $totalPrice;
-    } else {
-      $productIdSum =$_SESSION['product_id'];
-        $sql = "SELECT (product.price) ,quantity,(product.price* quantity ) as totalPrice
-                FROM cart_product
-                INNER JOIN product ON product.id = cart_product.product_id
-                WHERE cart_product.product_id = '$productIdSum'";
+    //   if ($totalPrice > 0) {
+    //     $_SESSION['total'] = $totalPrice;
+    // } else {
+    //   $productIdSum =$_SESSION['product_id'];
+    //     $sql = "SELECT SUM(product.price) as totalPrice
+    //             FROM cart_product
+    //             INNER JOIN product ON product.id = cart_product.product_id
+    //             WHERE cart_product.product_id = '$productIdSum'";
         
-        $resultOfSum = $conn->query($sql);
-        $rows = $resultOfSum->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($rows);
-        foreach ($rows as $row) {
-          $totalPrice += $row['totalPrice']; // Sum up the total price for all products
-      }
+    //     $resultOfSum = $conn->query($sql);
+    //     $rows = $resultOfSum->fetchAll(PDO::FETCH_ASSOC);
+    //     var_dump($rows);
+    //     foreach ($rows as $row) {
+    //       $totalPrice = $row['totalPrice']; // Sum up the total price for all products
+    //   }
         
-            $_SESSION['total'] = $totalPrice;
+    //         // $_SESSION['total'] = $totalPrice;
             
       
-        print_r( $_SESSION['total']);
-    }
+    //     var_dump( $totalPrice);
+    // }
 // Check if the 'products' session is set and not empty
 // if (isset($_SESSION['products']) && !empty($_SESSION['products'])) {
 //   foreach ($_SESSION['products'] as $key => $product) {
@@ -127,16 +127,16 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
         $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
         $stmt->bindParam(':discountCode', $discountCode);
         $_SESSION['totalPriceAfter'] = isset($_SESSION['totalPriceAfter']) ? $_SESSION['totalPriceAfter'] :"";
-
+        $_SESSION['total'] = $totalPrice;
         if ($stmt->execute()) {
             $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($precantage !== false) {
                 $discountAmount = ($precantage['precantage'] /100 ) * $totalPrice;
-                var_dump($totalPrice);
+                // var_dump($totalPrice);
                 $totalPriceAfter  = $totalPrice- $discountAmount;
-                var_dump($totalPriceAfter);
+                // var_dump($totalPriceAfter);
                 $_SESSION['totalPriceAfter'] = $totalPriceAfter;
-                var_dump($_SESSION['totalPriceAfter']);
+                // unset($_SESSION['totalPriceAfter']);
               } else {
                 
                 $dicountErr = "No discount found for the provided code.";
