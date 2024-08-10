@@ -181,58 +181,113 @@ function get_user_by_id($user_id){
 
 
 // ---------------------------------------------------------------------------------------
-
-
-function update_user($subjectInput, $subjectParams){
+function update_user($inputData, $user_id) {
     global $conn;
 
-    // التحقق من اتصال قاعدة البيانات
-    if ($conn->connect_error) {
-        $data = [
-            'status' => 500,
-            'message' => 'Database Connection Failed',
-        ];
-        header("HTTP/1.0 500 Internal Server Error");
-        echo json_encode($data);
-        exit();
-    }
+    if (isset($inputData['username']) && isset($inputData['email']) && isset($inputData['password']) && isset($inputData['role_id'])) {
+        $username = $inputData['username'];
+        $email = $inputData['email'];
+        $password = password_hash($inputData['password'], PASSWORD_DEFAULT);
+        $role_id = $inputData['role_id'];
 
-    if (isset($subjectParams['user_id'])) {
-        $user_id = mysqli_real_escape_string($conn, $subjectParams['user_id']);
+        // استعلام التحديث مع استخدام prepared statement
+        $sql = "UPDATE users SET name=?, email=?, password=?, role_id=? WHERE user_id=?";
+        $stmt = mysqli_prepare($conn, $sql);
 
-        $name = mysqli_real_escape_string($conn, $subjectInput['name']);
-        $email = mysqli_real_escape_string($conn, $subjectInput['email']);
-        $phone_number = mysqli_real_escape_string($conn, $subjectInput['phone_number']);
-        $image = mysqli_real_escape_string($conn, $subjectInput['image']);
-        $role_id = mysqli_real_escape_string($conn, $subjectInput['role_id']);
+        if ($stmt === false) {
+            return json_encode([
+                'status' => 500,
+                'message' => 'Failed to prepare statement: ' . $conn->error
+            ]);
+        }
 
-        $query = "UPDATE users SET name='$name', email='$email', phone_number='$phone_number', image='$image', role_id='$role_id' WHERE user_id='$user_id' LIMIT 1";
-        $result = mysqli_query($conn, $query);
+        mysqli_stmt_bind_param($stmt, "ssssi", $username, $email, $password, $role_id, $user_id);
+        $result = mysqli_stmt_execute($stmt);
 
         if ($result) {
-            $data = [
-                'status' => 200,
-                'message' => 'user updated Successfully',
-            ];
-            header('HTTP/1.0 200 Success');
-            return json_encode($data);
+            if (mysqli_stmt_affected_rows($stmt) > 0) {
+                return json_encode([
+                    'status' => 200,
+                    'message' => 'User updated successfully'
+                ]);
+            } else {
+                return json_encode([
+                    'status' => 400,
+                    'message' => 'No rows were updated'
+                ]);
+            }
         } else {
-            $data = [
+            return json_encode([
                 'status' => 500,
-                'message' => 'Internal Server Error',
-            ];
-            header('HTTP/1.0 500 Internal Server Error');
-            return json_encode($data);
+                'message' => 'Failed to execute statement: ' . mysqli_stmt_error($stmt)
+            ]);
         }
+
+        mysqli_stmt_close($stmt);
     } else {
-        $data = [
+        return json_encode([
             'status' => 400,
-            'message' => 'User ID is required',
-        ];
-        header('HTTP/1.0 400 Bad Request');
-        return json_encode($data);
+            'message' => 'All fields are required'
+        ]);
     }
 }
+
+
+// ----------------------------------------------------------------------------------------------------
+
+function update_categorie($inputData, $category_id){
+    global $conn;
+
+    if (isset($inputData['name']) ) {
+
+        $name = $inputData['name'];
+      
+
+
+        
+
+        // استعلام التحديث مع استخدام prepared statement
+        $sql = "UPDATE categories SET name=? WHERE id=?";
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if ($stmt === false) {
+            return json_encode([
+                'status' => 500,
+                'message' => 'Failed to prepare statement: ' . $conn->error
+            ]);
+        }
+
+        mysqli_stmt_bind_param($stmt, "si", $name, $category_id);
+        $result = mysqli_stmt_execute($stmt);
+
+        if ($result) {
+            if (mysqli_stmt_affected_rows($stmt) > 0) {
+                return json_encode([
+                    'status' => 200,
+                    'message' => 'category name updated successfully'
+                ]);
+            } else {
+                return json_encode([
+                    'status' => 400,
+                    'message' => 'No rows were updated'
+                ]);
+            }
+        } else {
+            return json_encode([
+                'status' => 500,
+                'message' => 'Failed to execute statement: ' . mysqli_stmt_error($stmt)
+            ]);
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+        return json_encode([
+            'status' => 400,
+            'message' => 'All fields are required'
+        ]);
+    }
+}
+
 
 // ----------------------------------------------------------------------------------------------------
 

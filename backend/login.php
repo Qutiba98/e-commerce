@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 confirmButton: 'swal-custom-button' // Custom class for the OK button
                             }
                         }).then(() => {
-                            window.location.href = data.role === 'admin' ? 'admin.php' : 'index.php';
+                            window.location.href = data.role === 'admin' ? 'http://localhost/e-commerce/backend/admin-dasboard/static/index.php' : 'index.php';
                         });
                     } else {
                         Swal.fire({
