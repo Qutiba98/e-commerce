@@ -2,6 +2,7 @@
 // اتصال بقاعدة البيانات وبدء الجلسة
 require "./connection_db_pdo.php";
 session_start();
+$_SESSION['totalPriceAfter']  = isset($_SESSION['totalPriceAfter'] ) ?$_SESSION['totalPriceAfter']  :"";
 if (isset($_POST['delete_product'])) {
   $productIdToDelete = $_POST['product_id'];
 

@@ -3,6 +3,7 @@ include 'db.php';
 session_start();
 
 $id = $_GET['productId'] ? $_GET['productId'] : "";
+$_SESSION['product_id'] = intval($id );
 $isInDatabase = false;
 $_SESSION['currentProductId'] = $_GET['productId'];
 
@@ -296,22 +297,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 
                                 $conn = new mysqli($servername, $username, $password, $dbname);
                                 $user_id = $_SESSION['user_id'];
-
+                                
                                 if ($conn->connect_error) {
                                     die("Connection failed: " . $conn->connect_error);
                                 }
 
-                                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text']) && $_SESSION['user_id']) {
                                     $product_id = $_SESSION['product_id'];
                                     $comment_text = $_POST['comment_text'];
                                     $name = $_SESSION['name'];
 
-                                    if ($product_id && $comment_text && $user_id) {
+                                    if ($id && $comment_text && $user_id) {
                                         $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
                                         $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
                                         $stmt->execute();
                                         $stmt->close();
                                     }
+                                }else{
+                                    echo "<script>alert ('login or signup to comment')</script>";
                                 }
 
                                 $sql = "SELECT users.name, comments.comment_text FROM comments 

@@ -11,9 +11,9 @@
 session_start();
 
 // $id =$_SESSION['user_id'];
-// $_SESSION['user_id'] = 22; // Example user ID
-// $_SESSION['product_id'] = 75; // Example product ID
-
+// $_SESSION['user_id'] = 43; // Example user ID
+$_SESSION['product_id'] = $_GET['productId']; // Example product ID
+var_dump($_GET['productId']);
 $servername = "localhost"; 
 $username = "root"; 
 $password = ""; 
@@ -27,8 +27,10 @@ if ($conn->connect_error) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product_id = $_SESSION['product_id'];
+    var_dump($_SESSION['product_id']) ;
+    var_dump( $_SESSION['user_id'] ) ;
     $comment_text = isset($_POST['comment_text']) ? $_POST['comment_text'] : null;
-    $user_id = $_SESSION['user_id'];
+    $user_id =  $_SESSION['user_id'] ;
 
     if ($product_id && $comment_text && $user_id) {
         $stmt = $conn->prepare("INSERT INTO comments (product_id, comment_text, user_id) VALUES (?, ?, ?)");
