@@ -880,12 +880,12 @@ textarea.input {
 
 .product {
   position: relative;
+  width: auto !important;
   margin: 15px 0px;
   -webkit-box-shadow: 0px 0px 0px 0px #e4e7ed, 0px 0px 0px 1px #e4e7ed;
   box-shadow: 0px 0px 0px 0px #e4e7ed, 0px 0px 0px 1px #e4e7ed;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
-  height: 20vh !important;
 }
 
 .product:hover {

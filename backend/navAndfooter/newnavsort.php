@@ -60,7 +60,43 @@ if (isset($categories['data'])) {
 
 
           <!-- SEARCH BAR -->
-          <div class="col-md-6 d-flex justify-content-center">
+              <!-- SEARCH BAR -->
+						<div class="col-md-6">
+							<div class="header-search">
+							<form id="filterForm" method="GET" >
+							<?php
+									
+									$api_url = 'http://localhost/e-commerce/backend/products_API/read_by_id.php?name=MSI%20Trident%203';
+
+								
+									$response = file_get_contents($api_url);
+
+									
+									$categories = json_decode($response, true);
+
+									
+									if ($categories['status'] == 200) {
+										$categories = $categories['data'];
+									} else {
+										$categories = [];
+									}
+									?>
+
+									<select class="input-select" name="category" id="categorySelect" onchange="filterCategory()">
+										<option value="">Select Category</option>
+										<?php foreach ($categories as $category): ?>
+											<option value="<?= $category['id'] ?>" <?php if (isset($_GET['category']) && $_GET['category'] == $category['id']) echo 'selected'; ?>>
+												<?= htmlspecialchars($category['name']) ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								<input class="input" placeholder="Search here" id="searchInput" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
+								<button type="button" class="search-btn" onclick="filterCategory()">Search</button>
+							</form>
+
+							</div>
+						</div>
+          <!-- <div class="col-md-6 d-flex justify-content-center">
             <div class="header-search">
               <form>
                 <select class="input-select" id="category-select">
@@ -76,7 +112,7 @@ if (isset($categories['data'])) {
                 <button class="search-btn">Search</button>
               </form>
             </div>
-          </div>
+          </div> -->
           <!-- /SEARCH BAR -->
 
 
@@ -163,6 +199,33 @@ if (isset($categories['data'])) {
   <script src="../frontend/js/nouislider.min.js"></script>
   <script src="../frontend/js/jquery.zoom.min.js"></script>
   <script src="../frontend/js/main.js"></script>
+  <script>
+			
+			function filterCategory() {
+				var select = document.getElementById('categorySelect');
+				var categoryId = select.value;
+				var searchInput = document.getElementById('searchInput').value.trim();
+				var url = new URL(window.location.href);
+				
+				// تحديث المعاملات في URL
+				if (categoryId) {
+					url.searchParams.set('category', categoryId);
+				} else {
+					url.searchParams.delete('category');
+				}
+
+				if (searchInput) {
+					url.searchParams.set('name', searchInput);
+				} else {
+					url.searchParams.delete('name');
+				}
+
+				// إعادة توجيه المستخدم إلى URL الجديد
+				window.location.href = url;
+			}
+
+
+		</script>
 
 </body>
 

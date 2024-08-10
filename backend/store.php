@@ -170,7 +170,7 @@
 									$imagePath = 'http://localhost/e-commerce/backend/images/' . $imageName;
 
 									if (stripos($productName, htmlspecialchars($searchName)) !== false) {
-										echo '<div class="col-md-4 col-xs-6">';
+										echo '<div class="col-md-4 col-xs-6" style="width:33%;" >';
 										echo '<div class="product">';
 										echo '<div class="product-img">';
 										echo '<img src="' . $imagePath . '" alt="Product Image">';

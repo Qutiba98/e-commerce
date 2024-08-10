@@ -1611,6 +1611,7 @@ pre code {
 .row {
   margin-right: -15px;
   margin-left: -15px;
+  width: 300%;
 }
 .col-lg-1,
 .col-lg-10,

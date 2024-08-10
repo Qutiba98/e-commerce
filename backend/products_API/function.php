@@ -212,7 +212,7 @@ function  get_product_by_name($productParams){
 
 
 
-    $query = "SELECT * FROM product WHERE name LIKE '%$product_name%' LIMIT 1   ";
+    $query = "SELECT * FROM product WHERE name LIKE '%$product_name%'   ";
 
     $reult = mysqli_query($conn, $query);
 

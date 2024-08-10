@@ -11,7 +11,6 @@ $requestMethod = $_SERVER["REQUEST_METHOD"];
 if($requestMethod == "GET"){
 
     if(isset($_GET["name"])){
-
         $phone_list = get_product_by_name($_GET);
         echo($phone_list);
 
