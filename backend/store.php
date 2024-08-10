@@ -55,12 +55,14 @@
 
 		/* Adjust the container to center the content */
 		.container1 {
-			justify-content: center;
-			display: flex;
-			flex-wrap: wrap; /* لتوزيع العناصر بشكل متناسق */
-			gap: 20px; /* مسافة بين البطاقات */
-			padding-left: 200px; /* مسافة من جهة اليسار */
-			padding-right: 200px; /* مسافة من جهة اليمين */
+
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+
 		}
 
 		/* Responsive design adjustments */
@@ -103,20 +105,9 @@
 
 <body>
 
-	<?php include './nav&footr/nav.php'; ?>
+	<?php include './navAndfooter/newnavsort.php'; ?>
 
-	<!-- store top filter -->
-	<div class="store-filter clearfix">
-		<div class="store-sort">
-			<select id="sortSelect" class="form-control" onchange="sortProducts()">
-				<option value="">Sort by Price</option>
-				<option value="asc">Low to High</option>
-				<option value="desc">High to Low</option>
-			</select>
-		</div>
-	</div>
-	<!-- /store top filter -->
-
+	
 	<!-- SECTION -->
 	<div class="section">
 		<!-- container -->
@@ -193,7 +184,8 @@
 										echo '<p class="product-category">' . $categoryName . '</p>';
 										
 										echo '<h3 class="product-name"><a href="#">' . htmlspecialchars($product['name']) . '</a></h3>';
-										echo '<div class="product-rating">';
+										echo '<div class="product-price">';
+										echo  "$" .$product['price'] ;
 										echo '</div>';
 										echo '<div class="product-btns">';
 										echo "<a href='http://localhost/e-commerce/backend/productpage.php?productId=" . $product['id'] . "' class='quick-view'><i class='fa fa-eye'></i><span class='tooltipp'> Quick View</span></a>";
@@ -215,7 +207,7 @@
 	</div>
 	<!-- /row -->
 
-
+	
 	
 	<!-- FOOTER -->
 	<?php require '../frontend/footer.php'; ?>
