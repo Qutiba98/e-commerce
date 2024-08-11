@@ -1,50 +1,85 @@
 <?php
+// Include the database connection file
 include 'db.php';
+
+// Start the session to use session variables
 session_start();
-$_SESSION['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] :""; 
+
+// Set the user_id session variable if it is not already set
+$_SESSION['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "";
+
+// Retrieve the productId from the GET request
 $id = $_GET['productId'] ? $_GET['productId'] : "";
-$_SESSION['product_id'] = intval($id );
-$isInDatabase = false;
+
+// Store the product ID in a session variable
+$_SESSION['product_id'] = intval($id);
 $_SESSION['currentProductId'] = $_GET['productId'];
 
-// Initialize the session variable if it doesn't exist
+// Initialize the products session array if it doesn't exist
 if (!isset($_SESSION['products']) || !is_array($_SESSION['products'])) {
     $_SESSION['products'] = [];
 }
 
+// Fetch product details from the API using file_get_contents
 $input = file_get_contents("http://localhost/e-commerce/backend/productapi/getbyid.php?id=$id");
 $result = json_decode($input, true);
 $showImage = $result['image'];
 
+// Check for a discount in the database
+$discountQuery = $conn->prepare("SELECT discount_amount FROM discount WHERE product_id = ?");
+$discountQuery->bind_param("i", $id);
+$discountQuery->execute();
+$discountResult = $discountQuery->get_result();
+$discountAmount = 0;
+
+// If a discount is found, store the discount amount
+if ($discountResult->num_rows > 0) {
+    $discountRow = $discountResult->fetch_assoc();
+    $discountAmount = $discountRow['discount_amount'];
+}
+
+$discountQuery->close();
+
+// Calculate the final price after applying the discount (if any)
+$originalPrice = $result['price'];
+$finalPrice = $originalPrice - ($originalPrice * ($discountAmount));
+
+// Handle the form submission when the user adds the product to the cart
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     $quantity = $_POST['qua'];
     $productId = $result['id'];
+
+    // Store product details in an associative array
     $productInfo = [
         'id' => $productId,
         'name' => $result['name'],
-        'price' => $result['price'],
+        'price' => $finalPrice,  // Use the final (discounted) price
         'description' => $result['description'],
         'image' => $result['image'],
         'quantity' => $quantity,
-        'isInDatabase' => $isInDatabase
+        'isInDatabase' => false
     ];
 
     $productExists = false;
 
+    // Check if the product already exists in the cart
     foreach ($_SESSION['products'] as &$product) {
         if ($product['id'] === $productId) {
+            // If the product exists, increase the quantity
             $product['quantity'] += $quantity;
             $productExists = true;
             break;
         }
     }
 
+    // If the product does not exist in the cart, add it
     if (!$productExists) {
         $_SESSION['products'][] = $productInfo;
     }
 
-    echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
-    exit();
+    // Return a success message as a JSON response
+    // echo json_encode(['status' => 'success', 'message' => 'Product added to cart!']);
+    // exit();
 }
 ?>
 
@@ -76,12 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
     <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
 
-
-<!-- SweetAlert CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<!-- SweetAlert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <style>
         .quantity {
@@ -243,6 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
 <body>
 
     <?php
+    // Include the navigation bar
     include '../backend/navAndFooter/navwithoutsearch.php';
     ?>
 
@@ -264,7 +298,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                 <div class="col-md-6">
                     <div class="product-details">
                         <h2 class="product-name"><?php echo $result['name'] ?></h2>
-                        <h3 class="product-price">$<?php echo $result['price'] ?></h3>
+
+                        <!-- Display the price based on whether there is a discount -->
+                        <?php if ($discountAmount > 0): ?>
+                            <h3 class="product-price">
+                                $<?php echo number_format($finalPrice, 2); ?>
+                            </h3>
+                        <?php else: ?>
+                            <h3 class="product-price">$<?php echo number_format($originalPrice, 2); ?></h3>
+                        <?php endif; ?>
+
                         <p class="product-description"><?php echo $result['description'] ?></p>
 
                         <!-- Quantity -->
@@ -289,169 +332,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['qua'])) {
                 <!-- /Product Details -->
             </div>
             <!-- /row -->
-
-            <!-- Customer Reviews Section -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="customer-reviews">
-                            <h3 class="reviews-title">Customer Reviews</h3>
-                            <div class="reviews">
-                                <?php
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $dbname = "e-commerce";
-
-                                $conn = new mysqli($servername, $username, $password, $dbname);
-                                $user_id = $_SESSION['user_id'];
-                                
-                                if ($conn->connect_error) {
-                                    die("Connection failed: " . $conn->connect_error);
-                                }
-                                
-                                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text']) && $_SESSION['user_id']) {
-                                    $product_id = $_SESSION['product_id'];
-                                    $comment_text = $_POST['comment_text'];
-                                    $name = $_SESSION['name'];
-
-                                    if ($id && $comment_text && $user_id) {
-                                        $stmt = $conn->prepare("INSERT INTO comments (comment_text,product_id,user_id) VALUES (?, ?, ?)");
-                                        $stmt->bind_param("sii", $comment_text, $product_id, $user_id);
-                                        $stmt->execute();
-                                        $stmt->close();
-                                    }
-                                }
-if(isset($_POST['comment_text'])){
-    if(!$_SESSION['user_id']){
-        echo "<script>
-            Swal.fire({
-                title: 'Oops!',
-                text: 'Please login or signup to comment',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
-        </script>";
-    }
-}  
-                                    // }else{
-                                    //     echo "<script>alert ('login or signup to comment')</script>";
-                                    // }
-                                $sql = "SELECT users.name, comments.comment_text FROM comments 
-                                        INNER JOIN users ON comments.user_id = users.user_id
-                                        WHERE comments.product_id = ?";
-                                $stmt = $conn->prepare($sql);
-                                $stmt->bind_param("i", $_SESSION['product_id']);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                                $reviews = [];
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        $reviews[] = $row;
-                                    }
-                                }
-                                ?>
-
-                                <?php foreach ($reviews as $review): ?>
-                                    <div class="review">
-                                        <div class="review-author">
-                                            <strong><?php echo htmlspecialchars($review['name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                        </div>
-                                        <p class="review-text"><?php echo htmlspecialchars($review['comment_text'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <!-- Add Review Form -->
-                            <div class="add-review-form">
-                                <h4>Add Your Review</h4>
-                                <form method="POST" action="">
-                                    <div class="form-group">
-                                        <label for="review-text">Your Review:</label>
-                                        <textarea id="review-text" name="comment_text" class="form-control" rows="4"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn" style="background: #C9302C; color: white;">Submit Review</button>
-                                </form>
-                            </div>
-                            <!-- /Add Review Form -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /Customer Reviews -->
-
         </div>
         <!-- /container -->
     </div>
     <!-- /SECTION -->
 
-    <!-- FOOTER -->
-    <footer id="footer">
-       <?php  require '../backend/navAndFooter/footer.php'?>
-    </footer>
-    <!-- /FOOTER -->
-
-    <!-- jQuery Plugins -->
-    <script src="../frontend/js/jquery.min.js"></script>
-    <script src="../frontend/js/bootstrap.min.js"></script>
-    <script src="../frontend/js/slick.min.js"></script>
-    <script src="../frontend/js/nouislider.min.js"></script>
-    <script src="../frontend/js/jquery.zoom.min.js"></script>
-    <script src="../frontend/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
+        // JavaScript functions to handle quantity increase and decrease
+        function increaseQuantity() {
+            var quantityInput = document.getElementById('quantity');
+            var currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        }
+
         function decreaseQuantity() {
-            let quantity = parseInt(document.getElementById('quantity').value);
-            if (quantity > 1) {
-                document.getElementById('quantity').value = quantity - 1;
+            var quantityInput = document.getElementById('quantity');
+            var currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
             }
         }
-
-        function increaseQuantity() {
-            let quantity = parseInt(document.getElementById('quantity').value);
-            document.getElementById('quantity').value = quantity + 1;
-        }
-
-        $(document).ready(function() {
-            $('#addToCartForm').on('submit', function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    url: '../backend/productpage.php?productId=<?php echo $id ?>',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        let data = JSON.parse(response);
-                        if (data.status === 'success') {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: data.message,
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'There was a problem adding the product to the cart.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'There was a problem with the server. Please try again later.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            });
-        });
     </script>
+
+    <?php
+    // Include the footer
+    include '../backend/navAndFooter/footer.php';
+    ?>
+
 </body>
 
 </html>

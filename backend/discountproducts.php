@@ -7,7 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve form data
     $productId = intval($_POST['product_id']);
     $productName = htmlspecialchars($_POST['product_name']);
-    $productPrice = floatval($_POST['product_price']);
+    $newPrice  = $_SESSION['$newPrice'];
+
+
     $productImage = htmlspecialchars($_POST['product_image']);
     $productdesc = htmlspecialchars($_POST['product_desc']);
 
@@ -15,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = array(
         'id' => $productId,
         'name' => $productName,
-        'price' => $productPrice,
+        'price' => $newPrice,
         'description' => $productdesc,
         'image' => $productImage,
         'quantity' => 1,
@@ -137,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     </header>
     <footer>
-        <?php require '../backend/navAndFooter/footer.php'?>
+        <?php require '../backend/navAndFooter/footer.php' ?>
     </footer>
 </body>
 

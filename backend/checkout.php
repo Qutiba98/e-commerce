@@ -2,13 +2,13 @@
 require "../backend/connection_db_pdo.php";
 session_start();
 // var_dump($_SESSION['total']);
-$totalpriceFromCart =$_SESSION['total'];
+$totalpriceFromCart = $_SESSION['total'];
 // echo $totalpriceFromCart;
 if (empty($_SESSION['user_id'])) {
- header('Location: http://localhost/e-commerce/backend/login.php');
-    exit(); 
+    header('Location: http://localhost/e-commerce/backend/login.php');
+    exit();
 }
-$_SESSION['cart_id']=$_SESSION['user_id'];
+$_SESSION['cart_id'] = $_SESSION['user_id'];
 // echo $_SESSION['total'];
 // Enable error reporting for debugging
 $_SESSION['emptyCart'] = false;
@@ -16,9 +16,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$firstNameErr = $lastNameErr = $emailErr = $addressErr = $cityErr = $countryErr = $zipCodeErr = $telephoneErr = "";
+$firstNameErr = $lastNameErr = $emailErr = $addressErr = $cityErr = $countryErr = $telephoneErr = "";
 $flag = true;
-$firstName = $lastName = $email = $address = $city = $country = $zipCode = $tel = "";
+$firstName = $lastName = $email = $address = $city = $country =  $tel = "";
 $amount = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,11 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $flag = false;
     }
 
-    $zipCode = isset($_POST['zip-code']) ? trim($_POST['zip-code']) : "";
-    if (empty($zipCode) || !preg_match("/^\d{5}(-\d{4})?$/", $zipCode)) {
-        $zipCodeErr = "Valid ZIP code is required (e.g., 12345 or 12345-6789)";
-        $flag = false;
-    }
+
 
     $tel = isset($_POST['tel']) ? trim($_POST['tel']) : "";
     if (empty($tel) || !preg_match("/^\+?[0-9]{10,15}$/", $tel)) {
@@ -99,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':amount' => $_SESSION['total'],
                 ':cartId' => $_SESSION['cart_id'] // Adjust or retrieve dynamically
             ]);
-        
+
             // Prepare and execute the DELETE query
             $deleteFromCart = "DELETE FROM cart_product WHERE cart_id = :cartId";
             $deleteStmt = $conn->prepare($deleteFromCart);
@@ -111,19 +107,19 @@ window.location.href='http://localhost/e-commerce/backend/index.php';
 </script>
             ";
             // header('Location: http://localhost/e-commerce/backend/index.php');
-        
+
             // Check if rows were affected
             if ($deleteStmt->rowCount() > 0) {
                 echo "Order placed successfully and cart cleared!";
             } else {
                 echo "No items found to delete from the cart.";
             }
-            
+
             exit;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-    }        
+    }
 } else {
     http_response_code(405);
     echo "";
@@ -131,7 +127,7 @@ window.location.href='http://localhost/e-commerce/backend/index.php';
 $id = $_SESSION['user_id'];
 // fetch data from cart  -------------------------- make it dynamic
 $input = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$id");
-$result = json_decode($input,true);
+$result = json_decode($input, true);
 // var_dump($result);
 // delete from cart 
 // -------------------- redo it to be as dynamic
@@ -141,6 +137,7 @@ $result = json_decode($input,true);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -151,155 +148,38 @@ $result = json_decode($input,true);
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/bootstrap.min.css" />
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="../frontend/css/slick-theme.css" />
 
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/nouislider.min.css" />
 
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="../frontend/css/font-awesome.min.css">
 
     <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css"/>
-	<style>
-		.error{
-			color :red;
-		}
-	</style>
+    <link type="text/css" rel="stylesheet" href="../frontend/css/style.css" />
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <?php require '../backend/navAndFooter/navwithoutsearch.php' ?>
+
 </head>
+
 <body>
 
 
-<header>
-    <!-- TOP HEADER -->
-    <div id="top-header">
-      <div class="container">
-        <ul class="header-links pull-left">
-          <li><a href="#"><i class="fa fa-phone"></i> +962-779-199-880</a></li>
-          <li><a href="#"><i class="fa fa-envelope-o"></i> Electrospark@gmail.com</a></li>
-          <li><a href="#"><i class="fa fa-map-marker"></i> Amman-Jordan</a></li>
-        </ul>
-        <ul class="header-links pull-right">
-          <?php  if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])):  ?>
-            <li><a href="http://localhost/e-commerce/backend/logout.php"><i class="fa fa-dollar"></i> Logout</a></li>
-            <?php endif; ?>
-            <?php  if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])):  ?>
-          <li><a href="http://localhost/e-commerce/backend/login.php"><i class="fa fa-dollar"></i> login</a></li>
-          <?php endif; ?>
-          <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
-        </ul>
-      </div>
-    </div>
-    <!-- /TOP HEADER -->
-
-    <!-- MAIN HEADER -->
-    <div id="header">
-      <!-- container -->
-      <div class="container">
-        <!-- row -->
-        <div class="row">
-          <!-- LOGO -->
-          <div class="col-md-3">
-            <div class="header-logo">
-              <a href="#" class="logo">
-                <img src="./img/logo.png" alt="" />
-              </a>
-            </div>
-          </div>
-          <!-- /LOGO -->
-
-          <!-- SEARCH BAR -->
-          <div class="col-md-6">
-            <div class="header-search">
-              <form style = "  visibility: hidden;">
-                <select class="input-select" id="category-select">
-                  <option value="0" data-url="#">All Categories</option>
-                  <?php
-                  foreach ($categoryData as $category) {
-                    echo '<option value="' . htmlspecialchars($category['id']) . '" data-url="http://localhost/e-commerce/backend/store.php?category=' . htmlspecialchars($category['id']) . '">'
-                      . htmlspecialchars($category['name']) . '</option>';
-                  }
-                  ?>
-                </select>
-                <input class="input" placeholder="Search here" />
-                <button class="search-btn">Search</button>
-              </form>
-            </div>
-          </div>
-          <!-- /SEARCH BAR -->
-
-            <!-- ACCOUNT -->
-            <div class="col-md-3 clearfix">
-              <div class="header-ctn">
-                <!-- Wishlist -->
-                <div>
-                  <a href="#">
-                    <span></span>
-                  </a>
-                </div>
-                <!-- /Wishlist -->
-                 
-
-              <!-- Cart -->
-              <div>
-                <a href="./cart.php">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span>Your Cart</span>
-                  <div class="qty">3</div>
-                </a>
-              </div>
-              <!-- /Cart -->
-
-
-              
-
-              <!-- Menu Toggle -->
-              <div class="menu-toggle">
-                <a href="#">
-                  <i class="fa fa-bars"></i>
-                  <span>Menu</span>
-                </a>
-              </div>
-              <!-- /Menu Toggle -->
-            </div>
-          </div>
-          <!-- /ACCOUNT -->
-        </div>
-        <!-- /row -->
-      </div>
-      <!-- /container -->
-    </div>
-    <!-- /MAIN HEADER -->
-  </header>
-  <!-- /HEADER -->
 
 
 
 
 
-    <!-- BREADCRUMB -->
-    <div id="breadcrumb" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="breadcrumb-tree">
-                        <li><a href="http://localhost/e-commerce/backend/">Home</a></li>
-                        <li><a href="http://localhost/e-commerce/backend/store.php?page=4#">Category</a></li>
-                        <li class="active">Checkout</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /BREADCRUMB -->
+
 
     <!-- MAIN -->
     <div class="main">
@@ -313,7 +193,7 @@ $result = json_decode($input,true);
                     <div class="checkout-form">
                         <form action="../backend/checkout.php" method="POST">
                             <div class="row">
-							<div class="col-md-6">
+                                <div class="col-md-6">
                                     <div class="billing-details">
                                         <div class="section-title">
                                             <h3 class="title">Billing Address</h3>
@@ -342,17 +222,14 @@ $result = json_decode($input,true);
                                             <input class="input" type="text" name="country" placeholder="Country" value="<?php echo htmlspecialchars($country); ?>">
                                             <span class="error"><?php echo $countryErr; ?></span>
                                         </div>
-                                        <div class="form-group">
-                                            <input class="input" type="text" name="zip-code" placeholder="ZIP Code" value="<?php echo htmlspecialchars($zipCode); ?>">
-                                            <span class="error"><?php echo $zipCodeErr; ?></span>
-                                        </div>
+
                                         <div class="form-group">
                                             <input class="input" type="tel" name="tel" placeholder="Telephone" value="<?php echo htmlspecialchars($tel); ?>">
                                             <span class="error"><?php echo $telephoneErr; ?></span>
                                         </div>
-                                       
-                                        
-                                       
+
+
+
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -361,35 +238,35 @@ $result = json_decode($input,true);
                                             <h3 class="title">Your Order</h3>
                                         </div>
                                         <div class="order-summary">
-    <?php foreach ($result as $row): ?>
-        <p><?php echo htmlspecialchars($row['name']); ?> <span><b><?php echo ($row['price'] * $row['quantity']); ?><br> Quantity :<?php echo $row['quantity'] ?> </b></span></p>
+                                            <?php foreach ($result as $row): ?>
+                                                <p><?php echo htmlspecialchars($row['name']); ?> <span><b><?php echo ($row['price'] * $row['quantity']); ?><br> Quantity :<?php echo $row['quantity'] ?> </b></span></p>
 
-        <p></p>
-        <?php endforeach; ?>
-        <p>Total Price: <b>
-        <?php 
-        if (isset($_SESSION['totalPriceAfter']  )&& $_SESSION['totalPriceAfter']  > 0): 
-         
-        echo htmlspecialchars(number_format(floatval($_SESSION['totalPriceAfter']) , 2)); ?> 
-        </b>
-        <!-- <del><?php 
-         echo htmlspecialchars(number_format($_SESSION['total']  ,2));
-            // $totalpriceFromCart += $row['quantity'] *$row['price'];
-            
-     ?></del> -->
-     <?php else: ?>
-     
-        <?php 
-         echo htmlspecialchars(number_format($totalpriceFromCart,2));
-    
-     ?>
-     <?php endif; ?>
+                                                <p></p>
+                                            <?php endforeach; ?>
+                                            <p>Total Price: <b>
+                                                    <?php
+                                                    if (isset($_SESSION['totalPriceAfter']) && $_SESSION['totalPriceAfter']  > 0):
 
-     </p>
-    <button class="primary-btn order-submit">Place Order</button>
-</div>
+                                                        echo htmlspecialchars(number_format(floatval($_SESSION['totalPriceAfter']), 2)); ?>
+                                                </b>
+                                                <!-- <del><?php
+                                                            echo htmlspecialchars(number_format($_SESSION['total'], 2));
+                                                            // $totalpriceFromCart += $row['quantity'] *$row['price'];
+
+                                                            ?></del> -->
+                                            <?php else: ?>
+
+                                                <?php
+                                                        echo htmlspecialchars(number_format($totalpriceFromCart, 2));
+
+                                                ?>
+                                            <?php endif; ?>
+
+                                            </p>
+                                            <button class="primary-btn order-submit">Place Order</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
                         </form>
                     </div>
                     <!-- /Checkout Form -->
@@ -402,72 +279,7 @@ $result = json_decode($input,true);
     </div>
     <!-- /MAIN -->
 
-    <!-- FOOTER -->
-    <footer id="footer" class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- Footer Widget -->
-                <div class="col-md-3">
-                    <div class="footer-widget">
-                        <h3 class="footer-title">About Us</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates, dolorum, hic voluptatibus labore tenetur.</p>
-                        <ul class="footer-links">
-                            <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
-                            <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-                            <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /Footer Widget -->
-
-                <!-- Footer Widget -->
-                <div class="col-md-3">
-                    <div class="footer-widget">
-                        <h3 class="footer-title">Categories</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Laptops</a></li>
-                            <li><a href="#">Smartphones</a></li>
-                            <li><a href="#">Cameras</a></li>
-                            <li><a href="#">Accessories</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /Footer Widget -->
-
-                <!-- Footer Widget -->
-                <div class="col-md-3">
-                    <div class="footer-widget">
-                        <h3 class="footer-title">Information</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /Footer Widget -->
-
-                <!-- Footer Widget -->
-                <div class="col-md-3">
-                    <div class="footer-widget">
-                        <h3 class="footer-title">Newsletter</h3>
-                        <form>
-                            <input class="input" type="email" placeholder="Enter your email">
-                            <button class="newsletter-btn">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /Footer Widget -->
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </footer>
-    <!-- /FOOTER -->
-
+    <?php require '../backend/navAndFooter/footer.php' ?>
     <!-- jQuery Plugins -->
     <script src="../frontend/js/jquery.min.js"></script>
     <script src="../frontend/js/bootstrap.min.js"></script>
@@ -475,4 +287,5 @@ $result = json_decode($input,true);
     <script src="../frontend/js/nouislider.min.js"></script>
     <script src="../frontend/js/main.js"></script>
 </body>
+
 </html>

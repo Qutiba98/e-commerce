@@ -2,18 +2,18 @@
 // اتصال بقاعدة البيانات وبدء الجلسة
 require "./connection_db_pdo.php";
 session_start();
-$_SESSION['totalPriceAfter']  = isset($_SESSION['totalPriceAfter'] ) ?$_SESSION['totalPriceAfter']  :"";
+$_SESSION['totalPriceAfter']  = isset($_SESSION['totalPriceAfter']) ? $_SESSION['totalPriceAfter']  : "";
 if (isset($_POST['delete_product'])) {
   $productIdToDelete = $_POST['product_id'];
 
   // Loop through the products in the session and remove the one with the matching ID
   foreach ($_SESSION['products'] as $key => $product) {
-      if ($product['id'] == $productIdToDelete) {
-          unset($_SESSION['products'][$key]);
-          // Reindex the array to avoid gaps in the keys
-          $_SESSION['products'] = array_values($_SESSION['products']);
-          break;
-      }
+    if ($product['id'] == $productIdToDelete) {
+      unset($_SESSION['products'][$key]);
+      // Reindex the array to avoid gaps in the keys
+      $_SESSION['products'] = array_values($_SESSION['products']);
+      break;
+    }
   }
 }
 $isEmptyDatabase = true;
@@ -35,37 +35,37 @@ $totalPrice = isset($totalPrice) ? $totalPrice : 0;
 
 // Get the total price if the user is not logged in
 if (!$registerd) {
-    if (isset($_SESSION['products'])) {
+  if (isset($_SESSION['products'])) {
+    // echo "entered products";
+    // Loop through each product in the session
+    foreach ($_SESSION['products'] as $product) {
       // echo "entered products";
-      // Loop through each product in the session
-      foreach ($_SESSION['products'] as $product) {
-          // echo "entered products";
-            // Calculate the total price for each product (price * quantity)
-            $totalPrice += (float)$product['price'] * (int)$product['quantity'];
-          }
-        }
-      }
-    //   if ($totalPrice > 0) {
-    //     $_SESSION['total'] = $totalPrice;
-    // } else {
-    //   $productIdSum =$_SESSION['product_id'];
-    //     $sql = "SELECT SUM(product.price) as totalPrice
-    //             FROM cart_product
-    //             INNER JOIN product ON product.id = cart_product.product_id
-    //             WHERE cart_product.product_id = '$productIdSum'";
-        
-    //     $resultOfSum = $conn->query($sql);
-    //     $rows = $resultOfSum->fetchAll(PDO::FETCH_ASSOC);
-    //     var_dump($rows);
-    //     foreach ($rows as $row) {
-    //       $totalPrice = $row['totalPrice']; // Sum up the total price for all products
-    //   }
-        
-    //         // $_SESSION['total'] = $totalPrice;
-            
-      
-    //     var_dump( $totalPrice);
-    // }
+      // Calculate the total price for each product (price * quantity)
+      $totalPrice += (float)$product['price'] * (int)$product['quantity'];
+    }
+  }
+}
+//   if ($totalPrice > 0) {
+//     $_SESSION['total'] = $totalPrice;
+// } else {
+//   $productIdSum =$_SESSION['product_id'];
+//     $sql = "SELECT SUM(product.price) as totalPrice
+//             FROM cart_product
+//             INNER JOIN product ON product.id = cart_product.product_id
+//             WHERE cart_product.product_id = '$productIdSum'";
+
+//     $resultOfSum = $conn->query($sql);
+//     $rows = $resultOfSum->fetchAll(PDO::FETCH_ASSOC);
+//     var_dump($rows);
+//     foreach ($rows as $row) {
+//       $totalPrice = $row['totalPrice']; // Sum up the total price for all products
+//   }
+
+//         // $_SESSION['total'] = $totalPrice;
+
+
+//     var_dump( $totalPrice);
+// }
 // Check if the 'products' session is set and not empty
 // if (isset($_SESSION['products']) && !empty($_SESSION['products'])) {
 //   foreach ($_SESSION['products'] as $key => $product) {
@@ -75,95 +75,99 @@ if (!$registerd) {
 //           unset($_SESSION['products'][$key]);
 //       }
 //   }
-  
+
 //   // Re-index the session array to remove any gaps in the keys
 //   $_SESSION['products'] = array_values($_SESSION['products']);
 // }
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-    $registerd = true;
+  $registerd = true;
 
-    // تأكد من أن الكمية يتم تعيينها بشكل صحيح من الجلسة
-    foreach ($result as &$row) {
-        $productId = $row['id'];
-        $quantity = isset($row['quantity']) ? $row['quantity'] : 0;
-        $checkSql = "SELECT COUNT(*) FROM cart_product WHERE cart_id = '$cartId' AND product_id = '$productId'";
-        $stmt = $conn->prepare($checkSql);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-        if (!$row['isInDatabase']) {
-            if ($count == 0) {
-                $sql = "INSERT INTO cart_product (cart_id, product_id, quantity) VALUES ('$cartId', '$productId', '$quantity')";
-                $conn->exec($sql);
-                $row['isInDatabase'] = true;
-                $isEmptyDatabase = false;
-            } else {
-                $sql = "UPDATE cart_product SET quantity = quantity + '$quantity' WHERE cart_id = '$cartId' AND product_id = '$productId'";
-                $conn->exec($sql);
-                $row['isInDatabase'] = true;
-                $isEmptyDatabase = false;
-            }
-        }
+  // تأكد من أن الكمية يتم تعيينها بشكل صحيح من الجلسة
+  foreach ($result as &$row) {
+    $productId = $row['id'];
+    $quantity = isset($row['quantity']) ? $row['quantity'] : 0;
+    $checkSql = "SELECT COUNT(*) FROM cart_product WHERE cart_id = '$cartId' AND product_id = '$productId'";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+    if (!$row['isInDatabase']) {
+      if ($count == 0) {
+        $sql = "INSERT INTO cart_product (cart_id, product_id, quantity) VALUES ('$cartId', '$productId', '$quantity')";
+        $conn->exec($sql);
+        $row['isInDatabase'] = true;
+        $isEmptyDatabase = false;
+      } else {
+        $sql = "UPDATE cart_product SET quantity = quantity + '$quantity' WHERE cart_id = '$cartId' AND product_id = '$productId'";
+        $conn->exec($sql);
+        $row['isInDatabase'] = true;
+        $isEmptyDatabase = false;
+      }
     }
+  }
 
-    // إزالة المنتجات التي تم إدخالها في قاعدة البيانات من الجلسة
-    foreach ($result as $key => $row) {
-        unset($_SESSION['products'][$key]);
-        $isEmptySesstion = false;
+  // إزالة المنتجات التي تم إدخالها في قاعدة البيانات من الجلسة
+  foreach ($result as $key => $row) {
+    unset($_SESSION['products'][$key]);
+    $isEmptySesstion = false;
+  }
+  // جلب بيانات السلة من قاعدة البيانات
+  if (isset($_SESSION['user_id'])) {
+    $cartFromDatabase = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
+    $cartData = json_decode($cartFromDatabase, true);
+
+    foreach ($cartData as $row) {
+      $quantity = intval($row['quantity']);
+      $price = floatval($row['price']);
+
+      if ($quantity > 0) {
+        $totalPrice += $quantity * $price;
+      }
     }
-    // جلب بيانات السلة من قاعدة البيانات
-    if (isset($_SESSION['user_id'])) {
-        $cartFromDatabase = file_get_contents("http://localhost/e-commerce/backend/cartApi/cartFetchData.php?id=$user_id");
-        $cartData = json_decode($cartFromDatabase, true);
+    // تطبيق الكود الخصم إذا كان موجودًا
+    $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
+    $stmt->bindParam(':discountCode', $discountCode);
+    $_SESSION['totalPriceAfter'] = isset($_SESSION['totalPriceAfter']) ? $_SESSION['totalPriceAfter'] : "";
+    $_SESSION['total'] = $totalPrice;
+    if ($stmt->execute()) {
+      $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($precantage !== false) {
+        $discountAmount = ($precantage['precantage'] / 100) * $totalPrice;
+        // var_dump($totalPrice);
+        $totalPriceAfter  = $totalPrice - $discountAmount;
+        // var_dump($totalPriceAfter);
+        $_SESSION['totalPriceAfter'] = $totalPriceAfter;
+        // unset($_SESSION['totalPriceAfter']);
+      } else {
 
-        foreach ($cartData as $row) {
-            $quantity = intval($row['quantity']);
-            $price = floatval($row['price']);
-
-            if ($quantity > 0) {
-                $totalPrice += $quantity * $price;
-            }
-        }
-        // تطبيق الكود الخصم إذا كان موجودًا
-        $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
-        $stmt->bindParam(':discountCode', $discountCode);
-        $_SESSION['totalPriceAfter'] = isset($_SESSION['totalPriceAfter']) ? $_SESSION['totalPriceAfter'] :"";
-        $_SESSION['total'] = $totalPrice;
-        if ($stmt->execute()) {
-            $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($precantage !== false) {
-                $discountAmount = ($precantage['precantage'] /100 ) * $totalPrice;
-                // var_dump($totalPrice);
-                $totalPriceAfter  = $totalPrice- $discountAmount;
-                // var_dump($totalPriceAfter);
-                $_SESSION['totalPriceAfter'] = $totalPriceAfter;
-                // unset($_SESSION['totalPriceAfter']);
-              } else {
-                
-                $dicountErr = "No discount found for the provided code.";
-              }
-            }
-          }
-          $cartFromDatabase = json_decode($cartFromDatabase, true);
-        }
-        // echo $_SESSION['totalPriceAfter'];
+        $dicountErr = "No discount found for the provided code.";
+      }
+    }
+  }
+  $cartFromDatabase = json_decode($cartFromDatabase, true);
+}
+// echo $_SESSION['totalPriceAfter'];
 // unset( $_SESSION['totalPriceAfter']);
 
 
 
 if (isset($_SESSION['products'])) {
-    $_SESSION['products'] = array_values($_SESSION['products']);
+  $_SESSION['products'] = array_values($_SESSION['products']);
 }
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en" style="font-size: 14px">
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    #bigFont { font-size: 1rem !important; }
+    #bigFont {
+      font-size: 1rem !important;
+    }
+
     .empty-cart {
       padding: 20px;
       border-radius: 10px;
@@ -177,7 +181,11 @@ if (isset($_SESSION['products'])) {
       align-items: center;
       justify-content: center;
     }
-    .h-100 { height: auto !important; }
+
+    .h-100 {
+      height: auto !important;
+    }
+
     .totalPriceStyle {
       color: black;
       font-weight: bold;
@@ -187,42 +195,67 @@ if (isset($_SESSION['products'])) {
       border-radius: 5px;
       margin-top: 20px;
     }
-    .emptyCartImage { width: 50px; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .emptyCartImage {
+      width: 50px;
     }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .form-outline {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
-    .form-control { margin-bottom: 10px; }
-    .btn { width: 100%; }
+
+    .form-control {
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
     .quantity-controls {
       display: flex;
       align-items: center;
     }
+
     .quantity-controls button {
       background-color: #f8f9fa;
       border: 1px solid #ced4da;
       padding: 5px 10px;
       cursor: pointer;
     }
+
     .quantity-controls input {
       text-align: center;
       width: 50px;
       border: 1px solid #ced4da;
-      margin: 0 5px; /* Add space between the input and buttons */
+      margin: 0 5px;
+      /* Add space between the input and buttons */
     }
+
     .quantity-controls button:hover {
       background-color: #e9ecef;
     }
+
     .btn-red {
       background-color: #dc3545;
       color: white;
       border: none;
     }
+
     .btn-red:hover {
       background-color: #c82333;
     }
@@ -242,11 +275,12 @@ if (isset($_SESSION['products'])) {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+
 <body>
   <header>
-    <?php require'../backend/navAndFooter/navwithoutsearch.php' ?>
+    <?php require '../backend/navAndFooter/navwithoutsearch.php' ?>
   </header>
-  
+
   <section class="h-100">
     <div class="container h-100 py-5">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -279,12 +313,12 @@ if (isset($_SESSION['products'])) {
                         <h5 class="mb-0 price" data-price="<?php echo $row['price'] ?>">$<?php echo $row['price'] * $row['quantity'] ?> </h5>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        
+
                         <?php if (!$registerd) : ?>
                           <form action="" method="POST" style="display:inline;">
-    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-    <button type="submit" name="delete_product" class="btn btn-link text-danger p-0 m-0"><i class="fas fa-trash fa-lg"></i></button>
-</form>
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <button type="submit" name="delete_product" class="btn btn-link text-danger p-0 m-0"><i class="fas fa-trash fa-lg"></i></button>
+                          </form>
 
                         <?php endif; ?>
                       </div>
@@ -326,41 +360,41 @@ if (isset($_SESSION['products'])) {
             <?php endif; ?>
             <div class="card mb-4">
               <form action="../backend/cart.php" method="POST">
-                <?php if($registerd): ?>
-              <div class="card-body p-4 d-flex flex-row">
-                <div data-mdb-input-init class="form-outline flex-fill">
-                    <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
-                    <label class="form-label" for="form1">Discount code</label>
-                </div>
-                <button type="submit" class="btn btn-warning btn-lg ms-3" style="width: 35%; background-color:#d10024">Apply</button>
-              </div>
-              <?php endif; ?>
-              <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
-              <?php if (!empty($totalPriceAfter)) : ?>
-                <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2)?></div>
+                <?php if ($registerd): ?>
+                  <div class="card-body p-4 d-flex flex-row">
+                    <div data-mdb-input-init class="form-outline flex-fill">
+                      <input type="text" id="form1" name="discountCode" class="form-control form-control-lg" />
+                      <label class="form-label" for="form1">Discount code</label>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-lg ms-3" style="width: 35%; background-color:#d10024">Apply</button>
+                  </div>
+                <?php endif; ?>
+                <span><?php echo isset($discountErr) ? htmlspecialchars($discountErr) : ''; ?></span>
+                <?php if (!empty($totalPriceAfter)) : ?>
+                  <div class="totalPriceStyle">Total after discount: <?php echo number_format($totalPriceAfter, 2) ?></div>
                 <?php endif; ?>
               </form>
-            <?php if($registerd): ?>
-              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo number_format($totalPrice, 2)?></span></div>
-              <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
-              <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
+              <?php if ($registerd): ?>
+                <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo number_format($totalPrice, 2) ?></span></div>
+                <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+                <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
             </div>
-            <?php endif; ?>
-            <?php if(!$registerd): ?>
-              <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
-              <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
-              <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
-            </div>
-            <?php endif; ?>
-          <div class="card">
-            <div class="card-body">
-              <a href="./checkout.php">
-                <button href="" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay"style=" background-color:#d10024">Check out</button>
-              </a>
-            </div>
-          </div>
+          <?php endif; ?>
+          <?php if (!$registerd): ?>
+            <div class="totalPriceStyle">Total price: <span id="total-price"><?php echo $totalPrice ?></span></div>
+            <input type="hidden" name="afterDiscount" value="<?php echo $_SESSION['total'] ?>" style="display : none;">
+            <input type="hidden" name="beforeDiscount" value="<?php echo number_format($totalPriceAfter, 2) ?>" style="display : none;">
+        </div>
+      <?php endif; ?>
+      <div class="card">
+        <div class="card-body">
+          <a href="http://localhost/e-commerce/backend/checkout.php">
+            <button href="" type="submit" class="btn btn-warning btn-block btn-lg" value="Proceed to Pay" style=" background-color:#d10024">Check out</button>
+          </a>
         </div>
       </div>
+      </div>
+    </div>
     </div>
   </section>
   <footer>
@@ -381,16 +415,16 @@ if (isset($_SESSION['products'])) {
     $stmt = $conn->prepare("SELECT precantage FROM discount_copon WHERE discount_code = :discountCode");
     $stmt->bindParam(':discountCode', $discountCode);
     if ($stmt->execute()) {
-        $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($precantage !== false) {
-            // $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
-            $_SESSION['totalPriceAfter'] = $totalPriceAfter;
-            $alertMessage = "Discount applied successfully! Total after discount: $" . number_format($totalPriceAfter,2);
-            $alertType = "success";
-        } else {
-            $alertMessage = "No discount found for the provided code.";
-            $alertType = "error";
-        }
+      $precantage = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($precantage !== false) {
+        // $totalPriceAfter = $totalPrice - ($precantage['precantage'] * $totalPrice);
+        $_SESSION['totalPriceAfter'] = $totalPriceAfter;
+        $alertMessage = "Discount applied successfully! Total after discount: $" . number_format($totalPriceAfter, 2);
+        $alertType = "success";
+      } else {
+        $alertMessage = "No discount found for the provided code.";
+        $alertType = "error";
+      }
     }
   }
   ?>
@@ -399,19 +433,19 @@ if (isset($_SESSION['products'])) {
   </section>
   <script>
     <?php if (!empty($alertMessage)): ?>
-        Swal.fire({
-            icon: '<?php echo $alertType; ?>',
-            title: '<?php echo $alertType === "success" ? "Success" : "Error"; ?>',
-            text: '<?php echo $alertMessage; ?>',
-            confirmButtonText: 'OK',
-            customClass: {
-                popup: 'swal2-popup',
-                title: 'swal2-title',
-                icon: 'swal2-icon',
-                confirmButton: 'swal2-confirm',
-                cancelButton: 'swal2-cancel'
-            }
-        });
+      Swal.fire({
+        icon: '<?php echo $alertType; ?>',
+        title: '<?php echo $alertType === "success" ? "Success" : "Error"; ?>',
+        text: '<?php echo $alertMessage; ?>',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'swal2-popup',
+          title: 'swal2-title',
+          icon: 'swal2-icon',
+          confirmButton: 'swal2-confirm',
+          cancelButton: 'swal2-cancel'
+        }
+      });
     <?php endif; ?>
 
     // JavaScript to handle quantity change and update price
@@ -449,4 +483,5 @@ if (isset($_SESSION['products'])) {
     });
   </script>
 </body>
+
 </html>
